@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
+    FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
+
+-->
+<synthetic xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
+
+    <type type="CapOne.JenkinsBuild" extends="jenkins.Build">
+        <property name="foo" category="output" label="Foo" kind="string"/>
+    </type>
+
+
+    <type type="jenkins.EnvInjectBuild" extends="jenkins.Build">
+    	<property name="scriptLocation" default="jenkins/EnvInjectBuild.py" hidden="true" />
+
+        <property name="envInjectVariables" category="output" label="variables" kind="map_string_string"/>
+    </type>
+
+    <type-modification type="jenkins.Server">
+        <property name="buildNumberRetrialCount" kind="integer" default="5" hidden="true" description="Number of times to check for available buildNumber" />
+    </type-modification>
+
+    
+</synthetic>
