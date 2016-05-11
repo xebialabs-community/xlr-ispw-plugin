@@ -8,20 +8,15 @@
 -->
 <synthetic xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
-    <type type="CapOne.JenkinsBuild" extends="jenkins.Build">
-        <property name="foo" category="output" label="Foo" kind="string"/>
+    <type type="ipsw.wzRequest" extends="xlrelease.PythonScript">
+    	<property name="scriptLocation" default="ipsw/wzRequest.py" hidden="true" />
+
+        <property name="ipswServer" category="input" label="Server" referenced-type="ipsw.Server" kind="ci"/>
+        <property name="action" category="input" label="Action" kind="string" />
     </type>
 
-
-    <type type="jenkins.EnvInjectBuild" extends="jenkins.Build">
-    	<property name="scriptLocation" default="jenkins/EnvInjectBuild.py" hidden="true" />
-
-        <property name="envInjectVariables" category="output" label="variables" kind="map_string_string"/>
+    <type type="ipsw.Server" extends="xlrelease.Configuration">
+        <property name="srid" label="Server id" kind="string" description="Specifies the ISPW server id"/>
     </type>
 
-    <type-modification type="jenkins.Server">
-        <property name="buildNumberRetrialCount" kind="integer" default="5" hidden="true" description="Number of times to check for available buildNumber" />
-    </type-modification>
-
-    
 </synthetic>
