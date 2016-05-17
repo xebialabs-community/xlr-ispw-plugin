@@ -9,6 +9,17 @@ apply plugin: 'maven'
 
 version="1.0.0"
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.caucho:quercus:4.0.45'
+    compile 'org.apache.commons:commons-lang3:3.4'
+}
+
+
 license {
     header rootProject.file('src/main/license/xebialabs_community.license')
     strictCheck true
