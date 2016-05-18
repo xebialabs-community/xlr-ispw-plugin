@@ -16,7 +16,7 @@
         <property name="logFileName" category="input" kind="string" hidden="true" default="xl-release-php"/>
     </type>
 
-    <type type="ispw.wzRequest" extends="xlrelease.PHPScript">
+    <type type="ispw.request" extends="xlrelease.PHPScript" virtual="true">
         <property name="iconLocation" default="ispw/compuware.png" hidden="true" />
 
         <property name="action" category="input" label="Action" kind="string" />
@@ -27,6 +27,20 @@
         <property name="user" category="input" label="User" kind="string" />
         <property name="xltaskid" category="input" label="Task id" kind="string" />
         <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
+    </type>
+
+    <type type="ispw.deploy" extends="ispw.request">
+        <property name="action" category="input" label="Action" kind="string" hidden="true" default="deploy"/>
+        <property name="xltaskid" category="input" label="Task id" kind="string" />
+        <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
+    </type>
+
+    <type type="ispw.promote" extends="ispw.request">
+        <property name="action" category="input" label="Action" kind="string" hidden="true" default="promote"/>
+    </type>
+
+    <!-- deprecated -->
+    <type type="ispw.wzRequest" extends="ispw.request">
     </type>
 
 </synthetic>
