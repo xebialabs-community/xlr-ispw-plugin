@@ -17,12 +17,16 @@
     </type>
 
     <type type="ispw.wzRequest" extends="xlrelease.PHPScript">
+        <property name="iconLocation" default="ispw/compuware.png" hidden="true" />
+
         <property name="action" category="input" label="Action" kind="string" />
         <property name="srid" category="input" label="SR id" kind="string" />
         <property name="appl" category="input" label="Application" kind="string" />
         <property name="level" category="input" label="Level" kind="string" />
         <property name="relid" category="input" label="Release id" kind="string" />
         <property name="user" category="input" label="User" kind="string" />
+        <property name="xltaskid" category="input" label="Task id" kind="string" />
+        <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
     </type>
 
 </synthetic>
