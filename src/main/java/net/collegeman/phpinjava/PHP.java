@@ -20,10 +20,7 @@ package net.collegeman.phpinjava;
  */
 
 import com.caucho.quercus.*;
-import com.caucho.quercus.env.ConstStringValue;
-import com.caucho.quercus.env.Env;
-import com.caucho.quercus.env.QuercusClass;
-import com.caucho.quercus.env.Value;
+import com.caucho.quercus.env.*;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
 import com.caucho.quercus.servlet.api.QuercusHttpServletResponse;
@@ -182,13 +179,13 @@ public class PHP {
 
                     getEnv().execute();
                 } catch (QuercusDieException var11) {
-                    log.log(Level.FINER, var11.toString(), var11);
+                    log.log(Level.SEVERE, var11.getMessage(), var11);
                     throw var11;
                 } catch (QuercusExitException var12) {
-                    log.log(Level.FINER, var12.toString(), var12);
-                    throw var12;
+                    log.log(Level.SEVERE, var12.getMessage(), var12);
+					throw var12;
                 } catch (QuercusErrorException var13) {
-                    log.log(Level.FINER, var13.toString(), var13);
+                    log.log(Level.SEVERE, var13.getMessage(), var13);
                     throw var13;
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();

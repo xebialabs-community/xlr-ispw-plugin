@@ -29,7 +29,6 @@
 
 package com.caucho.quercus;
 
-import com.caucho.quercus.env.CliEnv;
 import com.caucho.quercus.env.Env;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.servlet.api.QuercusHttpServletRequest;
@@ -44,7 +43,7 @@ public class XLRQuercus extends Quercus
                          QuercusHttpServletRequest request,
                          QuercusHttpServletResponse response)
     {
-        return new CliEnv(this, page, out, getArgv());
+        return new XLREnv(this, page, out, getArgv());
     }
 
     public void processArguments(String [] args) {
