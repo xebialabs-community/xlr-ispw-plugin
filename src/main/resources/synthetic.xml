@@ -22,23 +22,41 @@
         <property name="action" category="input" label="Action" kind="string" />
         <property name="srid" category="input" label="SR id" kind="string" />
         <property name="appl" category="input" label="Application" kind="string" />
-        <property name="level" category="input" label="Level" kind="string" />
-        <property name="relid" category="input" label="Release id" kind="string" />
+
+        <property name="relid" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="user" category="input" label="User" kind="string" />
     </type>
 
-    <type type="ispw.deploy" extends="ispw.request">
+    <type type="ispw.depltask" extends="ispw.request" virtual="true">
+        <property name="level" category="input" label="Level" kind="string" />
+    </type>
+
+    <type type="ispw.deploy" extends="ispw.depltask">
         <property name="action" category="input" label="Action" kind="string" hidden="true" default="deploy"/>
         <property name="xltaskid" category="input" label="Task id" kind="string" />
         <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
     </type>
 
-    <type type="ispw.promote" extends="ispw.request">
+    <type type="ispw.promote" extends="ispw.depltask">
         <property name="action" category="input" label="Action" kind="string" hidden="true" default="promote"/>
     </type>
 
+    <type type="ispw.createRelease" extends="ispw.request">
+        <property name="action" category="input" label="Action" kind="string" hidden="true" default="create"/>
+        <property name="desc" category="input" label="Release description" kind="string" />
+    </type>
+
+    <type type="ispw.SummaryTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
+        <property name="uri" hidden="true" default="include/ISPWSummaryTile/ispw-query-summary-view.html" />
+        <property name="title" description="Tile title" default="ISPW Summary"/>
+
+    </type>
+
     <!-- deprecated -->
-    <type type="ispw.wzRequest" extends="ispw.request">
+    <type type="ispw.wzRequest" extends="ispw.depltask">
+        <property name="action" category="input" label="Action" kind="string" hidden="true" default="deploy"/>
+        <property name="xltaskid" category="input" label="Task id" kind="string" />
+        <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
     </type>
 
 </synthetic>
