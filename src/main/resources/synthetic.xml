@@ -47,10 +47,10 @@
     </type>
 
 
-    <type type="ispw.ISPWTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
-        <property name="uri" hidden="true" default="include/ISPWTile/ispw-tile-view.html" />
-        <property name="title" description="Tile title" default="ISPW Summary"/>
-        <property name="detailsUri" hidden="true" default="include/ISPWTile/ispw-tile-details.html" />
+    <type type="ispwServices.ISPWTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
+        <property name="uri" hidden="true" default="include/ISPWServicesTile/ispw-tile-view.html" />
+        <property name="title" description="Tile title" default="ISPW Services Summary"/>
+        <property name="detailsUri" hidden="true" default="include/ISPWServicesTile/ispw-tile-details.html" />
 
         <property category="input" name="action" required="true" default="deploy" description="ISPW Action to show (Possible values are Deploy,Promote and CreateRelease)" />
     </type>

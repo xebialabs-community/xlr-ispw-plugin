@@ -95,7 +95,7 @@
     };
     ISPWTileController.$inject = ['$scope', 'ReleasesService', 'XlrTileHelper'];
 
-    angular.module('xlrelease.ISPW.tile', []);
-    angular.module('xlrelease.ISPW.tile').controller('ispw.ISPWTileController', ISPWTileController);
+    angular.module('xlrelease.ISPWServices.tile', []);
+    angular.module('xlrelease.ISPWServices.tile').controller('ispwServices.ISPWTileController', ISPWTileController);
 
 })();
