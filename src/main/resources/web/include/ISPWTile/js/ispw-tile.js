@@ -34,7 +34,7 @@
 
         function getAllISPWTasks(release) {
             return _(ReleasesService.getLeafTasks(release))
-                .filter({scriptDefinitionType: "ispw." + vm.config.action})
+                .filter({scriptDefinitionType: "ispwServices." + vm.config.action})
                 .map(function (task) {
                     return {
                         taskName: task.title,

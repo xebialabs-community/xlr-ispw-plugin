@@ -8,57 +8,51 @@
 -->
 <synthetic xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
-    <type type="xlrelease.PHPScript" extends="xlrelease.PythonScript" virtual="true">
-        <property name="scriptLocation" default="xlrelease/phpRequest.py" hidden="true" />
+    <type type="ispwServices.Server" extends="configuration.HttpConnection"/>
 
-        <property name="phpHomeFolder" category="input" label="Home Folder" kind="string" />
-        <property name="phpScript" category="input" label="PHP Script" kind="string" />
-        <property name="logFileName" category="input" kind="string" hidden="true" default="xl-release-php"/>
+    <type type="ispwServices.PythonScript" extends="xlrelease.PythonScript" virtual="true">
+        <property name="iconLocation" default="ispw/compuware.png" hidden="true" />
+        <property name="ispwServiceServer" category="input" label="Server" referenced-type="ispwServices.Server" kind="ci"/>
+        <property name="username" category="input" required="false" />
+        <property name="password" password="true" category="input" required="false" />
     </type>
 
-    <type type="ispw.request" extends="xlrelease.PHPScript" virtual="true">
-        <property name="iconLocation" default="ispw/compuware.png" hidden="true" />
+    <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript">
+        <property name="scriptLocation" default="ispw/createRelease.py" hidden="true" />
 
-        <property name="action" category="input" label="Action" kind="string" />
-        <property name="srid" category="input" label="SR id" kind="string" />
-        <property name="appl" category="input" label="Application" kind="string" />
+        <property name="application" category="input" label="Application" kind="string" />
+        <property name="description" category="input" label="Release description" kind="string" />
+        <property name="relid" category="input" label="Release id" kind="string" description="8 character value"/>
+        <property name="stream" category="input" label="Stream" kind="string" />
+        <property name="user" category="input" label="User" kind="string" />
+
+    </type>
+
+    <type type="ispwServices.Promote" extends="ispwServices.PythonScript">
+        <property name="scriptLocation" default="ispw/promote.py" hidden="true" />
 
         <property name="relid" category="input" label="Release id" kind="string" description="8 character value"/>
-        <property name="user" category="input" label="User" kind="string" />
-    </type>
-
-    <type type="ispw.depltask" extends="ispw.request" virtual="true">
         <property name="level" category="input" label="Level" kind="string" />
+        <property name="pollingInterval" category="input" default="10" required="true" kind="integer" description="Polling interval in seconds to check task status."/>
+        <property name="numberOfPollingTrials" category="input" label="Polling Retry Count" required="true" kind="integer" description="Number of times to retry check for task status."/>
     </type>
 
-    <type type="ispw.deploy" extends="ispw.depltask">
-        <property name="action" category="input" label="Action" kind="string" hidden="true" default="deploy"/>
-        <property name="xltaskid" category="input" label="Task id" kind="string" />
-        <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
+    <type type="ispwServices.Deploy" extends="ispwServices.PythonScript">
+        <property name="scriptLocation" default="ispw/deploy.py" hidden="true" />
+
+        <property name="relid" category="input" label="Release id" kind="string" description="8 character value"/>
+        <property name="level" category="input" label="Level" kind="string" />
+        <property name="pollingInterval" category="input" default="10" required="true" kind="integer" description="Polling interval in seconds to check task status."/>
+        <property name="numberOfPollingTrials" category="input" label="Polling Retry Count" required="true" kind="integer" description="Number of times to retry check for task status."/>
     </type>
 
-    <type type="ispw.promote" extends="ispw.depltask">
-        <property name="action" category="input" label="Action" kind="string" hidden="true" default="promote"/>
-    </type>
-
-    <type type="ispw.createRelease" extends="ispw.request">
-        <property name="action" category="input" label="Action" kind="string" hidden="true" default="create"/>
-        <property name="desc" category="input" label="Release description" kind="string" />
-    </type>
 
     <type type="ispw.ISPWTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
         <property name="uri" hidden="true" default="include/ISPWTile/ispw-tile-view.html" />
         <property name="title" description="Tile title" default="ISPW Summary"/>
         <property name="detailsUri" hidden="true" default="include/ISPWTile/ispw-tile-details.html" />
 
-        <property category="input" name="action" required="true" default="deploy" description="ISPW Action to show (Possible values are deploy,promote and createRelease)" />
-    </type>
-
-    <!-- deprecated -->
-    <type type="ispw.wzRequest" extends="ispw.depltask">
-        <property name="action" category="input" label="Action" kind="string" hidden="true" default="deploy"/>
-        <property name="xltaskid" category="input" label="Task id" kind="string" />
-        <property name="xdata" category="input" default="y" label="Extension Data" kind="string" />
+        <property category="input" name="action" required="true" default="deploy" description="ISPW Action to show (Possible values are Deploy,Promote and CreateRelease)" />
     </type>
 
 </synthetic>
