@@ -34,7 +34,7 @@
 
         function getAllISPWTasks(release) {
             return _(ReleasesService.getLeafTasks(release))
-                .filter({scriptDefinitionType: "ispw." + vm.config.action})
+                .filter({scriptDefinitionType: "ispwServices." + vm.config.action})
                 .map(function (task) {
                     return {
                         taskName: task.title,
@@ -95,7 +95,7 @@
     };
     ISPWTileController.$inject = ['$scope', 'ReleasesService', 'XlrTileHelper'];
 
-    angular.module('xlrelease.ISPW.tile', []);
-    angular.module('xlrelease.ISPW.tile').controller('ispw.ISPWTileController', ISPWTileController);
+    angular.module('xlrelease.ISPWServices.tile', []);
+    angular.module('xlrelease.ISPWServices.tile').controller('ispwServices.ISPWTileController', ISPWTileController);
 
 })();
