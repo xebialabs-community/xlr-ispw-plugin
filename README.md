@@ -26,5 +26,7 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 
 ## Tasks ##
 + CreateRelease
++ GetReleaseInformation
 + Promote
 + Deploy
++ GetSetInformation
