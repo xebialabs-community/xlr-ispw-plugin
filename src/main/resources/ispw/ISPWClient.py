@@ -10,64 +10,92 @@ import json, time
 
 
 class ISPWClient(object):
-    def __init__(self, http_connection, username=None, password=None):
-        self.http_request = HttpRequest(http_connection, username, password)
+    def __init__(self, http_connection, username=None, password=None, ces_token=None):
+        self.http_request = HttpRequest(http_connection, username, password, ces_token)
 
     @staticmethod
-    def create_client(http_connection, username=None, password=None):
-        return ISPWClient(http_connection, username, password)
+    def create_client(http_connection, username=None, password=None, ces_token=None):
+        return ISPWClient(http_connection, username, password, ces_token)
 
-    def create_release(self, release_id, application, stream, release_description, user):
-        context_root = "/ispw/w3t/releases/%s/create?applid=%s&stream=%s&desc=%s&ownerid=%s" % (release_id, application, stream, release_description, user)
+    def create_release(self, srid, application, stream, description, release_id, release_prefix, owner,
+                       reference_number):
+        context_root = "/ispw/%s/releases/" % srid
         headers = {'Accept': 'application/json'}
-        response = self.http_request.put(context_root, None, headers=headers)
+        body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
+                'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
+        response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
-            raise Exception("Failed to create release [%s]. Server return [%s], with content [%s]" % (release_id, response.status, response.response))
+            raise Exception("Failed to create release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
         else:
-            print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (release_id, response.status, response.response)
+            print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+            return json.loads(response.getResponse())
 
-    def promote(self, release_id, level):
-        context_root = "/ispw/w3t/releases/%s/promote?level=%s" % (release_id, level)
+    def get_release_information(self, srid, release_id):
+        context_root = "/ispw/%s/releases/%s" % (srid, release_id)
         headers = {'Accept': 'application/json'}
-        response = self.http_request.post(context_root, None, headers=headers)
+        response = self.http_request.get(context_root, headers=headers)
         if not response.isSuccessful():
-            raise Exception("Failed to promote release [%s]. Server return [%s], with content [%s]" % (release_id, response.status, response.response))
+            raise Exception("Failed to get release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
         else:
-            print "Called promote release with id [%s]. Server return [%s], with content [%s]\n" % (release_id, response.status, response.response)
-            return json.loads(response.response)['statusUri']
+            print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+            return json.loads(response.getResponse())
 
-    def deploy(self, release_id, level):
-        context_root = "/ispw/w3t/releases/%s/deploy?level=%s" % (release_id, level)
+    def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+                callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/releases/%s/promote?level=%s" % (srid, release_id, level)
         headers = {'Accept': 'application/json'}
-        response = self.http_request.post(context_root, None, headers=headers)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "complete", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion failed by ISPW\"}"},
+                {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Event received from ISPW\"}"},]}
+        response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
-            raise Exception("Failed to deploy release [%s]. Server return [%s], with content [%s]" % (release_id, response.status, response.response))
+            raise Exception("Failed to promote release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
         else:
-            print "Called deploy release with id [%s]. Server return [%s], with content [%s]\n" % (release_id, response.status, response.response)
-            return json.loads(response.response)['statusUri']
+            print "Called promote release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+            return json.loads(response.response)
 
-    def check_status(self, status_uri, number_of_polling_trials, polling_interval):
-        trial = 0
-        while not number_of_polling_trials or trial < number_of_polling_trials:
-            trial += 1
-            result = self.get_status(status_uri)
-            if result == "C":
-                print "Deployment completed.\n"
-                return
-            if result == "F":
-                print "Deployment failed.\n"
-                raise Exception("Failed to deploy release [%s]." % status_uri)
-            print "Will try again in [%d] seconds.\n" % polling_interval
-            time.sleep(polling_interval)
-        raise Exception("Status checked timed out.\n")
-
-
-    def get_status(self, status_uri):
+    def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+            callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/releases/%s/deploy?level=%s" % (srid, release_id, level)
         headers = {'Accept': 'application/json'}
-        self.http_request.params.url = status_uri
-        response = self.http_request.get('', headers=headers)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "complete", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy failed by ISPW\"}"},
+                {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Event received from ISPW\"}"},]}
+        response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
-            raise Exception("Failed to get status for uri [%s]. Server return [%s], with content [%s]" % (status_uri, response.status, response.response))
+            raise Exception("Failed to deploy release [%s]. Server return [%s], with content [%s]" % (
+                release_id, response.status, response.response))
         else:
-            print "Received status for uri [%s]. Server return [%s], with content [%s]\n" % (status_uri, response.status, response.response)
-            return json.loads(response.response)['set']['execstat']
+            print "Called deploy release with id [%s]. Server return [%s], with content [%s]\n" % (
+                release_id, response.status, response.response)
+            return json.loads(response.response)
+
+    def get_set_information(self, srid, set_id):
+        context_root = "/ispw/%s/sets/%s" % (srid, set_id)
+        headers = {'Accept': 'application/json'}
+        response = self.http_request.get(context_root, headers=headers)
+        if not response.isSuccessful():
+            raise Exception("Failed to get set information [%s]. Server return [%s], with content [%s]" % (
+                set_id, response.status, response.response))
+        else:
+            print "Received set info with id [%s]. Server return [%s], with content [%s]\n" % (
+                set_id, response.status, response.response)
+            return json.loads(response.getResponse())

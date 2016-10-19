@@ -8,5 +8,7 @@ from ispw.ISPWClientUtil import ISPWClientUtil
 
 ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, password)
 
-status_uri = ispw_client.deploy(relid, level)
-ispw_client.check_status(status_uri, numberOfPollingTrials, pollingInterval)
+result = ispw_client.deploy(srid=srid, release_id=relId, level=level, change_type=changeType, execution_status=executionStatus, runtime_configuration=runtimeConfiguration, callback_task_id=callbackTaskId, callback_url=callbackUrl, callback_username=callbackUsername, callback_password=callbackPassword)
+setId = result["setId"]
+message = result["message"]
+url = result["url"]

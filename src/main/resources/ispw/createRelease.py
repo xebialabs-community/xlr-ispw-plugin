@@ -6,6 +6,9 @@
 
 from ispw.ISPWClientUtil import ISPWClientUtil
 
-ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, password)
+ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, password, cesToken)
 
-ispw_client.create_release(release_id=relid, application=application, stream=stream, release_description=description, user=user)
+result = ispw_client.create_release(srid=srid, application=application, stream=stream, description=description, release_id=relId, release_prefix=relPrefix, owner=owner, reference_number=referenceNumber)
+relOutputId = result["releaseId"]
+message = result["message"]
+url = result["url"]

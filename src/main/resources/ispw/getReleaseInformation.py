@@ -8,7 +8,10 @@ from ispw.ISPWClientUtil import ISPWClientUtil
 
 ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, password, cesToken)
 
-result = ispw_client.promote(srid=srid, release_id=relId, level=level, change_type=changeType, execution_status=executionStatus, runtime_configuration=runtimeConfiguration, callback_task_id=callbackTaskId, callback_url=callbackUrl, callback_username=callbackUsername, callback_password=callbackPassword)
-setId = result["setId"]
-message = result["message"]
-url = result["url"]
+result = ispw_client.get_release_information(srid=srid, release_id=relId)
+relOutputId = result["releaseId"]
+application = result["application"]
+stream = result["stream"]
+description = result["description"]
+owner = result["owner"]
+workRefNumber = result["workRefNumber"]
