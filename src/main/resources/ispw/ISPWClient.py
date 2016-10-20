@@ -20,7 +20,7 @@ class ISPWClient(object):
     def create_release(self, srid, application, stream, description, release_id, release_prefix, owner,
                        reference_number):
         context_root = "/ispw/%s/releases/" % srid
-        headers = {'Accept': 'application/json'}
+        headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
                 'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
