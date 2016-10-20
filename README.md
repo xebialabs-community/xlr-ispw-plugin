@@ -66,3 +66,5 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
   + `Callback Password`: XLR password used for callback
   ![XLR Deploy](images/Deploy.png)
 + GetSetInformation
+  + `srid`: The instance of ISPW you are working with.
+  + `setid`: The set ID you want information on

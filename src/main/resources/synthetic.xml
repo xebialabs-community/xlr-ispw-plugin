@@ -63,7 +63,6 @@
         <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string" description="XLR password used for callback" required="true" />
 
         <property name="setId" category="output" label="Set id" kind="string" />
-        <property name="message" category="output" label="Message" kind="string" />
         <property name="url" category="output" label="Url" kind="string" />
 
     </type>
@@ -101,6 +100,7 @@
         <property name="deployActivationTime" category="output" label="Deploy Activation Time" kind="string" />
         <property name="deployImplementationDate" category="output" label="Deploy Implementation Date" kind="string" />
         <property name="deployImplementationTime" category="output" label="Deploy Implementation Time" kind="string" />
+        <property name="state" category="output" label="State" kind="string" />
     </type>
 
 
