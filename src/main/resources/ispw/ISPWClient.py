@@ -68,7 +68,7 @@ class ISPWClient(object):
 
     def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
             callback_url, callback_username, callback_password):
-        context_root = "/ispw/%s/releases/%s/deploy?level=%s" % (srid, release_id, level)
+        context_root = "/ispw/%s/releases/%s/tasks/deploy?level=%s" % (srid, release_id, level)
         headers = {'Accept': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
