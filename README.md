@@ -23,6 +23,8 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 # Installation #
 
 * Minimal version XLR: 5.0.0+
+* The `deploy` and `promote` tasks are asynch tasks. This means you'll need to provide a callback task id, that can be used to let the task fail or pass.
+  In order to this you can make use of the [xlr-xlrelease-plugin](https://github.com/xebialabs-community/xlr-xlrelease-plugin) which provides a task `Get Task Id`
 
 ## Tasks ##
 + CreateRelease

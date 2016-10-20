@@ -56,6 +56,8 @@ class ISPWClient(object):
                  "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
                 {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion terminated by ISPW\"}"},
                 {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Event received from ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
@@ -79,6 +81,8 @@ class ISPWClient(object):
                  "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
                 {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy terminated by ISPW\"}"},
                 {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Event received from ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
