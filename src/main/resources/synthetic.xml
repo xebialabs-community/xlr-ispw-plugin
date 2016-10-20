@@ -52,7 +52,7 @@
     <type type="ispwServices.Promote" extends="ispwServices.PythonScript">
         <property name="scriptLocation" default="ispw/promote.py" hidden="true" />
 
-        <property name="relid" category="input" label="Release id" kind="string" description="8 character value"/>
+        <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string" description="All tasks in the release at this level will be promoted."/>
         <property name="changeType" category="input" label="Change Type" kind="string" default="S" description="Optional, S for standard, I for incidental, or E for emergency. Default value of S" required="false"/>
         <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I" description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I" required="false"/>
@@ -71,7 +71,7 @@
     <type type="ispwServices.Deploy" extends="ispwServices.PythonScript">
         <property name="scriptLocation" default="ispw/deploy.py" hidden="true" />
 
-        <property name="relid" category="input" label="Release id" kind="string" description="8 character value"/>
+        <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string" description="All tasks in the release at this level will be deployed."/>
         <property name="changeType" category="input" label="Change Type" kind="string" default="S" description="Optional, S for standard, I for incidental, or E for emergency. Default value of S" required="false"/>
         <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I" description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I" required="false"/>
