@@ -10,5 +10,4 @@ ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, pas
 
 result = ispw_client.deploy(srid=srid, release_id=relId, level=level, change_type=changeType, execution_status=executionStatus, runtime_configuration=runtimeConfiguration, callback_task_id=callbackTaskId, callback_url=callbackUrl, callback_username=callbackUsername, callback_password=callbackPassword)
 setId = result["setId"]
-message = result["message"]
 url = result["url"]
