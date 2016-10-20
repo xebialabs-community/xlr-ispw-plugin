@@ -33,7 +33,6 @@
         <property name="referenceNumber" category="input" label="Reference Number" kind="string" required="false"/>
 
         <property name="relOutputId" category="output" label="Release id" kind="string" />
-        <property name="message" category="output" label="Message" kind="string" />
         <property name="url" category="output" label="Url" kind="string" />
     </type>
 
