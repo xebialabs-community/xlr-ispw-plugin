@@ -26,11 +26,19 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 
 ## Tasks ##
 + CreateRelease
+  + `srid`: The instance of ISPW you are working with.
+  + `Application`:
+  + `Stream`:
+  + `Release description`:
+  + `Release id`: 8 character Release id.
+  + `Release prefix`: 8 character Release prefix.
+  + `Owner`:
+  + `Reference Number`:
+  ![XLR Create Release](images/CreateRelease.png)
 + GetReleaseInformation
   + `srid`: The instance of ISPW you are working with.
   + `Release id`: 8 character Release id.
   ![XLR Get Release Information](images/GetReleaseInfo.png)
-
 + Promote
 + Deploy
 + GetSetInformation
