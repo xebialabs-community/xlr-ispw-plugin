@@ -50,13 +50,14 @@ class ISPWClient(object):
         headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name':'Content-type','value':'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
                 {"name": "complete", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
                 {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion failed by ISPW\"}"},
                 {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
-                 "body": "{\"comment\":\"Event received from ISPW\"}"},]}
+                 "body": "{\"comment\":\"Event received from ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
             raise Exception("Failed to promote release [%s]. Server return [%s], with content [%s]" % (
@@ -72,13 +73,14 @@ class ISPWClient(object):
         headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name':'Content-type','value':'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
                 {"name": "complete", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
                 {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy failed by ISPW\"}"},
                 {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
-                 "body": "{\"comment\":\"Event received from ISPW\"}"},]}
+                 "body": "{\"comment\":\"Event received from ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
             raise Exception("Failed to deploy release [%s]. Server return [%s], with content [%s]" % (
