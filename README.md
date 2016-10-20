@@ -68,3 +68,8 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 + GetSetInformation
   + `srid`: The instance of ISPW you are working with.
   + `setid`: The set ID you want information on
+  ![XLR Get Set Information](images/GetSetInfo.png)
+  
+## Example Template ##
+
+![XLR Example Template](images/ExampleTemplate.png)
