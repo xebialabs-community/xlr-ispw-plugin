@@ -52,6 +52,7 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
   + `Callback Url`: XLR base url used for callback
   + `Callback Username`: XLR username used for callback
   + `Callback Password`: XLR password used for callback
+  ![XLR Promote](images/Promote.png)
 + Deploy
   + `srid`: The instance of ISPW you are working with.
   + `Level`: All tasks in the release at this level will be deployed.
