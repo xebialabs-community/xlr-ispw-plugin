@@ -52,7 +52,7 @@ class ISPWClient(object):
                 'runtimeConfiguration': runtime_configuration,
                 'httpHeaders': [{'name':'Content-type','value':'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
-                {"name": "complete", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
                 {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion failed by ISPW\"}"},
@@ -75,7 +75,7 @@ class ISPWClient(object):
                 'runtimeConfiguration': runtime_configuration,
                 'httpHeaders': [{'name':'Content-type','value':'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
-                {"name": "complete", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
                 {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy failed by ISPW\"}"},

@@ -8,7 +8,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 
-version="3.0.0.RC9"
+version="3.0.0.RC10"
 
 xlrDocker {
     version = '5.0.1.10'
