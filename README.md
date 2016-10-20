@@ -40,5 +40,26 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
   + `Release id`: 8 character Release id.
   ![XLR Get Release Information](images/GetReleaseInfo.png)
 + Promote
+  + `srid`: The instance of ISPW you are working with.
+  + `Level`: All tasks in the release at this level will be promoted.
+  + `Change Type`: Optional, S for standard, I for incidental, or E for emergency. Default value of S
+  + `Execution Status`: Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I
+  + `Release id`: 8 character Release id.
+  + `Runtime Configuration`: See ISPW administrator for valid values.
+  + `Callback Task Id`: Manual task used for callback
+  + `Callback Url`: XLR base url used for callback
+  + `Callback Username`: XLR username used for callback
+  + `Callback Password`: XLR password used for callback
 + Deploy
+  + `srid`: The instance of ISPW you are working with.
+  + `Level`: All tasks in the release at this level will be deployed.
+  + `Change Type`: Optional, S for standard, I for incidental, or E for emergency. Default value of S
+  + `Execution Status`: Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I
+  + `Release id`: 8 character Release id.
+  + `Runtime Configuration`: See ISPW administrator for valid values.
+  + `Callback Task Id`: Manual task used for callback
+  + `Callback Url`: XLR base url used for callback
+  + `Callback Username`: XLR username used for callback
+  + `Callback Password`: XLR password used for callback
+  ![XLR Deploy](images/Deploy.png)
 + GetSetInformation
