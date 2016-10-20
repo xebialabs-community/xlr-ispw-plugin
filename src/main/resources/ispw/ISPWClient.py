@@ -46,8 +46,8 @@ class ISPWClient(object):
 
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
                 callback_url, callback_username, callback_password):
-        context_root = "/ispw/%s/releases/%s/promote?level=%s" % (srid, release_id, level)
-        headers = {'Accept': 'application/json'}
+        context_root = "/ispw/%s/releases/%s/tasks/promote?level=%s" % (srid, release_id, level)
+        headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
@@ -69,7 +69,7 @@ class ISPWClient(object):
     def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
             callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/releases/%s/tasks/deploy?level=%s" % (srid, release_id, level)
-        headers = {'Accept': 'application/json'}
+        headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
