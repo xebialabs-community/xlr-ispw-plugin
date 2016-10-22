@@ -11,7 +11,7 @@ apply plugin: 'maven'
 version="3.0.0"
 
 xlrDocker {
-    version = '5.0.1.10'
+    version = 'v5.0.1.11'
 }
 
 license {
