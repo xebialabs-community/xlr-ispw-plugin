@@ -1,6 +1,6 @@
 plugins {
     id "com.github.hierynomus.license" version "0.13.0"
-    id "com.xebialabs.xlr.docker" version "1.1.12"
+    id "com.xebialabs.xlr.docker" version "1.2.1"
 }
 
 apply plugin: 'java'
@@ -11,7 +11,13 @@ apply plugin: 'maven'
 version="3.0.0"
 
 xlrDocker {
-    version = 'v5.0.1.11'
+    compileVersion = 'v5.0.1.11'
+    runVersion = 'v5.0.1.11'
+    download("xlr_community_plugins") {
+        src(["https://github.com/xebialabs-community/xlr-xlrelease-plugin/releases/download/v1.8.0/xlr-xlrelease-plugin-1.8.0.jar"])
+        dest file("src/downloads/plugins")
+        acceptAnyCertificate true
+    }
 }
 
 license {
