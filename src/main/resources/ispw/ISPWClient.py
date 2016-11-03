@@ -10,12 +10,12 @@ import json, time
 
 
 class ISPWClient(object):
-    def __init__(self, http_connection, username=None, password=None, ces_token=None):
-        self.http_request = HttpRequest(http_connection, username, password, ces_token)
+    def __init__(self, http_connection, ces_token=None):
+        self.http_request = HttpRequest(http_connection, None, None, ces_token)
 
     @staticmethod
-    def create_client(http_connection, username=None, password=None, ces_token=None):
-        return ISPWClient(http_connection, username, password, ces_token)
+    def create_client(http_connection, ces_token=None):
+        return ISPWClient(http_connection, ces_token)
 
     def create_release(self, srid, application, stream, description, release_id, release_prefix, owner,
                        reference_number):

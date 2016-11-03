@@ -6,7 +6,7 @@
 
 from ispw.ISPWClientUtil import ISPWClientUtil
 
-ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, password, cesToken)
+ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, cesToken)
 
 result = ispw_client.get_release_information(srid=srid, release_id=relId)
 relOutputId = result["releaseId"]

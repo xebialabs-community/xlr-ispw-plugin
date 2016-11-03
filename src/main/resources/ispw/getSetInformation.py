@@ -6,7 +6,7 @@
 
 from ispw.ISPWClientUtil import ISPWClientUtil
 
-ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, username, password, cesToken)
+ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, cesToken)
 
 result = ispw_client.get_set_information(srid=srid, set_id=setId)
 setOutputId = result["setid"]

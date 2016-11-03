@@ -10,5 +10,5 @@ from ispw.ISPWClient import ISPWClient
 class ISPWClientUtil(object):
 
     @staticmethod
-    def create_ispw_client(container, username, password, ces_token):
-        return ISPWClient.create_client(container, username, password, ces_token)
+    def create_ispw_client(container, ces_token):
+        return ISPWClient.create_client(container, ces_token)

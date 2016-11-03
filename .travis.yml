@@ -7,7 +7,7 @@ deploy:
   provider: releases
   api_key:
     secure: TZKfF31Ss6DiyKVrOw6Z6WRUbKwcmx5ssS0AyD82tHZ9H1Ps4yCoGprDdKicdmbmfabzsUs6YRJwva4gVo4bwMVnyh2PVHAtm3ozXMLRbr3C2uT8YyDCa3AdMih59/VzulByXaMEK1DZuYee1RfojO5FUTKdhk3fWaXVqlsD8clglQHwiTB/6us74RvDmEBEKej5b3vL4BQRaatkN3Jzl4fXjj61EnNw3bwe6aFYpiO/7a9Xyv4iDdSl0WGtXyICa/m/lwCCo9GFiV35932b9EwEzr10n3NIMRxNqCPpwY3+8LswnLcw/roS9XJROVR1ChPVXN1p64lyOcnRhqS5NEfxbGw9OGki2wZhUAFyLG5xkSXfO0WDun8Kab+QXhd19KCVyp31TmOZzzqqvcu7NjChkKzJsHyUNl+pqATvft4O/sCrJXlElI/xdRKgYnb7gC0yd19R/9YnlhRav8kINzDp8hAVedF0W3xTvYCQCpfh7+8WEkqlHuOZwOejf5c/c5Er/XYacMu7MTRxoxPbm+SOSSBtyQpu6I0AbD4F5mX70q8bHwNSyJ82EMJ3q6LV9+uyf2SaEHrpbnQMscw/syeF4y5TClmow6Ad6nGz9o8COd7jJT6m8X2YZId2iZTDf5JAjo1GGWQgl6EluqeaHQydvU1KfqgEXefUeMlRrfU=
-  file: build/libs/xlr-ispw-plugin-3.0.1.jar
+  file: build/libs/xlr-ispw-plugin-3.0.2.jar
   skip_cleanup: true
   on:
     tags: true
