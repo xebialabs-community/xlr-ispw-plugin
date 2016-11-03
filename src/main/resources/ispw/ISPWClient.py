@@ -59,9 +59,7 @@ class ISPWClient(object):
                 {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
-                 "body": "{\"comment\":\"Promotion deleted by ISPW\"}"},
-                {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
-                 "body": "{\"comment\":\"Event received from ISPW\"}"}]}
+                 "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
             raise Exception("Failed to promote release [%s]. Server return [%s], with content [%s]" % (
@@ -86,9 +84,7 @@ class ISPWClient(object):
                 {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
-                 "body": "{\"comment\":\"Deploy deleted by ISPW\"}"},
-                {"name": "always", "url": "%s/api/v1/tasks/%s/comment" % (callback_url, callback_task_id),
-                 "body": "{\"comment\":\"Event received from ISPW\"}"}]}
+                 "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
             raise Exception("Failed to deploy release [%s]. Server return [%s], with content [%s]" % (

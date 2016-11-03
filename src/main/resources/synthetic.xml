@@ -10,13 +10,13 @@
 
     <type type="ispwServices.Server" extends="configuration.HttpConnection">
         <property name="cesToken" kind="string" required="false" label="Authentication token" />
+        <property name="username" hidden="true" default="username" />
+        <property name="password" hidden="true" default="password" />
     </type>
 
     <type type="ispwServices.PythonScript" extends="xlrelease.PythonScript" virtual="true">
         <property name="iconLocation" default="ispw/compuware.png" hidden="true" />
         <property name="ispwServiceServer" category="input" label="Server" referenced-type="ispwServices.Server" kind="ci"/>
-        <property name="username" category="input" required="false" />
-        <property name="password" password="true" category="input" required="false" />
         <property name="cesToken" category="input" kind="string" required="false" label="Authentication token" />
         <property name="srid" category="input" kind="string" required="true" label="srid" description="The instance of ISPW you are working with." />
     </type>
