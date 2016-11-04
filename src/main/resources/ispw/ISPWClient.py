@@ -11,7 +11,7 @@ import json, time
 
 class ISPWClient(object):
     def __init__(self, http_connection, ces_token=None):
-        self.http_request = HttpRequest(http_connection, None, None, ces_token)
+        self.http_request = HttpRequest(http_connection, ces_token)
 
     @staticmethod
     def create_client(http_connection, ces_token=None):

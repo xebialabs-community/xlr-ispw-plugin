@@ -22,20 +22,14 @@ from xlrelease.HttpResponse import HttpResponse
 
 
 class HttpRequest:
-    def __init__(self, params, username = None, password = None, ces_token = None):
+    def __init__(self, params, ces_token = None):
         """
         Builds an HttpRequest
 
         :param params: an <a href="/jython-docs/#!/_PROD_VERSION_/service/com.xebialabs.xlrelease.domain.configuration.HttpConnection">HttpConnection</a>
-        :param username: the username
-            (optional, it will override the credentials defined on the <a href="/jython-docs/#!/_PROD_VERSION_/service/com.xebialabs.xlrelease.domain.configuration.HttpConnection">HttpConnection</a> object)
-        :param password: an password
-            (optional, it will override the credentials defined on the <a href="/jython-docs/#!/_PROD_VERSION_/service/com.xebialabs.xlrelease.domain.configuration.HttpConnection">HttpConnection</a> object)
         """
         self.params = HttpConnection(params)
         self.config_token = params['cesToken']
-        self.username = username
-        self.password = password
         self.token = ces_token
 
     def doRequest(self, **options):
@@ -177,23 +171,13 @@ class HttpRequest:
 
 
     def setCredentials(self, request):
-        if self.username:
-            username = self.username
-            password = self.password
-        elif self.params.getUsername():
-            username = self.params.getUsername()
-            password = self.params.getPassword()
-        elif self.token:
+        if self.token:
             request.addHeader('Authorization',self.token)
             return
         elif self.config_token:
             request.addHeader('Authorization',self.config_token)
             return
-        else:
-            return
-
-        encoding = Base64.encodeBase64String(String(username + ':' + password).getBytes('ISO-8859-1'))
-        request.addHeader('Authorization', 'Basic ' + encoding)
+        return
 
 
     def setProxy(self, request):
