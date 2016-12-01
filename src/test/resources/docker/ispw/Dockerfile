@@ -3,8 +3,8 @@ RUN mkdir /app
 ADD . /app/
 WORKDIR /app
 
-# Install the Martini package
-RUN go get github.com/go-martini/martini
+# Install the Gorilla package
+RUN go get github.com/gorilla/mux
 
 RUN go build -o main .
 CMD ["/app/main"]

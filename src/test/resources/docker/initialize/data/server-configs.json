@@ -8,7 +8,7 @@
     "id": "Configuration/Custom/ispw",
     "type":"ispwServices.Server",
     "title":"ispw",
-    "url":"http://yourserver:2020",
-    "cesToken":"12345678-abcd-efgh-12345678",
+    "url":"http://ispw:8080",
+    "cesToken":"12345678-abcd-efgh-12345678"
   }
 ]

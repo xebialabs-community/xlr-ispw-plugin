@@ -7,7 +7,7 @@
 ispw:
   build: ./ispw
   ports:
-    - 3000:3000
+    - 8080:8080
 
 xlr:
   image: xebialabs/xlr_dev_run:v6.0.0.1
