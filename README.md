@@ -9,6 +9,8 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 [![Build Status][xlr-ispw-plugin-travis-image]][xlr-ispw-plugin-travis-url]
 [![Codacy Badge][xlr-ispw-plugin-codacy-image] ][xlr-ispw-plugin-codacy-url]
 [![Code Climate][xlr-ispw-plugin-code-climate-image] ][xlr-ispw-plugin-code-climate-url]
+[![License: MIT][xlr-ispw-plugin-license-image] ][xlr-ispw-plugin-license-url]
+[![Github All Releases][xlr-ispw-plugin-downloads-image] ]()
 
 [xlr-ispw-plugin-travis-image]: https://travis-ci.org/xebialabs-community/xlr-ispw-plugin.svg?branch=master
 [xlr-ispw-plugin-travis-url]: https://travis-ci.org/xebialabs-community/xlr-ispw-plugin
@@ -16,6 +18,10 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 [xlr-ispw-plugin-codacy-url]: https://www.codacy.com/app/joris-dewinne/xlr-ispw-plugin
 [xlr-ispw-plugin-code-climate-image]: https://codeclimate.com/github/xebialabs-community/xlr-ispw-plugin/badges/gpa.svg
 [xlr-ispw-plugin-code-climate-url]: https://codeclimate.com/github/xebialabs-community/xlr-ispw-plugin
+[xlr-ispw-plugin-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
+[xlr-ispw-plugin-license-url]: https://opensource.org/licenses/MIT
+[xlr-ispw-plugin-downloads-image]: https://img.shields.io/github/downloads/xebialabs-community/xlr-ispw-plugin/total.svg
+
 
 
 # Overview #
