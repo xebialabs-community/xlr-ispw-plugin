@@ -11,7 +11,6 @@
 from ispw.ISPWClientUtil import ISPWClientUtil
 
 ispw_client = ISPWClientUtil.create_ispw_client(ispwServiceServer, cesToken)
-
-result = ispw_client.promote(srid=srid, release_id=relId, level=level, change_type=changeType, execution_status=executionStatus, runtime_configuration=runtimeConfiguration, callback_task_id=callbackTaskId, callback_url=callbackUrl, callback_username=callbackUsername, callback_password=callbackPassword)
-setId = result["setId"]
-url = result["url"]
+method = str(task.getTaskType()).lower().replace('.', '_')
+call = getattr(ispw_client, method)
+output = call(locals())

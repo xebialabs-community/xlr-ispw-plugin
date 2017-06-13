@@ -9,8 +9,14 @@ import (
 )
 
 type Release struct {
-	ReleaseId  string `json:"releaseId"`
-	Url string `json:"url"`
+	ReleaseId string `json:"releaseId"`
+	Url       string `json:"url"`
+}
+
+type Regress struct {
+	SetId   string `json:"setid"`
+	Message string `json:"message"`
+	Url     string `json:"url"`
 }
 
 func main() {
@@ -20,6 +26,7 @@ func main() {
 	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote?level={level}", Promote).Methods("POST")
 	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy?level={level}", Deploy).Methods("POST")
 	//router.HandleFunc("/ispw/ispw/sets/%s", GetSetInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress?level={level}", Regress).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -35,4 +42,18 @@ func CreateRelease(res http.ResponseWriter, req *http.Request) {
 	}
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
+}
+
+func Regress(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := Regress{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+
 }

@@ -8,9 +8,14 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+import json
+
 from ispwHttp.HttpRequest import HttpRequest
 
-import json, time
+
+def check_response(response, message):
+    if not response.isSuccessful():
+        raise Exception(message)
 
 
 class ISPWClient(object):
@@ -30,10 +35,10 @@ class ISPWClient(object):
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
         if not response.isSuccessful():
             raise Exception("Failed to create release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
+                release_id, response.status, response.response))
         else:
             print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
+                release_id, response.status, response.response)
             return json.loads(response.getResponse())
 
     def get_release_information(self, srid, release_id):
@@ -42,10 +47,10 @@ class ISPWClient(object):
         response = self.http_request.get(context_root, headers=headers)
         if not response.isSuccessful():
             raise Exception("Failed to get release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
+                release_id, response.status, response.response))
         else:
             print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
+                release_id, response.status, response.response)
             return json.loads(response.getResponse())
 
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
@@ -54,7 +59,7 @@ class ISPWClient(object):
         headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
-                'httpHeaders': [{'name':'Content-type','value':'application/json'}],
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
                 {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
@@ -65,21 +70,42 @@ class ISPWClient(object):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
-        if not response.isSuccessful():
-            raise Exception("Failed to promote release [%s]. Server return [%s], with content [%s]" % (
+        check_response(response, "Failed to promote release [%s]. Server return [%s], with content [%s]" % (
             release_id, response.status, response.response))
-        else:
-            print "Called promote release with id [%s]. Server return [%s], with content [%s]\n" % (
+        print "Called promote release with id [%s]. Server return [%s], with content [%s]\n" % (
             release_id, response.status, response.response)
-            return json.loads(response.response)
+        return json.loads(response.response)
+
+    def regress(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+                    callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/releases/%s/tasks/regress?level=%s" % (srid, release_id, level)
+        headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
+        response = self.http_request.post(context_root, json.dumps(body), headers=headers)
+        check_response(response, "Failed to regress release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
+        print "Called regress release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+        return json.loads(response.response)
 
     def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
-            callback_url, callback_username, callback_password):
+               callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/releases/%s/tasks/deploy?level=%s" % (srid, release_id, level)
         headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
-                'httpHeaders': [{'name':'Content-type','value':'application/json'}],
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
                 {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
@@ -109,3 +135,23 @@ class ISPWClient(object):
             print "Received set info with id [%s]. Server return [%s], with content [%s]\n" % (
                 set_id, response.status, response.response)
             return json.loads(response.getResponse())
+
+    def ispwservices_promote(self, variables):
+        result = self.promote(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
+                              change_type=variables['changeType'], execution_status=variables['executionStatus'],
+                              runtime_configuration=variables['runtimeConfiguration'],
+                              callback_task_id=variables['callbackTaskId'], callback_url=variables['callbackUrl'],
+                              callback_username=variables['callbackUsername'],
+                              callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
+
+    def ispwservices_regress(self, variables):
+        result = self.regress(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
+                              change_type=variables['changeType'], execution_status=variables['executionStatus'],
+                              runtime_configuration=variables['runtimeConfiguration'],
+                              callback_task_id=variables['callbackTaskId'], callback_url=variables['callbackUrl'],
+                              callback_username=variables['callbackUsername'],
+                              callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
