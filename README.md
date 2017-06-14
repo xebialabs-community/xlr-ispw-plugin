@@ -34,46 +34,16 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 
 ## Tasks ##
 + CreateRelease
-  + `srid`: The instance of ISPW you are working with.
-  + `Application`:
-  + `Stream`:
-  + `Release description`:
-  + `Release id`: 8 character Release id.
-  + `Release prefix`: 8 character Release prefix.
-  + `Owner`:
-  + `Reference Number`:
   ![XLR Create Release](images/CreateRelease.png)
 + GetReleaseInformation
-  + `srid`: The instance of ISPW you are working with.
-  + `Release id`: 8 character Release id.
   ![XLR Get Release Information](images/GetReleaseInfo.png)
 + Promote
-  + `srid`: The instance of ISPW you are working with.
-  + `Level`: All tasks in the release at this level will be promoted.
-  + `Change Type`: Optional, S for standard, I for incidental, or E for emergency. Default value of S
-  + `Execution Status`: Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I
-  + `Release id`: 8 character Release id.
-  + `Runtime Configuration`: See ISPW administrator for valid values.
-  + `Callback Task Id`: Manual task used for callback
-  + `Callback Url`: XLR base url used for callback
-  + `Callback Username`: XLR username used for callback
-  + `Callback Password`: XLR password used for callback
   ![XLR Promote](images/Promote.png)
++ Regress
+  ![XLR Regress](images/Regress.png)
 + Deploy
-  + `srid`: The instance of ISPW you are working with.
-  + `Level`: All tasks in the release at this level will be deployed.
-  + `Change Type`: Optional, S for standard, I for incidental, or E for emergency. Default value of S
-  + `Execution Status`: Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I
-  + `Release id`: 8 character Release id.
-  + `Runtime Configuration`: See ISPW administrator for valid values.
-  + `Callback Task Id`: Manual task used for callback
-  + `Callback Url`: XLR base url used for callback
-  + `Callback Username`: XLR username used for callback
-  + `Callback Password`: XLR password used for callback
   ![XLR Deploy](images/Deploy.png)
 + GetSetInformation
-  + `srid`: The instance of ISPW you are working with.
-  + `setid`: The set ID you want information on
   ![XLR Get Set Information](images/GetSetInfo.png)
   
 ## Example Template ##
