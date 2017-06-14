@@ -12,9 +12,6 @@
 import re
 import urllib
 
-from java.lang import String
-
-from org.apache.commons.codec.binary import Base64
 from org.apache.http import HttpHost
 from org.apache.http.client.config import RequestConfig
 from org.apache.http.client.methods import HttpGet, HttpPost, HttpPut, HttpDelete, HttpPatch

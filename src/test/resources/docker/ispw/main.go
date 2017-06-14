@@ -31,6 +31,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
+// CreateRelease sends a dummy response back
 func CreateRelease(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := Release{"relid", "http://ispw:8080/ispw/ispw/releases/relid"}
@@ -44,6 +45,7 @@ func CreateRelease(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(res, string(outgoingJSON))
 }
 
+// Regress sends a dummy response back
 func Regress(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := Regress{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
