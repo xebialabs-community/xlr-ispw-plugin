@@ -34,17 +34,17 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 
 ## Tasks ##
 + CreateRelease
-  ![XLR Create Release](images/CreateRelease.png)
+    ![XLR Create Release](images/CreateRelease.png)
 + GetReleaseInformation
-  ![XLR Get Release Information](images/GetReleaseInfo.png)
+    ![XLR Get Release Information](images/GetReleaseInfo.png)
 + Promote
-  ![XLR Promote](images/Promote.png)
+    ![XLR Promote](images/Promote.png)
 + Regress
-  ![XLR Regress](images/Regress.png)
+    ![XLR Regress](images/Regress.png)
 + Deploy
-  ![XLR Deploy](images/Deploy.png)
+    ![XLR Deploy](images/Deploy.png)
 + GetSetInformation
-  ![XLR Get Set Information](images/GetSetInfo.png)
+    ![XLR Get Set Information](images/GetSetInfo.png)
   
 ## Example Template ##
 
