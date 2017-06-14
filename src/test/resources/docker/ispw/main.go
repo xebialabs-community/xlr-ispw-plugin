@@ -14,9 +14,9 @@ type Release struct {
 	URL       string `json:"url"`
 }
 
-// Regress struct used to retun json after regress is called
-type Regress struct {
-	SetID   string `json:"setid"`
+// RegressResponse struct used to retun json after regress is called
+type RegressResponse struct {
+	SetID   string `json:"setId"`
 	Message string `json:"message"`
 	URL     string `json:"url"`
 }
@@ -28,7 +28,7 @@ func main() {
 	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote?level={level}", Promote).Methods("POST")
 	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy?level={level}", Deploy).Methods("POST")
 	//router.HandleFunc("/ispw/ispw/sets/%s", GetSetInformation).Methods("GET")
-	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress?level={level}", Regress).Methods("POST")
+	router.HandleFunc("/ispw/ispw/releases/relid/tasks/regress", Regress).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -50,7 +50,7 @@ func CreateRelease(res http.ResponseWriter, req *http.Request) {
 // Regress sends a dummy response back
 func Regress(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	c := Regress{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	c := RegressResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())
