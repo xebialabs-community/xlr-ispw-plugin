@@ -14,17 +14,26 @@
 
     var ISPWTileController = function ($scope, ReleasesService, XlrTileHelper) {
         var vm = this;
-
         if ($scope.xlrDashboard) {
             // summary page
             vm.release = $scope.xlrDashboard.release;
             vm.tile = $scope.xlrTile.tile;
-            vm.config = vm.tile.configurationProperties;
+            if (vm.tile.properties == null) {
+                vm.config = tile.configurationProperties;
+            } else {
+                // new style since 7.0
+                vm.config = tile.properties;
+            }
         } else {
             // details page
             vm.release = $scope.xlrTileDetailsCtrl.release;
             vm.tile = $scope.xlrTileDetailsCtrl.tile;
-            vm.config = vm.tile.configurationProperties;
+            if (vm.tile.properties == null) {
+                vm.config = tile.configurationProperties;
+            } else {
+                // new style since 7.0
+                vm.config = tile.properties;
+            }
         }
 
 

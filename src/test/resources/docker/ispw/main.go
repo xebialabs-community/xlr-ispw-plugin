@@ -8,15 +8,17 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Release struct used to return json after createRelease is called
 type Release struct {
-	ReleaseId string `json:"releaseId"`
-	Url       string `json:"url"`
+	ReleaseID string `json:"releaseId"`
+	URL       string `json:"url"`
 }
 
+// Regress struct used to retun json after regress is called
 type Regress struct {
-	SetId   string `json:"setid"`
+	SetID   string `json:"setid"`
 	Message string `json:"message"`
-	Url     string `json:"url"`
+	URL     string `json:"url"`
 }
 
 func main() {
