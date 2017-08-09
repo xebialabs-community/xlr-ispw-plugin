@@ -14,6 +14,16 @@ type Release struct {
 	URL       string `json:"url"`
 }
 
+// ReleaseInformation struct used to return json after getReleaseInformation is called
+type ReleaseInformation struct {
+	RelOutputId string `json:"releaseId"`
+	Application string `json:"application"`
+	Stream string `json:"stream"`
+	Description string `json:"description"`
+	Owner string `json:"owner"`
+	WorkRefNumber string `json:"workRefNumber"`
+}
+
 // RegressResponse struct used to retun json after regress is called
 type RegressResponse struct {
 	SetID   string `json:"setId"`
@@ -24,7 +34,7 @@ type RegressResponse struct {
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
-	//router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
 	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote?level={level}", Promote).Methods("POST")
 	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy?level={level}", Deploy).Methods("POST")
 	//router.HandleFunc("/ispw/ispw/sets/%s", GetSetInformation).Methods("GET")
@@ -37,6 +47,19 @@ func main() {
 func CreateRelease(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := Release{"relid", "http://ispw:8080/ispw/ispw/releases/relid"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+}
+
+func GetReleaseInformation(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := ReleaseInformation{"relid", "app", "stream", "something", "xebia", "1234"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())

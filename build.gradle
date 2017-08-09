@@ -12,9 +12,9 @@ version = "3.1.0"
 
 xlDocker {
   compileImage = 'xebialabs/xlr_dev_compile'
-  compileVersion = 'v7.0.0.1'
+  compileVersion = 'v7.0.1.1'
   runImage = 'xebialabs/xlr_dev_run'
-  runVersion = 'v7.0.0.1'
+  runVersion = 'v7.0.1.1'
   runPortMapping = '15516:5516'
   download("xlr_community_plugins") {
     src(["https://github.com/xebialabs-community/xlr-xlrelease-plugin/releases/download/v1.10.0/xlr-xlrelease-plugin-1.10.0.jar"])
