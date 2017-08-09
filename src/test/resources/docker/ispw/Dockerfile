@@ -1,6 +1,6 @@
 FROM golang:latest
 RUN mkdir /app
-ADD . /app/
+ADD src/test/resources/docker/ispw/. /app/
 WORKDIR /app
 
 # Install the Gorilla package
