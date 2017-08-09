@@ -1,7 +1,8 @@
 FROM golang:latest
 RUN mkdir /app
-ADD src/test/resources/docker/ispw/. /app/
 WORKDIR /app
+COPY . .
+
 
 # Install the Gorilla package
 RUN go get github.com/gorilla/mux
