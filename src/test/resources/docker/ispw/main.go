@@ -26,7 +26,7 @@ type ReleaseInformation struct {
 
 // SetInformation struct used to return json after getSetInformation is called
 type SetInformation struct {
-	SetOutputId              string `json:"setid"`
+	SetOutputID              string `json:"setid"`
 	Application              string `json:"applicationId"`
 	Stream                   string `json:"streamName"`
 	Description              string `json:"description"`
@@ -40,8 +40,8 @@ type SetInformation struct {
 	State                    string `json:"state"`
 }
 
-// RegressResponse struct used to retun json after regress is called
-type RegressResponse struct {
+// IspwResponse struct used to retun json after regress, promote or deploy is called
+type IspwResponse struct {
 	SetID   string `json:"setId"`
 	Message string `json:"message"`
 	URL     string `json:"url"`
@@ -51,10 +51,10 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
-	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote?level={level}", Promote).Methods("POST")
-	//router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy?level={level}", Deploy).Methods("POST")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", Promote).Methods("POST").Queries("level","{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", Deploy).Methods("POST").Queries("level","{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
-	router.HandleFunc("/ispw/ispw/releases/relid/tasks/regress", Regress).Methods("POST")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", Regress).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -104,7 +104,37 @@ func GetSetInformation(res http.ResponseWriter, req *http.Request) {
 // Regress sends a dummy response back
 func Regress(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	c := RegressResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	c := IspwResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+
+}
+
+// Promote sends a dummy response back
+func Promote(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := IspwResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+
+}
+
+// Deploy sends a dummy response back
+func Deploy(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := IspwResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())
