@@ -11,127 +11,159 @@
 
 -->
 
-<synthetic xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
+<synthetic xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
     <type type="ispwServices.Server" extends="configuration.HttpConnection">
-        <property name="cesToken" kind="string" required="false" label="Authentication token" />
-        <property name="username" hidden="true" default="username" />
-        <property name="password" hidden="true" default="password" />
+        <property name="cesToken" kind="string" required="false" label="Authentication token"/>
+        <property name="username" hidden="true" default="username"/>
+        <property name="password" hidden="true" default="password"/>
     </type>
 
     <type type="ispwServices.PythonScript" extends="xlrelease.PythonScript" virtual="true">
-        <property name="scriptLocation" default="ispw/ISPWTask.py" hidden="true" />
-        <property name="iconLocation" default="ispw/compuware.png" hidden="true" />
-        <property name="ispwServiceServer" category="input" label="Server" referenced-type="ispwServices.Server" kind="ci"/>
-        <property name="cesToken" category="input" kind="string" required="false" label="Authentication token" />
-        <property name="srid" category="input" kind="string" required="true" label="srid" description="The instance of ISPW you are working with." />
+        <property name="scriptLocation" default="ispw/ISPWTask.py" hidden="true"/>
+        <property name="iconLocation" default="ispw/compuware.png" hidden="true"/>
+        <property name="ispwServiceServer" category="input" label="Server" referenced-type="ispwServices.Server"
+                  kind="ci"/>
+        <property name="cesToken" category="input" kind="string" required="false" label="Authentication token"/>
+        <property name="srid" category="input" kind="string" required="true" label="srid"
+                  description="The instance of ISPW you are working with."/>
     </type>
 
     <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript">
-        <property name="scriptLocation" default="ispw/createRelease.py" hidden="true" />
-
-        <property name="application" category="input" label="Application" kind="string" />
-        <property name="stream" category="input" label="Stream" kind="string" />
-        <property name="description" category="input" label="Release description" kind="string" />
-        <property name="relId" category="input" label="Release id" kind="string" description="8 character value" required="false" />
-        <property name="relPrefix" category="input" label="Release prefix" kind="string" description="8 character value" required="false"/>
+        <property name="application" category="input" label="Application" kind="string"/>
+        <property name="stream" category="input" label="Stream" kind="string"/>
+        <property name="description" category="input" label="Release description" kind="string"/>
+        <property name="relId" category="input" label="Release id" kind="string" description="8 character value"
+                  required="false"/>
+        <property name="relPrefix" category="input" label="Release prefix" kind="string" description="8 character value"
+                  required="false"/>
         <property name="owner" category="input" label="Owner" kind="string" required="false"/>
         <property name="referenceNumber" category="input" label="Reference Number" kind="string" required="false"/>
 
-        <property name="relOutputId" category="output" label="Release id" kind="string" />
-        <property name="url" category="output" label="Url" kind="string" />
+        <property name="relOutputId" category="output" label="Release id" kind="string"/>
+        <property name="url" category="output" label="Url" kind="string"/>
     </type>
 
     <type type="ispwServices.GetReleaseInformation" extends="ispwServices.PythonScript">
-        <property name="scriptLocation" default="ispw/getReleaseInformation.py" hidden="true" />
+        <property name="relId" category="input" label="Release id" kind="string" description="8 character value"
+                  required="true"/>
 
-        <property name="relId" category="input" label="Release id" kind="string" description="8 character value" required="true" />
-
-        <property name="relOutputId" category="output" label="Release id" kind="string" />
-        <property name="application" category="output" label="Application" kind="string" />
-        <property name="stream" category="output" label="Stream" kind="string" />
-        <property name="description" category="output" label="Release description" kind="string" />
+        <property name="relOutputId" category="output" label="Release id" kind="string"/>
+        <property name="application" category="output" label="Application" kind="string"/>
+        <property name="stream" category="output" label="Stream" kind="string"/>
+        <property name="description" category="output" label="Release description" kind="string"/>
         <property name="owner" category="output" label="Owner" kind="string"/>
-        <property name="workRefNumber" category="output" label="Work Reference Number" kind="string" />
+        <property name="workRefNumber" category="output" label="Work Reference Number" kind="string"/>
     </type>
 
     <type type="ispwServices.Promote" extends="ispwServices.PythonScript">
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
-        <property name="level" category="input" label="Level" kind="string" description="All tasks in the release at this level will be promoted."/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S" description="Optional, S for standard, I for incidental, or E for emergency. Default value of S" required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I" description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I" required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string" description="See ISPW administrator for valid values" required="true"/>
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string" description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string" description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string" description="XLR username used for callback"  required="true" />
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string" description="XLR password used for callback" required="true" />
+        <property name="level" category="input" label="Level" kind="string"
+                  description="All tasks in the release at this level will be promoted."/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
+        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
+                  description="See ISPW administrator for valid values" required="true"/>
+        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
+                  description="Manual task used for callback" required="true"/>
+        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
+                  description="XLR base url used for callback" required="true"/>
+        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
+                  description="XLR username used for callback" required="true"/>
+        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
+                  description="XLR password used for callback" required="true"/>
 
-        <property name="setId" category="output" label="Set id" kind="string" />
-        <property name="url" category="output" label="Url" kind="string" />
+        <property name="setId" category="output" label="Set id" kind="string"/>
+        <property name="url" category="output" label="Url" kind="string"/>
 
     </type>
 
     <type type="ispwServices.Regress" extends="ispwServices.PythonScript">
-        <property name="relId" category="input" label="Release id" kind="string" description="The Release you intend to regress."/>
-        <property name="level" category="input" label="Level" kind="string" description="All tasks in the release at this level will be regressed."/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S" description="Optional, S for standard, I for incidental, or E for emergency. Default value of S" required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I" description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I" required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string" description="See ISPW administrator for valid values" required="true"/>
+        <property name="relId" category="input" label="Release id" kind="string"
+                  description="The Release you intend to regress."/>
+        <property name="level" category="input" label="Level" kind="string"
+                  description="All tasks in the release at this level will be regressed."/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
+        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
+                  description="See ISPW administrator for valid values" required="true"/>
 
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string" description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string" description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string" description="XLR username used for callback"  required="true" />
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string" description="XLR password used for callback" required="true" />
+        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
+                  description="Manual task used for callback" required="true"/>
+        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
+                  description="XLR base url used for callback" required="true"/>
+        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
+                  description="XLR username used for callback" required="true"/>
+        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
+                  description="XLR password used for callback" required="true"/>
 
-        <property name="setId" category="output" label="Set id" kind="string" />
-        <property name="url" category="output" label="Url" kind="string" />
+        <property name="setId" category="output" label="Set id" kind="string"/>
+        <property name="url" category="output" label="Url" kind="string"/>
 
     </type>
 
     <type type="ispwServices.Deploy" extends="ispwServices.PythonScript">
-        <property name="scriptLocation" default="ispw/deploy.py" hidden="true" />
-
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
-        <property name="level" category="input" label="Level" kind="string" description="All tasks in the release at this level will be deployed."/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S" description="Optional, S for standard, I for incidental, or E for emergency. Default value of S" required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I" description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I" required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string" description="See ISPW administrator for valid values" required="true"/>
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string" description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string" description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string" description="XLR username used for callback"  required="true" />
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string" description="XLR password used for callback" required="true" />
+        <property name="level" category="input" label="Level" kind="string"
+                  description="All tasks in the release at this level will be deployed."/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
+        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
+                  description="See ISPW administrator for valid values" required="true"/>
+        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
+                  description="Manual task used for callback" required="true"/>
+        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
+                  description="XLR base url used for callback" required="true"/>
+        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
+                  description="XLR username used for callback" required="true"/>
+        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
+                  description="XLR password used for callback" required="true"/>
 
-        <property name="setId" category="output" label="Set id" kind="string" />
-        <property name="url" category="output" label="Url" kind="string" />
+        <property name="setId" category="output" label="Set id" kind="string"/>
+        <property name="url" category="output" label="Url" kind="string"/>
     </type>
 
     <type type="ispwServices.GetSetInformation" extends="ispwServices.PythonScript">
-        <property name="scriptLocation" default="ispw/getSetInformation.py" hidden="true" />
+        <property name="setId" category="input" label="Set id" kind="string"
+                  description="The set ID you want information on" required="true"/>
 
-        <property name="setId" category="input" label="Set id" kind="string" description="The set ID you want information on" required="true" />
-
-        <property name="setOutputId" category="output" label="Set id" kind="string" />
-        <property name="application" category="output" label="Application" kind="string" />
-        <property name="stream" category="output" label="Stream" kind="string" />
-        <property name="description" category="output" label="Release description" kind="string" />
+        <property name="setOutputId" category="output" label="Set id" kind="string"/>
+        <property name="application" category="output" label="Application" kind="string"/>
+        <property name="stream" category="output" label="Stream" kind="string"/>
+        <property name="description" category="output" label="Release description" kind="string"/>
         <property name="owner" category="output" label="Owner" kind="string"/>
-        <property name="startDate" category="output" label="Start Date" kind="string" />
-        <property name="startTime" category="output" label="Start Time" kind="string" />
-        <property name="deployActivationDate" category="output" label="Deploy Activation Date" kind="string" />
-        <property name="deployActivationTime" category="output" label="Deploy Activation Time" kind="string" />
-        <property name="deployImplementationDate" category="output" label="Deploy Implementation Date" kind="string" />
-        <property name="deployImplementationTime" category="output" label="Deploy Implementation Time" kind="string" />
-        <property name="state" category="output" label="State" kind="string" />
+        <property name="startDate" category="output" label="Start Date" kind="string"/>
+        <property name="startTime" category="output" label="Start Time" kind="string"/>
+        <property name="deployActivationDate" category="output" label="Deploy Activation Date" kind="string"/>
+        <property name="deployActivationTime" category="output" label="Deploy Activation Time" kind="string"/>
+        <property name="deployImplementationDate" category="output" label="Deploy Implementation Date" kind="string"/>
+        <property name="deployImplementationTime" category="output" label="Deploy Implementation Time" kind="string"/>
+        <property name="state" category="output" label="State" kind="string"/>
     </type>
 
 
     <type type="ispwServices.ISPWTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
-        <property name="uri" hidden="true" default="include/ISPWServicesTile/ispw-tile-view.html" />
+        <property name="uri" hidden="true" default="include/ISPWServicesTile/ispw-tile-view.html"/>
         <property name="title" description="Tile title" default="ISPW Services Summary"/>
-        <property name="detailsUri" hidden="true" default="include/ISPWServicesTile/ispw-tile-details.html" />
-        <property name="embedded" kind="boolean" hidden="true" default="true" required="false"/>  <!-- XLR 7.0.0 compatibility -->
+        <property name="detailsUri" hidden="true" default="include/ISPWServicesTile/ispw-tile-details.html"/>
+        <property name="embedded" kind="boolean" hidden="true" default="true"
+                  required="false"/>  <!-- XLR 7.0.0 compatibility -->
 
-        <property category="input" name="action" required="true" default="deploy" description="ISPW Action to show (Possible values are Deploy,Promote and CreateRelease)" />
+        <property category="input" name="action" required="true" default="deploy"
+                  description="ISPW Action to show (Possible values are Deploy,Promote and CreateRelease)"/>
     </type>
 
 </synthetic>
