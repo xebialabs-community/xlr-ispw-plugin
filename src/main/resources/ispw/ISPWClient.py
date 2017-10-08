@@ -33,25 +33,21 @@ class ISPWClient(object):
         body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
                 'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
-        if not response.isSuccessful():
-            raise Exception("Failed to create release [%s]. Server return [%s], with content [%s]" % (
-                release_id, response.status, response.response))
-        else:
-            print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
-                release_id, response.status, response.response)
-            return json.loads(response.getResponse())
+        check_response(response, "Failed to create release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
+        print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+        return json.loads(response.getResponse())
 
     def get_release_information(self, srid, release_id):
         context_root = "/ispw/%s/releases/%s" % (srid, release_id)
         headers = {'Accept': 'application/json'}
         response = self.http_request.get(context_root, headers=headers)
-        if not response.isSuccessful():
-            raise Exception("Failed to get release [%s]. Server return [%s], with content [%s]" % (
-                release_id, response.status, response.response))
-        else:
-            print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
-                release_id, response.status, response.response)
-            return json.loads(response.getResponse())
+        check_response(response, "Failed to get release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
+        print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+        return json.loads(response.getResponse())
 
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
                 callback_url, callback_username, callback_password):
@@ -77,7 +73,7 @@ class ISPWClient(object):
         return json.loads(response.response)
 
     def regress(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
-                    callback_url, callback_username, callback_password):
+                callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/releases/%s/tasks/regress?level=%s" % (srid, release_id, level)
         headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'changeType': change_type, 'executionStatus': execution_status,
@@ -116,25 +112,21 @@ class ISPWClient(object):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
         response = self.http_request.post(context_root, json.dumps(body), headers=headers)
-        if not response.isSuccessful():
-            raise Exception("Failed to deploy release [%s]. Server return [%s], with content [%s]" % (
-                release_id, response.status, response.response))
-        else:
-            print "Called deploy release with id [%s]. Server return [%s], with content [%s]\n" % (
-                release_id, response.status, response.response)
-            return json.loads(response.response)
+        check_response(response, "Failed to deploy release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
+        print "Called deploy release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+        return json.loads(response.response)
 
     def get_set_information(self, srid, set_id):
         context_root = "/ispw/%s/sets/%s" % (srid, set_id)
         headers = {'Accept': 'application/json'}
         response = self.http_request.get(context_root, headers=headers)
-        if not response.isSuccessful():
-            raise Exception("Failed to get set information [%s]. Server return [%s], with content [%s]" % (
-                set_id, response.status, response.response))
-        else:
-            print "Received set info with id [%s]. Server return [%s], with content [%s]\n" % (
-                set_id, response.status, response.response)
-            return json.loads(response.getResponse())
+        check_response(response, "Failed to get set information [%s]. Server return [%s], with content [%s]" % (
+            set_id, response.status, response.response))
+        print "Received set info with id [%s]. Server return [%s], with content [%s]\n" % (
+            set_id, response.status, response.response)
+        return json.loads(response.getResponse())
 
     def ispwservices_promote(self, variables):
         result = self.promote(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
@@ -155,3 +147,46 @@ class ISPWClient(object):
                               callback_password=variables['callbackPassword'])
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
+
+    def ispwservices_deploy(self, variables):
+        result = self.deploy(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
+                             change_type=variables['changeType'], execution_status=variables['executionStatus'],
+                             runtime_configuration=variables['runtimeConfiguration'],
+                             callback_task_id=variables['callbackTaskId'], callback_url=variables['callbackUrl'],
+                             callback_username=variables['callbackUsername'],
+                             callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
+
+    def ispwservices_createrelease(self, variables):
+        result = self.create_release(srid=variables['srid'], application=variables['application'],
+                                     stream=variables['stream'],
+                                     description=variables['description'], release_id=variables['relId'],
+                                     release_prefix=variables['relPrefix'],
+                                     owner=variables['owner'], reference_number=variables['referenceNumber'])
+        variables['relOutputId'] = result["releaseId"]
+        variables['url'] = result["url"]
+
+    def ispwservices_getreleaseinformation(self, variables):
+        result = self.get_release_information(srid=variables['srid'], release_id=variables['relId'])
+        variables['relOutputId'] = result["releaseId"]
+        variables['application'] = result["application"]
+        variables['stream'] = result["stream"]
+        variables['description'] = result["description"]
+        variables['owner'] = result["owner"]
+        variables['workRefNumber'] = result["workRefNumber"]
+
+    def ispwservices_getsetinformation(self, variables):
+        result = self.get_set_information(srid=variables['srid'], set_id=variables['setId'])
+        variables['setOutputId'] = result["setid"]
+        variables['application'] = result["applicationId"]
+        variables['stream'] = result["streamName"]
+        variables['description'] = result["description"]
+        variables['owner'] = result["owner"]
+        variables['startDate'] = result["startDate"]
+        variables['startTime'] = result["startTime"]
+        variables['deployActivationDate'] = result["deployActiveDate"]
+        variables['deployActivationTime'] = result["deployActiveTime"]
+        variables['deployImplementationDate'] = result["deployImplementationDate"]
+        variables['deployImplementationTime'] = result["deployImplementationTime"]
+        variables['state'] = result["state"]
