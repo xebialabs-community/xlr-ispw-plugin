@@ -25,16 +25,6 @@ class ISPWClient(object):
     def create_client(http_connection, ces_token=None):
         return ISPWClient(http_connection, ces_token)
 
-    def get_release_information(self, srid, release_id):
-        context_root = "/ispw/%s/releases/%s" % (srid, release_id)
-        headers = {'Accept': 'application/json'}
-        response = self.http_request.get(context_root, headers=headers)
-        check_response(response, "Failed to get release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
-        print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
-        return json.loads(response.getResponse())
-
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
                 callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/releases/%s/tasks/promote?level=%s" % (srid, release_id, level)
@@ -146,7 +136,7 @@ class ISPWClient(object):
         variables['url'] = result["url"]
 
     def ispwservices_getreleaseinformation(self, variables):
-        result = self.get_release_information(srid=variables['srid'], release_id=variables['relId'])
+        result = self.release_client.get_release_information(srid=variables['srid'], release_id=variables['relId'])
         variables['relOutputId'] = result["releaseId"]
         variables['application'] = result["application"]
         variables['stream'] = result["stream"]

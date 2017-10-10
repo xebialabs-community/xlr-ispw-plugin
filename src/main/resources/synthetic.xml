@@ -67,8 +67,10 @@
         <property name="url" category="output" label="Url" kind="string"/>
     </type>
 
-    <type type="ispwServices.GetReleaseInformation" extends="ispwServices.PythonScript">
-        <property name="relId" category="input" label="Release id" kind="string" description="8 character value"
+    <type type="ispwServices.GetReleaseInformation" extends="ispwServices.PythonScript"
+          label="ISPW Releases: Get Release Information">
+        <property name="relId" category="input" label="Release id" kind="string"
+                  description="8 character value, the release ID you want information on."
                   required="true"/>
 
         <property name="relOutputId" category="output" label="Release id" kind="string"/>

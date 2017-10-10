@@ -28,3 +28,13 @@ class ReleaseClient(object):
         print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
             release_id, response.status, response.response)
         return json.loads(response.getResponse())
+
+    def get_release_information(self, srid, release_id):
+        context_root = "/ispw/%s/releases/%s" % (srid, release_id)
+        headers = {'Accept': 'application/json'}
+        response = self.http_request.get(context_root, headers=headers)
+        check_response(response, "Failed to get release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
+        print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+        return json.loads(response.getResponse())
