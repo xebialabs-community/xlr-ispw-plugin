@@ -11,6 +11,7 @@
 import json
 
 from ispwHttp.HttpRequest import HttpRequest
+from ispw.ReleaseClient import ReleaseClient
 from ispw.SetClient import SetClient
 from ispw.Util import check_response
 
@@ -18,23 +19,11 @@ class ISPWClient(object):
     def __init__(self, http_connection, ces_token=None):
         self.http_request = HttpRequest(http_connection, ces_token)
         self.set_client = SetClient(self.http_request)
+        self.release_client = ReleaseClient(self.http_request)
 
     @staticmethod
     def create_client(http_connection, ces_token=None):
         return ISPWClient(http_connection, ces_token)
-
-    def create_release(self, srid, application, stream, description, release_id, release_prefix, owner,
-                       reference_number):
-        context_root = "/ispw/%s/releases/" % srid
-        headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
-        body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
-                'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
-        response = self.http_request.post(context_root, json.dumps(body), headers=headers)
-        check_response(response, "Failed to create release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
-        print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
-        return json.loads(response.getResponse())
 
     def get_release_information(self, srid, release_id):
         context_root = "/ispw/%s/releases/%s" % (srid, release_id)
@@ -148,7 +137,7 @@ class ISPWClient(object):
         variables['url'] = result["url"]
 
     def ispwservices_createrelease(self, variables):
-        result = self.create_release(srid=variables['srid'], application=variables['application'],
+        result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],
                                      stream=variables['stream'],
                                      description=variables['description'], release_id=variables['relId'],
                                      release_prefix=variables['relPrefix'],
