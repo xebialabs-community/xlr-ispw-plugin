@@ -97,6 +97,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetSetTaskList).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/deployment", GetSetDeploymentInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks/fallback", FallbackSet).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -217,4 +218,19 @@ func GetSetDeploymentInformation(res http.ResponseWriter, req *http.Request) {
 	}
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
+}
+
+// Fallback set sends a dummy response back
+func FallbackSet(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := IspwResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+
 }

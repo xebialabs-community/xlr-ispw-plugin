@@ -197,3 +197,13 @@ class ISPWClient(object):
         variables['requestId'] = result["requestId"]
         variables['setOutputId'] = result["setId"]
         variables['state'] = result["status"]
+
+    def ispwservices_fallbackset(self, variables):
+        result = self.set_client.fallback_set(srid=variables['srid'], set_id=variables['setId'],
+                                 change_type=variables['changeType'], execution_status=variables['executionStatus'],
+                                 runtime_configuration=variables['runtimeConfiguration'],
+                                 callback_task_id=variables['callbackTaskId'], callback_url=variables['callbackUrl'],
+                                 callback_username=variables['callbackUsername'],
+                                 callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
