@@ -30,6 +30,25 @@
                   description="The instance of ISPW you are working with."/>
     </type>
 
+    <type type="ispwServices.Action" extends="ispwServices.PythonScript" virtual="true">
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
+        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
+                  description="See ISPW administrator for valid values" required="false"/>
+        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
+                  description="Manual task used for callback" required="true"/>
+        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
+                  description="XLR base url used for callback" required="true"/>
+        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
+                  description="XLR username used for callback" required="true"/>
+        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
+                  description="XLR password used for callback" required="true"/>
+    </type>
+
     <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript">
         <property name="application" category="input" label="Application" kind="string"/>
         <property name="stream" category="input" label="Stream" kind="string"/>
@@ -57,80 +76,31 @@
         <property name="workRefNumber" category="output" label="Work Reference Number" kind="string"/>
     </type>
 
-    <type type="ispwServices.Promote" extends="ispwServices.PythonScript">
+    <type type="ispwServices.Promote" extends="ispwServices.Action">
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string"
                   description="All tasks in the release at this level will be promoted."/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
-                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
-                  required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
-                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
-                  required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
-                  description="See ISPW administrator for valid values" required="true"/>
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
-                  description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
-                  description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
-                  description="XLR username used for callback" required="true"/>
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
-                  description="XLR password used for callback" required="true"/>
 
         <property name="setId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
 
     </type>
 
-    <type type="ispwServices.Regress" extends="ispwServices.PythonScript">
+    <type type="ispwServices.Regress" extends="ispwServices.Action">
         <property name="relId" category="input" label="Release id" kind="string"
                   description="The Release you intend to regress."/>
         <property name="level" category="input" label="Level" kind="string"
                   description="All tasks in the release at this level will be regressed."/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
-                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
-                  required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
-                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
-                  required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
-                  description="See ISPW administrator for valid values" required="true"/>
-
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
-                  description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
-                  description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
-                  description="XLR username used for callback" required="true"/>
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
-                  description="XLR password used for callback" required="true"/>
 
         <property name="setId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
 
     </type>
 
-    <type type="ispwServices.Deploy" extends="ispwServices.PythonScript">
+    <type type="ispwServices.Deploy" extends="ispwServices.Action">
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string"
                   description="All tasks in the release at this level will be deployed."/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
-                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
-                  required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
-                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
-                  required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
-                  description="See ISPW administrator for valid values" required="true"/>
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
-                  description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
-                  description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
-                  description="XLR username used for callback" required="true"/>
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
-                  description="XLR password used for callback" required="true"/>
 
         <property name="setId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
@@ -179,26 +149,10 @@
         <property name="state" category="output" label="State" kind="string"/>
     </type>
 
-    <type type="ispwServices.FallbackSet" extends="ispwServices.PythonScript"
+    <type type="ispwServices.FallbackSet" extends="ispwServices.Action"
           label="ISPW Sets: Fallback set">
         <property name="setId" category="input" label="Set id" kind="string"
                   description="The set ID you want deployment information on" required="true"/>
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
-                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
-                  required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
-                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
-                  required="false"/>
-        <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
-                  description="See ISPW administrator for valid values" required="true"/>
-        <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
-                  description="Manual task used for callback" required="true"/>
-        <property name="callbackUrl" category="input" label="Callback Url" kind="string"
-                  description="XLR base url used for callback" required="true"/>
-        <property name="callbackUsername" category="input" label="Callback Username" kind="string"
-                  description="XLR username used for callback" required="true"/>
-        <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
-                  description="XLR password used for callback" required="true"/>
 
         <property name="setOutputId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
