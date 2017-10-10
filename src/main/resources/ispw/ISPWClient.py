@@ -11,16 +11,13 @@
 import json
 
 from ispwHttp.HttpRequest import HttpRequest
-
-
-def check_response(response, message):
-    if not response.isSuccessful():
-        raise Exception(message)
-
+from ispw.SetClient import SetClient
+from ispw.Util import check_response
 
 class ISPWClient(object):
     def __init__(self, http_connection, ces_token=None):
         self.http_request = HttpRequest(http_connection, ces_token)
+        self.set_client = SetClient(self.http_request)
 
     @staticmethod
     def create_client(http_connection, ces_token=None):
@@ -118,25 +115,6 @@ class ISPWClient(object):
             release_id, response.status, response.response)
         return json.loads(response.response)
 
-    def get_set_information(self, srid, set_id):
-        context_root = "/ispw/%s/sets/%s" % (srid, set_id)
-        headers = {'Accept': 'application/json'}
-        response = self.http_request.get(context_root, headers=headers)
-        check_response(response, "Failed to get set information [%s]. Server return [%s], with content [%s]" % (
-            set_id, response.status, response.response))
-        print "Received set info with id [%s]. Server return [%s], with content [%s]\n" % (
-            set_id, response.status, response.response)
-        return json.loads(response.getResponse())
-
-    def get_set_task_list(self, srid, set_id):
-        context_root = "/ispw/%s/sets/%s/tasks" % (srid, set_id)
-        headers = {'Accept': 'application/json'}
-        response = self.http_request.get(context_root, headers=headers)
-        check_response(response, "Failed to get set task list [%s]. Server return [%s], with content [%s]" % (
-            set_id, response.status, response.response))
-        print "Received set task list with set id [%s]. Server return [%s], with content [%s]\n" % (
-            set_id, response.status, response.response)
-        return json.loads(response.getResponse())
 
 
     def ispwservices_promote(self, variables):
@@ -188,7 +166,7 @@ class ISPWClient(object):
         variables['workRefNumber'] = result["workRefNumber"]
 
     def ispwservices_getsetinformation(self, variables):
-        result = self.get_set_information(srid=variables['srid'], set_id=variables['setId'])
+        result = self.set_client.get_set_information(srid=variables['srid'], set_id=variables['setId'])
         variables['setOutputId'] = result["setid"]
         variables['application'] = result["applicationId"]
         variables['stream'] = result["streamName"]
@@ -203,9 +181,23 @@ class ISPWClient(object):
         variables['state'] = result["state"]
 
     def ispwservices_getsettasklist(self, variables):
-        result = self.get_set_task_list(srid=variables['srid'], set_id=variables['setId'])
+        result = self.set_client.get_set_task_list(srid=variables['srid'], set_id=variables['setId'])
         processed_result = {}
         for item in result["tasks"]:
             task_id = item['taskId']
             processed_result[task_id] = item
         variables['tasks'] = processed_result
+
+    def ispwservices_getsetdeploymentinformation(self,variables):
+        result = self.set_client.get_set_deployment_information(srid=variables['srid'], set_id=variables['setId'])
+        variables["createDate"] = result["createDate"]
+        variables['description'] = result["description"]
+        variables['environment'] = result["environment"]
+        processed_result = {}
+        for package in result["packages"]:
+            package_id = package['packageId']
+            processed_result[package_id] = package
+        variables['packages'] = processed_result
+        variables['requestId'] = result["requestId"]
+        variables['setOutputId'] = result["setId"]
+        variables['state'] = result["status"]

@@ -42,19 +42,44 @@ type SetInformation struct {
 
 // Task struct used to define task info in json
 type Task struct {
-	TaskID	string `json:"taskId"`
-	UserID	string `json:"userId"`
-	Stream	string `json:"stream"`
+	TaskID string `json:"taskId"`
+	UserID string `json:"userId"`
+	Stream string `json:"stream"`
 }
 
 // Array of tasks
 type Tasks []Task
 
 type SetTaskList struct {
-	TaskList	Tasks `json:"tasks"`
+	TaskList Tasks `json:"tasks"`
 }
 
-// IspwResponse struct used to retun json after regress, promote or deploy is called
+// DeploymentInformation struct used to return json after getSetDeploymentInformation is called
+type SetDeploymentInformation struct {
+	CreateDate  string `json:"createDate"`
+	Description string `json:"description"`
+	Environment string `json:"environment"`
+	Packages	Packages `json:"packages"`
+	RequestID   int `json:"requestId"`
+	SetOutputID string `json:"setId"`
+	State       string `json:"status"`
+}
+
+// Package struct used to define a package in json
+type Packages struct {
+	PackageID int `json:"packageId"`
+	SubEnvironment string `json:"subEnvironment"`
+	System string `json:"system"`
+	DeploymentItems DeploymentItems `json:"deploymentItems"`
+}
+
+type DeploymentItems struct {
+	Item int `json:"item"`
+	Part int `json:"part"`
+	Name string `json:"name"`
+}
+
+// IspwResponse struct used to return json after regress, promote or deploy is called
 type IspwResponse struct {
 	SetID   string `json:"setId"`
 	Message string `json:"message"`
@@ -65,12 +90,13 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
-	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", Promote).Methods("POST").Queries("level","{[a-z]*?}")
-	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", Deploy).Methods("POST").Queries("level","{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", Promote).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", Deploy).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", Regress).Methods("POST")
 
 	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetSetTaskList).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/deployment", GetSetDeploymentInformation).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -102,7 +128,6 @@ func GetReleaseInformation(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
 }
-
 
 // Regress sends a dummy response back
 func Regress(res http.ResponseWriter, req *http.Request) {
@@ -152,7 +177,7 @@ func Deploy(res http.ResponseWriter, req *http.Request) {
 // GetSetInformation sends a dummy response back
 func GetSetInformation(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	c := SetInformation{"someId","app","stream","something","xebia","08/10", "11am","09/10","11am","10/10","11am", "DONE"}
+	c := SetInformation{"someId", "app", "stream", "something", "xebia", "08/10", "11am", "09/10", "11am", "10/10", "11am", "DONE"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())
@@ -166,8 +191,24 @@ func GetSetInformation(res http.ResponseWriter, req *http.Request) {
 // GetSetTaskList sends a dummy response back
 func GetSetTaskList(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	tasks := Tasks{Task{"7E12E3B57A02","FOOUSER","BAR"},Task{"7E12E3B59441","FOOUSER","BAR"}}
+	tasks := Tasks{Task{"7E12E3B57A02", "FOOUSER", "BAR"}, Task{"7E12E3B59441", "FOOUSER", "BAR"}}
 	c := SetTaskList{tasks}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+}
+
+// GetSetDeploymentInformation sends a dummy response back
+func GetSetDeploymentInformation(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	dItem := DeploymentItems{1,5161,"TSUBR05"}
+	packages := Packages{1,"DEVL", "MP3000", dItem}
+	c := SetDeploymentInformation{"2017-08-18", "MyGen", "FOOENV", packages, 3193, "S0000009884", "Completed"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())

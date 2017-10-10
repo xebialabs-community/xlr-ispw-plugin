@@ -136,6 +136,7 @@
         <property name="url" category="output" label="Url" kind="string"/>
     </type>
 
+    <!-- ISPW Sets -->
     <type type="ispwServices.GetSetInformation" extends="ispwServices.PythonScript"
           label="ISPW Sets: Get Set Information">
         <property name="setId" category="input" label="Set id" kind="string"
@@ -164,7 +165,21 @@
                   description="A map containing all tasks. Key is the taskId, Value is a json string containing all fields."/>
     </type>
 
+    <type type="ispwServices.GetSetDeploymentInformation" extends="ispwServices.PythonScript"
+          label="ISPW Sets: Get Set Deployment Information">
+        <property name="setId" category="input" label="Set id" kind="string"
+                  description="The set ID you want deployment information on" required="true"/>
 
+        <property name="createDate" category="output" label="Creation Date" kind="date"/>
+        <property name="description" category="output" label="Release description" kind="string"/>
+        <property name="environment" category="output" label="Environment" kind="string"/>
+        <property name="packages" category="output" label="Packages" kind="map_string_string"/>
+        <property name="requestId" category="output" label="Request id" kind="integer"/>
+        <property name="setOutputId" category="output" label="Set id" kind="string"/>
+        <property name="state" category="output" label="State" kind="string"/>
+    </type>
+
+    <!-- Tiles -->
     <type type="ispwServices.ISPWTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
         <property name="uri" hidden="true" default="include/ISPWServicesTile/ispw-tile-view.html"/>
         <property name="title" description="Tile title" default="ISPW Services Summary"/>
