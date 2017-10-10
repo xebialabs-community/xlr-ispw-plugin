@@ -16,7 +16,7 @@ type Release struct {
 
 // ReleaseInformation struct used to return json after getReleaseInformation is called
 type ReleaseInformation struct {
-	RelOutputId   string `json:"releaseId"`
+	RelOutputID   string `json:"releaseId"`
 	Application   string `json:"application"`
 	Stream        string `json:"stream"`
 	Description   string `json:"description"`
@@ -50,11 +50,12 @@ type Task struct {
 // Array of tasks
 type Tasks []Task
 
+// SetTaskList is an array of tasks, with a named json element tasks.
 type SetTaskList struct {
 	TaskList Tasks `json:"tasks"`
 }
 
-// DeploymentInformation struct used to return json after getSetDeploymentInformation is called
+// SetDeploymentInformation struct used to return json after getSetDeploymentInformation is called
 type SetDeploymentInformation struct {
 	CreateDate  string `json:"createDate"`
 	Description string `json:"description"`
@@ -65,7 +66,7 @@ type SetDeploymentInformation struct {
 	State       string `json:"status"`
 }
 
-// Package struct used to define a package in json
+// Packages struct used to define a package in json
 type Packages struct {
 	PackageID int `json:"packageId"`
 	SubEnvironment string `json:"subEnvironment"`
@@ -73,6 +74,7 @@ type Packages struct {
 	DeploymentItems DeploymentItems `json:"deploymentItems"`
 }
 
+// DeploymentItems according to doc, there can be only one.
 type DeploymentItems struct {
 	Item int `json:"item"`
 	Part int `json:"part"`
@@ -220,7 +222,7 @@ func GetSetDeploymentInformation(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(res, string(outgoingJSON))
 }
 
-// Fallback set sends a dummy response back
+// FallbackSet sends a dummy response back
 func FallbackSet(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := IspwResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
