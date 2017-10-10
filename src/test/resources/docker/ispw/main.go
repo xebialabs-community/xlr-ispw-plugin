@@ -40,6 +40,20 @@ type SetInformation struct {
 	State                    string `json:"state"`
 }
 
+// Task struct used to define task info in json
+type Task struct {
+	TaskID	string `json:taskId`
+	UserID	string `json:userId`
+	Stream	string `json:stream`
+}
+
+// Array of tasks
+type Tasks []Task
+
+type SetTaskList struct {
+	TaskList	Tasks `json:tasks`
+}
+
 // IspwResponse struct used to retun json after regress, promote or deploy is called
 type IspwResponse struct {
 	SetID   string `json:"setId"`
@@ -53,8 +67,10 @@ func main() {
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", Promote).Methods("POST").Queries("level","{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", Deploy).Methods("POST").Queries("level","{[a-z]*?}")
-	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", Regress).Methods("POST")
+
+	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetSetTaskList).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -87,19 +103,6 @@ func GetReleaseInformation(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(res, string(outgoingJSON))
 }
 
-// GetSetInformation sends a dummy response back
-func GetSetInformation(res http.ResponseWriter, req *http.Request) {
-	res.Header().Set("Content-Type", "application/json")
-	c := SetInformation{"someId","app","stream","something","xebia","08/10", "11am","09/10","11am","10/10","11am", "DONE"}
-	outgoingJSON, err := json.Marshal(c)
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(res, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	res.WriteHeader(http.StatusCreated)
-	fmt.Fprint(res, string(outgoingJSON))
-}
 
 // Regress sends a dummy response back
 func Regress(res http.ResponseWriter, req *http.Request) {
@@ -144,4 +147,33 @@ func Deploy(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
 
+}
+
+// GetSetInformation sends a dummy response back
+func GetSetInformation(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := SetInformation{"someId","app","stream","something","xebia","08/10", "11am","09/10","11am","10/10","11am", "DONE"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+}
+
+// GetSetTaskList sends a dummy response back
+func GetSetTaskList(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	var tasks = Tasks{Task{"7E12E3B57A02","FOOUSER","BAR"},Task{"7E12E3B59441","FOOUSER","BAR"}}
+	c := SetTaskList{tasks}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
 }

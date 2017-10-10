@@ -128,6 +128,17 @@ class ISPWClient(object):
             set_id, response.status, response.response)
         return json.loads(response.getResponse())
 
+    def get_set_task_list(self, srid, set_id):
+        context_root = "/ispw/%s/sets/%s/tasks" % (srid, set_id)
+        headers = {'Accept': 'application/json'}
+        response = self.http_request.get(context_root, headers=headers)
+        check_response(response, "Failed to get set task list [%s]. Server return [%s], with content [%s]" % (
+            set_id, response.status, response.response))
+        print "Received set task list with set id [%s]. Server return [%s], with content [%s]\n" % (
+            set_id, response.status, response.response)
+        return json.loads(response.getResponse())
+
+
     def ispwservices_promote(self, variables):
         result = self.promote(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
                               change_type=variables['changeType'], execution_status=variables['executionStatus'],
@@ -190,3 +201,11 @@ class ISPWClient(object):
         variables['deployImplementationDate'] = result["deployImplementationDate"]
         variables['deployImplementationTime'] = result["deployImplementationTime"]
         variables['state'] = result["state"]
+
+    def ispwservices_getsettasklist(self, variables):
+        result = self.get_set_task_list(srid=variables['srid'], set_id=variables['setId'])
+        processed_result = {}
+        for item in result["tasks"]:
+            task_id = item['taskId']
+            processed_result[task_id] = item
+        variables['tasks'] = processed_result

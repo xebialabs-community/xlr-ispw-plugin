@@ -136,7 +136,8 @@
         <property name="url" category="output" label="Url" kind="string"/>
     </type>
 
-    <type type="ispwServices.GetSetInformation" extends="ispwServices.PythonScript">
+    <type type="ispwServices.GetSetInformation" extends="ispwServices.PythonScript"
+          label="ISPW Sets: Get Set Information">
         <property name="setId" category="input" label="Set id" kind="string"
                   description="The set ID you want information on" required="true"/>
 
@@ -152,6 +153,15 @@
         <property name="deployImplementationDate" category="output" label="Deploy Implementation Date" kind="string"/>
         <property name="deployImplementationTime" category="output" label="Deploy Implementation Time" kind="string"/>
         <property name="state" category="output" label="State" kind="string"/>
+    </type>
+
+    <type type="ispwServices.GetSetTaskList" extends="ispwServices.PythonScript"
+          label="ISPW Sets: Get Set Task List">
+        <property name="setId" category="input" label="Set id" kind="string"
+                  description="The set ID you want information on" required="true"/>
+
+        <property name="tasks" category="output" label="Tasks" kind="map_string_string"
+                  description="A map containing all tasks. Key is the taskId, Value is a json string containing all fields."/>
     </type>
 
 
