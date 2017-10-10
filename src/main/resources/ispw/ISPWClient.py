@@ -11,16 +11,13 @@
 import json
 
 from ispwHttp.HttpRequest import HttpRequest
-
-
-def check_response(response, message):
-    if not response.isSuccessful():
-        raise Exception(message)
-
+from ispw.SetClient import SetClient
+from ispw.Util import check_response
 
 class ISPWClient(object):
     def __init__(self, http_connection, ces_token=None):
         self.http_request = HttpRequest(http_connection, ces_token)
+        self.set_client = SetClient(self.http_request)
 
     @staticmethod
     def create_client(http_connection, ces_token=None):
@@ -118,15 +115,7 @@ class ISPWClient(object):
             release_id, response.status, response.response)
         return json.loads(response.response)
 
-    def get_set_information(self, srid, set_id):
-        context_root = "/ispw/%s/sets/%s" % (srid, set_id)
-        headers = {'Accept': 'application/json'}
-        response = self.http_request.get(context_root, headers=headers)
-        check_response(response, "Failed to get set information [%s]. Server return [%s], with content [%s]" % (
-            set_id, response.status, response.response))
-        print "Received set info with id [%s]. Server return [%s], with content [%s]\n" % (
-            set_id, response.status, response.response)
-        return json.loads(response.getResponse())
+
 
     def ispwservices_promote(self, variables):
         result = self.promote(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
@@ -177,7 +166,7 @@ class ISPWClient(object):
         variables['workRefNumber'] = result["workRefNumber"]
 
     def ispwservices_getsetinformation(self, variables):
-        result = self.get_set_information(srid=variables['srid'], set_id=variables['setId'])
+        result = self.set_client.get_set_information(srid=variables['srid'], set_id=variables['setId'])
         variables['setOutputId'] = result["setid"]
         variables['application'] = result["applicationId"]
         variables['stream'] = result["streamName"]
@@ -190,3 +179,31 @@ class ISPWClient(object):
         variables['deployImplementationDate'] = result["deployImplementationDate"]
         variables['deployImplementationTime'] = result["deployImplementationTime"]
         variables['state'] = result["state"]
+
+    def ispwservices_getsettasklist(self, variables):
+        result = self.set_client.get_set_task_list(srid=variables['srid'], set_id=variables['setId'])
+        processed_result = {}
+        for item in result["tasks"]:
+            task_id = item['taskId']
+            processed_result[task_id] = item
+        variables['tasks'] = processed_result
+
+    def ispwservices_getsetdeploymentinformation(self,variables):
+        result = self.set_client.get_set_deployment_information(srid=variables['srid'], set_id=variables['setId'])
+        variables["createDate"] = result["createDate"]
+        variables['description'] = result["description"]
+        variables['environment'] = result["environment"]
+        variables['packages'] = result["packages"]
+        variables['requestId'] = result["requestId"]
+        variables['setOutputId'] = result["setId"]
+        variables['state'] = result["status"]
+
+    def ispwservices_fallbackset(self, variables):
+        result = self.set_client.fallback_set(srid=variables['srid'], set_id=variables['setId'],
+                                 change_type=variables['changeType'], execution_status=variables['executionStatus'],
+                                 runtime_configuration=variables['runtimeConfiguration'],
+                                 callback_task_id=variables['callbackTaskId'], callback_url=variables['callbackUrl'],
+                                 callback_username=variables['callbackUsername'],
+                                 callback_password=variables['callbackPassword'])
+        variables['setOutputId'] = result["setId"]
+        variables['url'] = result["url"]
