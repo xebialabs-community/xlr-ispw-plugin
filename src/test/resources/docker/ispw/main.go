@@ -42,16 +42,16 @@ type SetInformation struct {
 
 // Task struct used to define task info in json
 type Task struct {
-	TaskID	string `json:taskId`
-	UserID	string `json:userId`
-	Stream	string `json:stream`
+	TaskID	string `json:"taskId"`
+	UserID	string `json:"userId"`
+	Stream	string `json:"stream"`
 }
 
 // Array of tasks
 type Tasks []Task
 
 type SetTaskList struct {
-	TaskList	Tasks `json:tasks`
+	TaskList	Tasks `json:"tasks"`
 }
 
 // IspwResponse struct used to retun json after regress, promote or deploy is called
@@ -166,7 +166,7 @@ func GetSetInformation(res http.ResponseWriter, req *http.Request) {
 // GetSetTaskList sends a dummy response back
 func GetSetTaskList(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	var tasks = Tasks{Task{"7E12E3B57A02","FOOUSER","BAR"},Task{"7E12E3B59441","FOOUSER","BAR"}}
+	tasks := Tasks{Task{"7E12E3B57A02","FOOUSER","BAR"},Task{"7E12E3B59441","FOOUSER","BAR"}}
 	c := SetTaskList{tasks}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {

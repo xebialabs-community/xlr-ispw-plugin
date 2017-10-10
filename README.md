@@ -1,10 +1,4 @@
-# Preface #
-
-This document describes the functionality provided by the xlr-ispw-plugin.
-
-See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index.html)** for background information on XL Release and release concepts.
-
-# CI status #
+# XL Release ISPW plugin
 
 [![Build Status][xlr-ispw-plugin-travis-image]][xlr-ispw-plugin-travis-url]
 [![Codacy Badge][xlr-ispw-plugin-codacy-image] ][xlr-ispw-plugin-codacy-url]
@@ -22,17 +16,23 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 [xlr-ispw-plugin-license-url]: https://opensource.org/licenses/MIT
 [xlr-ispw-plugin-downloads-image]: https://img.shields.io/github/downloads/xebialabs-community/xlr-ispw-plugin/total.svg
 
+## Preface
 
+This document describes the functionality provided by the xlr-ispw-plugin.
 
-# Overview #
+See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index.html)** for background information on XL Release and release concepts.
 
-# Installation #
+## Overview
+
+This is a plugin allowing to interact from XL Release with ISPW for deploying, promoting, ... applications on the mainframe.
+
+## Installation
 
 * Minimal version XLR: 5.0.0+
 * The `deploy` and `promote` tasks are asynch tasks. This means you'll need to provide a callback task id, that can be used to let the task fail or pass.
   In order to this you can make use of the [xlr-xlrelease-plugin](https://github.com/xebialabs-community/xlr-xlrelease-plugin) which provides a task `Get Task Id`
 
-## Tasks ##
+## Tasks
 + CreateRelease
 
     ![XLR Create Release](images/CreateRelease.png)
@@ -53,10 +53,16 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 
     ![XLR Deploy](images/Deploy.png)
     
+
+### Sets
 + GetSetInformation
 
     ![XLR Get Set Information](images/GetSetInfo.png)
+    
++ GetSetTaskList
+
+    ![XLR Get Set Task List](images/GetSetTaskList.png)
   
-## Example Template ##
+## Example Template
 
 ![XLR Example Template](images/ExampleTemplate.png)
