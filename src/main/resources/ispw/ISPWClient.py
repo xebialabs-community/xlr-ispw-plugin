@@ -193,11 +193,7 @@ class ISPWClient(object):
         variables["createDate"] = result["createDate"]
         variables['description'] = result["description"]
         variables['environment'] = result["environment"]
-        processed_result = {}
-        for package in result["packages"]:
-            package_id = package['packageId']
-            processed_result[package_id] = package
-        variables['packages'] = processed_result
+        variables['packages'] = result["packages"]
         variables['requestId'] = result["requestId"]
         variables['setOutputId'] = result["setId"]
         variables['state'] = result["status"]

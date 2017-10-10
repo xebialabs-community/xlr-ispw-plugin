@@ -62,6 +62,10 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 + GetSetTaskList
 
     ![XLR Get Set Task List](images/GetSetTaskList.png)
+    
++ GetSetDeploymentInformation
+
+    ![XLR Get Set Deployment Information](images/GetSetDeploymentInformation.png)
   
 ## Example Template
 
