@@ -47,7 +47,7 @@ type Task struct {
 	Stream string `json:"stream"`
 }
 
-// Array of tasks
+// Tasks is an array of task items
 type Tasks []Task
 
 // SetTaskList is an array of tasks, with a named json element tasks.
