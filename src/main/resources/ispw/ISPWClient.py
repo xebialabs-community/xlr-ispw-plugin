@@ -205,5 +205,5 @@ class ISPWClient(object):
                                  callback_task_id=variables['callbackTaskId'], callback_url=variables['callbackUrl'],
                                  callback_username=variables['callbackUsername'],
                                  callback_password=variables['callbackPassword'])
-        variables['setId'] = result["setId"]
+        variables['setOutputId'] = result["setId"]
         variables['url'] = result["url"]

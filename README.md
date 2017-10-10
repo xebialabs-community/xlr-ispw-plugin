@@ -66,6 +66,10 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 + GetSetDeploymentInformation
 
     ![XLR Get Set Deployment Information](images/GetSetDeploymentInformation.png)
+    
++ FallbackSet
+
+    ![XLR Fallback Set](images/FallbackSet.png)
   
 ## Example Template
 
