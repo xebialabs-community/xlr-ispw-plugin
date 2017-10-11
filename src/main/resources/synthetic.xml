@@ -18,6 +18,8 @@
         <property name="cesToken" kind="string" required="false" label="Authentication token"/>
         <property name="username" hidden="true" default="username"/>
         <property name="password" hidden="true" default="password"/>
+        <property name="enableSslVerification" label="SSL Verification" required="false" default="true" kind="boolean"
+                  description="Enable SSL Verification"/>
     </type>
 
     <type type="ispwServices.PythonScript" extends="xlrelease.PythonScript" virtual="true">
@@ -91,6 +93,17 @@
 
         <property name="tasks" category="output" label="Tasks" kind="map_string_string"
                   description="A map containing all tasks. Key is the taskId, Value is a json string containing all fields."/>
+    </type>
+
+    <type type="ispwServices.GetReleaseTaskInformation" extends="ispwServices.PythonScript"
+          label="ISPW Releases: Get Release Task Information">
+        <property name="relId" category="input" label="Release id" kind="string"
+                  description="8 character value, the release ID you want information on."
+                  required="true"/>
+        <property name="taskId" category="input" label="Level" kind="string" required="false"
+                  description="Optional - All tasks in the release at this level will be displayed."/>
+
+        <property name="action" category="output" label="Action" kind="string" />
     </type>
 
     <type type="ispwServices.Promote" extends="ispwServices.Action">

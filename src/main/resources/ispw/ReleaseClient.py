@@ -10,44 +10,109 @@
 
 import json
 
+from ispw.HttpClient import HttpClient
 from ispw.Util import check_response
 
-class ReleaseClient(object):
-    def __init__(self, http_request):
-        self.http_request = http_request
 
+class ReleaseClient(HttpClient):
     def create_release(self, srid, application, stream, description, release_id, release_prefix, owner,
                        reference_number):
         context_root = "/ispw/%s/releases/" % srid
-        headers = {'Accept': 'application/json', 'Content-type': 'application/json'}
         body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
                 'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
-        response = self.http_request.post(context_root, json.dumps(body), headers=headers)
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
         check_response(response, "Failed to create release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
+            release_id, response.status_code, response.text))
         print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
-        return json.loads(response.getResponse())
+            release_id, response.status_code, response.json())
+        return response.json()
 
     def get_release_information(self, srid, release_id):
         context_root = "/ispw/%s/releases/%s" % (srid, release_id)
-        headers = {'Accept': 'application/json'}
-        response = self.http_request.get(context_root, headers=headers)
+        response = self._get_request(context_root, {'Accept': 'application/json'})
         check_response(response, "Failed to get release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
+            release_id, response.status_code, response.text))
         print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
-        return json.loads(response.getResponse())
+            release_id, response.status_code, response.json())
+        return response.json()
 
     def get_release_task_list(self, srid, release_id, level):
         context_root = "/ispw/%s/releases/%s/tasks" % (srid, release_id)
         if level:
             context_root += "?level=%s" % level
-        headers = {'Accept': 'application/json'}
-        response = self.http_request.get(context_root, headers=headers)
+        response = self._get_request(context_root, {'Accept': 'application/json'})
         check_response(response, "Failed to get release task list [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status, response.response))
+            release_id, response.status_code, response.text))
         print "Received release task list with set id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status, response.response)
-        return json.loads(response.getResponse())
+            release_id, response.status_code, response.json())
+        return response.json()
 
+    def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+                callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/releases/%s/tasks/promote?level=%s" % (srid, release_id, level)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to promote release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status_code, response.text))
+        print "Called promote release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status_code, response.json())
+        return response.json()
+
+    def regress(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+                callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/releases/%s/tasks/regress?level=%s" % (srid, release_id, level)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to regress release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status_code, response.text))
+        print "Called regress release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status_code, response.json())
+        return response.json()
+
+    def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+               callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/releases/%s/tasks/deploy?level=%s" % (srid, release_id, level)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to deploy release [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status_code, response.text))
+        print "Called deploy release with id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status_code, response.json())
+        return response.json()
