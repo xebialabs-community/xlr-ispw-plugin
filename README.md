@@ -40,7 +40,11 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 + GetReleaseInformation
 
     ![XLR Get Release Information](images/GetReleaseInfo.png)
-    
+
++ GetReleaseTaskList
+
+    ![XLR Get Release Task List](images/GetReleaseTaskList.png)
+  
 + Promote
 
     ![XLR Promote](images/Promote.png)
