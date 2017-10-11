@@ -38,3 +38,16 @@ class ReleaseClient(object):
         print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
             release_id, response.status, response.response)
         return json.loads(response.getResponse())
+
+    def get_release_task_list(self, srid, release_id, level):
+        context_root = "/ispw/%s/releases/%s/tasks" % (srid, release_id)
+        if level:
+            context_root += "?level=%s" % level
+        headers = {'Accept': 'application/json'}
+        response = self.http_request.get(context_root, headers=headers)
+        check_response(response, "Failed to get release task list [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status, response.response))
+        print "Received release task list with set id [%s]. Server return [%s], with content [%s]\n" % (
+            release_id, response.status, response.response)
+        return json.loads(response.getResponse())
+

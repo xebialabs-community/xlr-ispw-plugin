@@ -81,6 +81,18 @@
         <property name="workRefNumber" category="output" label="Work Reference Number" kind="string"/>
     </type>
 
+    <type type="ispwServices.GetReleaseTaskList" extends="ispwServices.PythonScript"
+          label="ISPW Releases: Get Release Task List">
+        <property name="relId" category="input" label="Release id" kind="string"
+                  description="8 character value, the release ID you want information on."
+                  required="true"/>
+        <property name="level" category="input" label="Level" kind="string" required="false"
+                  description="Optional - All tasks in the release at this level will be displayed."/>
+
+        <property name="tasks" category="output" label="Tasks" kind="map_string_string"
+                  description="A map containing all tasks. Key is the taskId, Value is a json string containing all fields."/>
+    </type>
+
     <type type="ispwServices.Promote" extends="ispwServices.Action">
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string"

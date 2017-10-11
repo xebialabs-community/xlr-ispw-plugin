@@ -144,6 +144,14 @@ class ISPWClient(object):
         variables['owner'] = result["owner"]
         variables['workRefNumber'] = result["workRefNumber"]
 
+    def ispwservices_getreleasetasklist(self, variables):
+        result = self.release_client.get_release_task_list(srid=variables['srid'], release_id=variables['relId'], level=variables['level'])
+        processed_result = {}
+        for item in result["tasks"]:
+            task_id = item['taskId']
+            processed_result[task_id] = item
+        variables['tasks'] = processed_result
+
     def ispwservices_getsetinformation(self, variables):
         result = self.set_client.get_set_information(srid=variables['srid'], set_id=variables['setId'])
         variables['setOutputId'] = result["setid"]

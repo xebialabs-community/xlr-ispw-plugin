@@ -50,8 +50,8 @@ type Task struct {
 // Tasks is an array of task items
 type Tasks []Task
 
-// SetTaskList is an array of tasks, with a named json element tasks.
-type SetTaskList struct {
+// TaskList is an array of tasks, with a named json element tasks.
+type TaskList struct {
 	TaskList Tasks `json:"tasks"`
 }
 
@@ -92,12 +92,13 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", Promote).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", Deploy).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", Regress).Methods("POST")
 
 	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
-	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetSetTaskList).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetTaskList).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/deployment", GetSetDeploymentInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks/fallback", FallbackSet).Methods("POST")
 
@@ -191,11 +192,11 @@ func GetSetInformation(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(res, string(outgoingJSON))
 }
 
-// GetSetTaskList sends a dummy response back
-func GetSetTaskList(res http.ResponseWriter, req *http.Request) {
+// GetTaskList sends a dummy response back
+func GetTaskList(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	tasks := Tasks{Task{"7E12E3B57A02", "FOOUSER", "BAR"}, Task{"7E12E3B59441", "FOOUSER", "BAR"}}
-	c := SetTaskList{tasks}
+	c := TaskList{tasks}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())
