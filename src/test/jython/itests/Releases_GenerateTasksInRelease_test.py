@@ -19,7 +19,7 @@ class GenerateTasksInRelease(unittest.TestCase):
 
     def test_generate_tasks_in_release(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {"srid":"ispw","relId":"1234","level":"test"}
+        variables = {"srid":"ispw","relId":"1234","level":"test", "runtimeConfiguration":"", "autoDeploy":False}
         client.ispwservices_generatetasksinrelease(variables)
         self.assertIsNotNone(variables["setId"])
         self.assertIsNotNone(variables["url"])

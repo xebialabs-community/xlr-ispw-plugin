@@ -59,7 +59,11 @@ class ISPWClient(object):
         result = self.release_client.generate_tasks_in_release(srid=variables['srid'], release_id=variables['relId'],
                                                                level=variables['level'],
                                                                runtime_configuration=variables['runtimeConfiguration'],
-                                                               auto_deploy=variables['autoDeploy'])
+                                                               auto_deploy=variables['autoDeploy'],
+                                                               callback_task_id=variables['callbackTaskId'],
+                                                               callback_url=variables['callbackUrl'],
+                                                               callback_username=variables['callbackUsername'],
+                                                               callback_password=variables['callbackPassword'])
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
 
