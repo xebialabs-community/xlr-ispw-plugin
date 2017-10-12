@@ -18,7 +18,8 @@ from ispw.ISPWClientUtil import ISPWClientUtil
 class DeployRelease(unittest.TestCase):
     def test_deploy_release(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {"srid": "ispw", "relId": "1234", "level": "test", "dpenvlst":"","system":"","runtimeConfiguration": "", "autoDeploy": False,
+        variables = {"srid": "ispw", "relId": "1234", "level": "test", "dpenvlst": "", "system": "", "changeType": "S",
+                     "executionStatus": "I", "runtimeConfiguration": "", "autoDeploy": False,
                      "callbackTaskId": "taskid", "callbackUrl": "http://localhost:1234", "callbackUsername": "testuser",
                      "callbackPassword": "testpassword"}
         client.ispwservices_deploy(variables)
