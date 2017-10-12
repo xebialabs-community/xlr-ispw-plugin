@@ -64,7 +64,7 @@ class ReleaseClient(HttpClient):
         if level:
             context_root += "?level=%s" % level
         body = {'runtimeConfiguration': runtime_configuration,
-                'autoDeploy': auto_deploy
+                'autoDeploy': auto_deploy,
                 'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
                 {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
