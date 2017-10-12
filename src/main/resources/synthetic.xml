@@ -193,7 +193,7 @@
         <property name="url" category="output" label="Url" kind="string"/>
     </type>
 
-    <type type="ispwServices.Regress" extends="ispwServices.Action">
+    <type type="ispwServices.Regress" extends="ispwServices.Action" label="ISPW Releases: Regress Release">
         <property name="relId" category="input" label="Release id" kind="string"
                   description="The Release you intend to regress."/>
         <property name="level" category="input" label="Level" kind="string"
