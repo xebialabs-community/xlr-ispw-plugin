@@ -87,6 +87,21 @@ class ISPWClient(object):
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
 
+    def ispwservices_deploy(self, variables):
+        result = self.release_client.deploy(srid=variables['srid'], release_id=variables['relId'],
+                                            level=variables['level'],
+                                            change_type=variables['changeType'],
+                                            execution_status=variables['executionStatus'],
+                                            runtime_configuration=variables['runtimeConfiguration'],
+                                            dpenvlst=variables['dpenvlst'],
+                                            system=variables['system'],
+                                            callback_task_id=variables['callbackTaskId'],
+                                            callback_url=variables['callbackUrl'],
+                                            callback_username=variables['callbackUsername'],
+                                            callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
+
     def ispwservices_regress(self, variables):
         result = self.release_client.regress(srid=variables['srid'], release_id=variables['relId'],
                                              level=variables['level'],
@@ -100,18 +115,6 @@ class ISPWClient(object):
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
 
-    def ispwservices_deploy(self, variables):
-        result = self.release_client.deploy(srid=variables['srid'], release_id=variables['relId'],
-                                            level=variables['level'],
-                                            change_type=variables['changeType'],
-                                            execution_status=variables['executionStatus'],
-                                            runtime_configuration=variables['runtimeConfiguration'],
-                                            callback_task_id=variables['callbackTaskId'],
-                                            callback_url=variables['callbackUrl'],
-                                            callback_username=variables['callbackUsername'],
-                                            callback_password=variables['callbackPassword'])
-        variables['setId'] = result["setId"]
-        variables['url'] = result["url"]
 
     def ispwservices_getsetinformation(self, variables):
         result = self.set_client.get_set_information(srid=variables['srid'], set_id=variables['setId'])
