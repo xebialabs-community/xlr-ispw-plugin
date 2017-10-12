@@ -63,6 +63,12 @@ class ISPWClient(object):
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
 
+    def ispwservices_getreleasetaskgeneratelisting(self, variables):
+        result = self.release_client.get_release_task_generate_listing(srid=variables['srid'],
+                                                                       release_id=variables['relId'],
+                                                                       task_id=variables['taskId'])
+        variables['listing'] = result["listing"]
+
     def ispwservices_promote(self, variables):
         result = self.release_client.promote(srid=variables['srid'], release_id=variables['relId'],
                                              level=variables['level'],

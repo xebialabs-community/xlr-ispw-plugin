@@ -64,6 +64,7 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 #### Others
 + Get Release Task Information
 + Generate Tasks in Release
++ Get Release Task Generate Listing
 
 #### Sets
 

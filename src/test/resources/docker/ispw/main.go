@@ -60,7 +60,7 @@ type SetDeploymentInformation struct {
 	CreateDate  string `json:"createDate"`
 	Description string `json:"description"`
 	Environment string `json:"environment"`
-	Packages	Packages `json:"packages"`
+	Packages    Packages `json:"packages"`
 	RequestID   int `json:"requestId"`
 	SetOutputID string `json:"setId"`
 	State       string `json:"status"`
@@ -68,9 +68,9 @@ type SetDeploymentInformation struct {
 
 // Packages struct used to define a package in json
 type Packages struct {
-	PackageID int `json:"packageId"`
-	SubEnvironment string `json:"subEnvironment"`
-	System string `json:"system"`
+	PackageID       int `json:"packageId"`
+	SubEnvironment  string `json:"subEnvironment"`
+	System          string `json:"system"`
 	DeploymentItems DeploymentItems `json:"deploymentItems"`
 }
 
@@ -88,6 +88,11 @@ type IspwResponse struct {
 	URL     string `json:"url"`
 }
 
+// Listing struct used to return json after GetReleaseTaskGenerateListing is called.
+type Listing struct {
+	Listing string `json:"listing"`
+}
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
@@ -95,6 +100,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}", GetReleaseTaskInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/generate", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}/listing", GetReleaseTaskGenerateListing).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", ReturnIspwResponse).Methods("POST")
@@ -134,10 +140,25 @@ func GetReleaseInformation(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
 }
+
 // GetReleaseTaskInformation sends a dummy response back
 func GetReleaseTaskInformation(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := Task{"7E12E3B57A02", "FOOUSER", "BAR"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+}
+
+// GetReleaseTaskGenerateListing sends a dummy response back
+func GetReleaseTaskGenerateListing(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := Listing{"Somelisting"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())
@@ -195,8 +216,8 @@ func GetTaskList(res http.ResponseWriter, req *http.Request) {
 // GetSetDeploymentInformation sends a dummy response back
 func GetSetDeploymentInformation(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
-	dItem := DeploymentItems{1,5161,"TSUBR05"}
-	packages := Packages{1,"DEVL", "MP3000", dItem}
+	dItem := DeploymentItems{1, 5161, "TSUBR05"}
+	packages := Packages{1, "DEVL", "MP3000", dItem}
 	c := SetDeploymentInformation{"2017-08-18", "MyGen", "FOOENV", packages, 3193, "S0000009884", "Completed"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
@@ -207,4 +228,3 @@ func GetSetDeploymentInformation(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
 }
-
