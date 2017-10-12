@@ -62,7 +62,8 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
     ![XLR Deploy](images/Deploy.png)
 
 #### Others
-+ GetReleaseTaskInformation   
++ Get Release Task Information
++ Generate Tasks in Release
 
 #### Sets
 

@@ -33,12 +33,6 @@
     </type>
 
     <type type="ispwServices.Action" extends="ispwServices.PythonScript" virtual="true">
-        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
-                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
-                  required="false"/>
-        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
-                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
-                  required="false"/>
         <property name="runtimeConfiguration" category="input" label="Runtime Configuration" kind="string"
                   description="See ISPW administrator for valid values" required="false"/>
         <property name="callbackTaskId" category="input" label="Callback Task Id" kind="string"
@@ -134,10 +128,30 @@
         <property name="memberName" category="output" label="Member name" kind="string"/>
     </type>
 
+    <type type="ispwServices.GenerateTasksInRelease" extends="ispwServices.Action"
+          label="ISPW Releases: Generate Tasks in Release">
+        <property name="relId" category="input" label="Release id" kind="string"
+                  description="8 character value, the release ID to generate tasks for."
+                  required="true"/>
+        <property name="level" category="input" label="Level" kind="string" required="false"
+                  description="Optional -All tasks in the release at this level will be generated.s."/>
+        <property name="autoDeploy" category="input" label="Auto Deploy" kind="boolean" required="false"
+                  description="Promotes can be set up to automatically Deploy as well by an option set up by the ISPW Administrator"/>
+
+        <property name="setId" category="output" label="Set id" kind="string"/>
+        <property name="url" category="output" label="Url" kind="string"/>
+    </type>
+
     <type type="ispwServices.Promote" extends="ispwServices.Action">
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string"
                   description="All tasks in the release at this level will be promoted."/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
 
         <property name="setId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
@@ -149,6 +163,12 @@
                   description="The Release you intend to regress."/>
         <property name="level" category="input" label="Level" kind="string"
                   description="All tasks in the release at this level will be regressed."/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
 
         <property name="setId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
@@ -159,6 +179,12 @@
         <property name="relId" category="input" label="Release id" kind="string" description="8 character value"/>
         <property name="level" category="input" label="Level" kind="string"
                   description="All tasks in the release at this level will be deployed."/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
 
         <property name="setId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
@@ -211,6 +237,12 @@
           label="ISPW Sets: Fallback set">
         <property name="setId" category="input" label="Set id" kind="string"
                   description="The set ID you want deployment information on" required="true"/>
+        <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+                  description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+                  required="false"/>
+        <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+                  description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+                  required="false"/>
 
         <property name="setOutputId" category="output" label="Set id" kind="string"/>
         <property name="url" category="output" label="Url" kind="string"/>
