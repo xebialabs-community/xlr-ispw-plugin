@@ -79,6 +79,7 @@ class ISPWClient(object):
                                              change_type=variables['changeType'],
                                              execution_status=variables['executionStatus'],
                                              runtime_configuration=variables['runtimeConfiguration'],
+                                             auto_deploy=variables['autoDeploy'],
                                              callback_task_id=variables['callbackTaskId'],
                                              callback_url=variables['callbackUrl'],
                                              callback_username=variables['callbackUsername'],
