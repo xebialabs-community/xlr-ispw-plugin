@@ -16,10 +16,11 @@ from ispw.ISPWClientUtil import ISPWClientUtil
 
 
 class GenerateTasksInRelease(unittest.TestCase):
-
     def test_generate_tasks_in_release(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {"srid":"ispw","relId":"1234","level":"test", "runtimeConfiguration":"", "autoDeploy":False}
+        variables = {"srid": "ispw", "relId": "1234", "level": "test", "runtimeConfiguration": "", "autoDeploy": False,
+                     "callbackTaskId": "taskid", "callbackUrl": "http://localhost:1234", "callbackUsername": "testuser",
+                     "callbackPassword": "testpassword"}
         client.ispwservices_generatetasksinrelease(variables)
         self.assertIsNotNone(variables["setId"])
         self.assertIsNotNone(variables["url"])
