@@ -100,8 +100,8 @@
         <property name="relId" category="input" label="Release id" kind="string"
                   description="8 character value, the release ID you want information on."
                   required="true"/>
-        <property name="taskId" category="input" label="Level" kind="string" required="false"
-                  description="Optional - All tasks in the release at this level will be displayed."/>
+        <property name="taskId" category="input" label="Task id" kind="string" required="true"
+                  description="The task id you want information on."/>
 
         <property name="action" category="output" label="Action" kind="string" />
     </type>
