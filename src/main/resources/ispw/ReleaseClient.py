@@ -48,6 +48,16 @@ class ReleaseClient(HttpClient):
             release_id, response.status_code, response.json())
         return response.json()
 
+    def get_release_task_information(self, srid, release_id, task_id):
+        context_root = "/ispw/%s/releases/%s/tasks/%s" % (srid, release_id, task_id)
+        response = self._get_request(context_root, {'Accept': 'application/json'})
+        check_response(response, "Failed to get release task information [%s]. Server return [%s], with content [%s]" % (
+            release_id, response.status_code, response.text))
+        print "Received release task information with id [%s]. Server return [%s], with content [%s]\n" % (
+            task_id, response.status_code, response.json())
+        return response.json()
+
+
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
                 callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/releases/%s/tasks/promote?level=%s" % (srid, release_id, level)

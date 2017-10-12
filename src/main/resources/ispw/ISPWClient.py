@@ -46,6 +46,11 @@ class ISPWClient(object):
             processed_result[task_id] = item
         variables['tasks'] = processed_result
 
+    def ispwservices_getreleasetaskinformation(self, variables):
+        result = self.release_client.get_release_task_information(srid=variables['srid'], release_id=variables['relId'], task_id=variables['taskId'])
+        for key,value in result.iteritems():
+            variables[key] = value
+
     def ispwservices_promote(self, variables):
         result = self.release_client.promote(srid=variables['srid'], release_id=variables['relId'], level=variables['level'],
                               change_type=variables['changeType'], execution_status=variables['executionStatus'],

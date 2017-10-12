@@ -33,6 +33,10 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
   In order to this you can make use of the [xlr-xlrelease-plugin](https://github.com/xebialabs-community/xlr-xlrelease-plugin) which provides a task `Get Task Id`
 
 ## Tasks
+
+### Releases
+
+#### Some examples
 + CreateRelease
 
     ![XLR Create Release](images/CreateRelease.png)
@@ -56,9 +60,13 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 + Deploy
 
     ![XLR Deploy](images/Deploy.png)
-    
 
-### Sets
+#### Others
++ GetReleaseTaskInformation   
+
+#### Sets
+
+#### Some examples
 + GetSetInformation
 
     ![XLR Get Set Information](images/GetSetInfo.png)
