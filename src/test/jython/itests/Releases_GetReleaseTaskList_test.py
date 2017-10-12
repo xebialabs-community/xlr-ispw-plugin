@@ -8,6 +8,17 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-def check_response(response, message):
-    if not response.ok:
-        raise Exception(message)
+
+
+import unittest
+from itests import ISPWServerCi
+from ispw.ISPWClientUtil import ISPWClientUtil
+
+
+class GetReleaseTaskListTest(unittest.TestCase):
+
+    def test_get_release_task_list(self):
+        client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
+        variables = {"srid":"ispw","relId":"1234","level":"test"}
+        client.ispwservices_getreleasetasklist(variables)
+        self.assertGreaterEqual(len(variables["tasks"]), 2)

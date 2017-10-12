@@ -8,3 +8,20 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+
+
+import unittest
+from itests import ISPWServerCi
+from ispw.ISPWClientUtil import ISPWClientUtil
+
+
+class DeployRelease(unittest.TestCase):
+    def test_deploy_release(self):
+        client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
+        variables = {"srid": "ispw", "relId": "1234", "level": "test", "dpenvlst": "", "system": "", "changeType": "S",
+                     "executionStatus": "I", "runtimeConfiguration": "", "autoDeploy": False,
+                     "callbackTaskId": "taskid", "callbackUrl": "http://localhost:1234", "callbackUsername": "testuser",
+                     "callbackPassword": "testpassword"}
+        client.ispwservices_deploy(variables)
+        self.assertIsNotNone(variables["setId"])
+        self.assertIsNotNone(variables["url"])

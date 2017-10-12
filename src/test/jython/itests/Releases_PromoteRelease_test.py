@@ -8,6 +8,19 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-def check_response(response, message):
-    if not response.ok:
-        raise Exception(message)
+
+
+import unittest
+from itests import ISPWServerCi
+from ispw.ISPWClientUtil import ISPWClientUtil
+
+
+class PromoteRelease(unittest.TestCase):
+    def test_promote_release(self):
+        client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
+        variables = {"srid": "ispw", "relId": "1234", "level": "test", "changeType":"S", "executionStatus": "I","runtimeConfiguration": "", "autoDeploy": False,
+                     "callbackTaskId": "taskid", "callbackUrl": "http://localhost:1234", "callbackUsername": "testuser",
+                     "callbackPassword": "testpassword"}
+        client.ispwservices_promote(variables)
+        self.assertIsNotNone(variables["setId"])
+        self.assertIsNotNone(variables["url"])
