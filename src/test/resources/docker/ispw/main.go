@@ -93,6 +93,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}", GetReleaseTaskInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", Promote).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", Deploy).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", Regress).Methods("POST")
@@ -132,6 +133,20 @@ func GetReleaseInformation(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated)
 	fmt.Fprint(res, string(outgoingJSON))
 }
+// GetReleaseTaskInformation sends a dummy response back
+func GetReleaseTaskInformation(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := Task{"7E12E3B57A02", "FOOUSER", "BAR"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+}
+
 
 // Regress sends a dummy response back
 func Regress(res http.ResponseWriter, req *http.Request) {
