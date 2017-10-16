@@ -19,6 +19,6 @@ indent_style = space
 indent_size = 4
 
 # 2 space indentation
-[*.{groovy,gradle,html,yml}]
+[*.{groovy,gradle,html,xml,yml}]
 indent_style = space
 indent_size = 2

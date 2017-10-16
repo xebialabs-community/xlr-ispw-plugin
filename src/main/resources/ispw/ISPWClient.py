@@ -8,6 +8,7 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+from ispw.AssignmentClient import AssignmentClient
 from ispw.ReleaseClient import ReleaseClient
 from ispw.SetClient import SetClient
 
@@ -16,10 +17,23 @@ class ISPWClient(object):
     def __init__(self, http_connection, ces_token=None):
         self.set_client = SetClient(http_connection, ces_token)
         self.release_client = ReleaseClient(http_connection, ces_token)
+        self.assignment_client = AssignmentClient(http_connection, ces_token)
 
     @staticmethod
     def create_client(http_connection, ces_token=None):
         return ISPWClient(http_connection, ces_token)
+
+    def ispwservices_createassignment(self, variables):
+        result = self.assignment_client.create_assignment(srid=variables['srid'], stream=variables['stream'],
+                                                          application=variables['application'],
+                                                          default_path=variables['defaultPath'],
+                                                          description=variables['description'],
+                                                          owner=variables['owner'],
+                                                          assignment_prefix=variables['assignmentPrefix'],
+                                                          reference_number=variables['referenceNumber'],
+                                                          release_id=variables['relId'], user_tag=variables['userTag'])
+        variables['assignmentId'] = result["assignmentId"]
+        variables['url'] = result["url"]
 
     def ispwservices_createrelease(self, variables):
         result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],
@@ -114,7 +128,6 @@ class ISPWClient(object):
                                              callback_password=variables['callbackPassword'])
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
-
 
     def ispwservices_getsetinformation(self, variables):
         result = self.set_client.get_set_information(srid=variables['srid'], set_id=variables['setId'])
