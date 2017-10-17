@@ -18,7 +18,7 @@ from ispw.ISPWClientUtil import ISPWClientUtil
 class LoadTask(unittest.TestCase):
     def test_load_task(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {
+        variables = {"srid": "ispw", "assignmentId":"1234",
             "application": "APP1",
             "moduleName": "MEMBER1",
             "moduleType": "JCL",
