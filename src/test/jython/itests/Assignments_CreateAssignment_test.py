@@ -26,7 +26,7 @@ class CreateAssignment(unittest.TestCase):
                      "owner": "me",
                      "assignmentPrefix": "FB1",
                      "referenceNumber": "1234",
-                     "releaseId": "rel",
+                     "relId": "rel",
                      "userTag": "testing"
                      }
         client.ispwservices_createassignment(variables)
