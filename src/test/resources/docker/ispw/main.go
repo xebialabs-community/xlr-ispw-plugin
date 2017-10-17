@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Assignment struct used to return json after createAssignment is called
+// Assignment struct used to return json after ReturnAssignmentResponse is called
 type Assignment struct {
 	AssignmentID string `json:"assignmentId"`
 	URL          string `json:"url"`
@@ -101,7 +101,8 @@ type Listing struct {
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/ispw/ispw/assignments/", CreateAssignment).Methods("POST")
+	router.HandleFunc("/ispw/ispw/assignments/", ReturnAssignmentResponse).Methods("POST")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", ReturnAssignmentResponse).Methods("POST")
 
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
@@ -121,8 +122,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
-// CreateAssignment sends a dummy response back
-func CreateAssignment(res http.ResponseWriter, req *http.Request) {
+// ReturnAssignmentResponse sends a dummy response back
+func ReturnAssignmentResponse(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := Assignment{"assignmentID", "http://ispw:8080/ispw/ispw/assignments/assignmentid"}
 	outgoingJSON, err := json.Marshal(c)

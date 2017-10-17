@@ -63,6 +63,27 @@
     <property name="url" category="output" label="Url" kind="string"/>
   </type>
 
+  <type type="ispwServices.LoadTask" extends="ispwServices.PythonScript"
+        label="ISPW Assignments: Load Task">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="stream" category="input" label="Stream" kind="string"/>
+    <property name="application" category="input" label="Application" kind="string"/>
+    <property name="moduleName" category="input" label="Module name" kind="string"/>
+    <property name="moduleType" category="input" label="Module type" kind="string"/>
+    <property name="currentLevel" category="input" label="Current level" kind="string"/>
+    <property name="startingLevel" category="input" label="Starting level" kind="string"/>
+
+    <property name="generateSequence" category="input" label="Generate sequence" kind="string" required="false"/>
+    <property name="sql" category="input" label="SQL" kind="boolean" required="false"/>
+    <property name="ims" category="input" label="IMS" kind="boolean" required="false"/>
+    <property name="cics" category="input" label="CICS" kind="boolean" required="false"/>
+    <property name="program" category="input" label="Program" kind="boolean" required="false"/>
+
+    <property name="assignmentOutputId" category="output" label="Assignment id" kind="string"/>
+    <property name="url" category="output" label="Url" kind="string"/>
+  </type>
+
+
   <!-- Releases -->
   <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript" label="ISPW Releases: Create Release">
     <property name="application" category="input" label="Application" kind="string"/>

@@ -33,3 +33,24 @@ class AssignmentClient(HttpClient):
         print "Called create assignment with id [%s]. Server return [%s], with content [%s]\n" % (
             srid, response.status_code, response.json())
         return response.json()
+
+    def load_task(self, srid, assignment_id, stream, application, module_name, module_type, current_level, starting_level,
+                  generate_sequence, sql, ims, cics, program):
+        context_root = "/ispw/%s/assignments/%s/tasks" % (srid, assignment_id)
+        body = {'application': application, 'stream': stream,
+                'moduleName': module_name,
+                'moduleType': module_type,
+                'currentLevel': current_level,
+                'startingLevel': starting_level,
+                'generateSequence': generate_sequence,
+                'sql': sql,
+                'ims': ims,
+                'cics': cics,
+                'program': program}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to load task for srid [%s]. Server return [%s], with content [%s]" % (
+            srid, response.status_code, response.text))
+        print "Called load task with id [%s]. Server return [%s], with content [%s]\n" % (
+            srid, response.status_code, response.json())
+        return response.json()

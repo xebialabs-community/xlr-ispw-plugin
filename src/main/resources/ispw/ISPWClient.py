@@ -35,6 +35,20 @@ class ISPWClient(object):
         variables['assignmentId'] = result["assignmentId"]
         variables['url'] = result["url"]
 
+    def ispwservices_loadtask(self, variables):
+        result = self.assignment_client.load_task(srid=variables['srid'], assignment_id=variables['assignmentId'],
+                                                  stream=variables['stream'],
+                                                  application=variables['application'],
+                                                  module_name=variables['moduleName'],
+                                                  module_type=variables['moduleType'],
+                                                  current_level=variables['currentLevel'],
+                                                  starting_level=variables['startingLevel'],
+                                                  generate_sequence=variables['generateSequence'],
+                                                  sql=variables['sql'], ims=variables['ims'],
+                                                  cics=variables['cics'], program=variables['program'])
+        variables['assignmentId'] = result["assignmentId"]
+        variables['url'] = result["url"]
+
     def ispwservices_createrelease(self, variables):
         result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],
                                                     stream=variables['stream'],
