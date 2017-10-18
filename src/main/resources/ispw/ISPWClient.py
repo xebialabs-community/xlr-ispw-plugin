@@ -72,6 +72,17 @@ class ISPWClient(object):
             else:
                 variables[key] = value
 
+    def ispwservices_generatetasksinassigment(self, variables):
+        result = self.assignment_client.generate_tasks_in_assignment(srid=variables['srid'], assignment_id=variables['assignmentId'],
+                                                               level=variables['level'],
+                                                               runtime_configuration=variables['runtimeConfiguration'],
+                                                               auto_deploy=variables['autoDeploy'],
+                                                               callback_task_id=variables['callbackTaskId'],
+                                                               callback_url=variables['callbackUrl'],
+                                                               callback_username=variables['callbackUsername'],
+                                                               callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
 
     def ispwservices_createrelease(self, variables):
         result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],

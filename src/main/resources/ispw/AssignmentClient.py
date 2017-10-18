@@ -85,3 +85,29 @@ class AssignmentClient(HttpClient):
         print "Received assignment task information with id [%s]. Server return [%s], with content [%s]\n" % (
             task_id, response.status_code, response.json())
         return response.json()
+
+    def generate_tasks_in_assigment(self, srid, assignment_id, level, runtime_configuration, auto_deploy, callback_task_id,
+                                  callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/assignments/%s/tasks/generate" % (srid, assignment_id)
+        if level:
+            context_root += "?level=%s" % level
+        body = {'runtimeConfiguration': runtime_configuration,
+                'autoDeploy': auto_deploy,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Task generation completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Task generation failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Task generation terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Task generation deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to generate tasks for assignment [%s]. Server return [%s], with content [%s]" % (
+            assignment_id, response.status_code, response.text))
+        print "Called task generation for assignment with id [%s]. Server return [%s], with content [%s]\n" % (
+            assignment_id, response.status_code, response.json())
+        return response.json()
+

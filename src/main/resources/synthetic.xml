@@ -146,6 +146,18 @@
     <property name="memberName" category="output" label="Member name" kind="string"/>
   </type>
 
+  <type type="ispwServices.GenerateTasksInAssignment" extends="ispwServices.Action"
+        label="ISPW Assignments: Generate Tasks in Assignment">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="level" category="input" label="Level" kind="string" required="false"
+              description="Optional -All tasks in the assignment at this level will be generated."/>
+    <property name="autoDeploy" category="input" label="Auto Deploy" kind="boolean" required="false"
+              description="Promotes can be set up to automatically Deploy as well by an option set up by the ISPW Administrator"/>
+
+    <property name="setId" category="output" label="Set id" kind="string"/>
+    <property name="url" category="output" label="Url" kind="string"/>
+  </type>
+
   <!-- Releases -->
   <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript" label="ISPW Releases: Create Release">
     <property name="application" category="input" label="Application" kind="string"/>
@@ -235,7 +247,7 @@
               description="8 character value, the release ID to generate tasks for."
               required="true"/>
     <property name="level" category="input" label="Level" kind="string" required="false"
-              description="Optional -All tasks in the release at this level will be generated.s."/>
+              description="Optional -All tasks in the release at this level will be generated."/>
     <property name="autoDeploy" category="input" label="Auto Deploy" kind="boolean" required="false"
               description="Promotes can be set up to automatically Deploy as well by an option set up by the ISPW Administrator"/>
 
