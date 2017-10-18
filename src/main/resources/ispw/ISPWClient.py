@@ -72,7 +72,7 @@ class ISPWClient(object):
             else:
                 variables[key] = value
 
-    def ispwservices_generatetasksinassigment(self, variables):
+    def ispwservices_generatetasksinassignment(self, variables):
         result = self.assignment_client.generate_tasks_in_assignment(srid=variables['srid'], assignment_id=variables['assignmentId'],
                                                                level=variables['level'],
                                                                runtime_configuration=variables['runtimeConfiguration'],

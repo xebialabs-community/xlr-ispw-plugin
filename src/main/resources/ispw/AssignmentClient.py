@@ -86,7 +86,7 @@ class AssignmentClient(HttpClient):
             task_id, response.status_code, response.json())
         return response.json()
 
-    def generate_tasks_in_assigment(self, srid, assignment_id, level, runtime_configuration, auto_deploy, callback_task_id,
+    def generate_tasks_in_assignment(self, srid, assignment_id, level, runtime_configuration, auto_deploy, callback_task_id,
                                   callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/assignments/%s/tasks/generate" % (srid, assignment_id)
         if level:
