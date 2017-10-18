@@ -69,6 +69,8 @@ class ISPWClient(object):
         for key, value in result.iteritems():
             if key == "taskId":
                 variables["taskOutputId"] = value
+            elif key == "type":
+                variables["taskType"] = value
             else:
                 variables[key] = value
 
@@ -161,6 +163,8 @@ class ISPWClient(object):
         for key, value in result.iteritems():
             if key == "taskId":
                 variables["taskOutputId"] = value
+            elif key == "type":
+                variables["taskType"] = value
             else:
                 variables[key] = value
 

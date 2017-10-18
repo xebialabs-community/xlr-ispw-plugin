@@ -140,7 +140,7 @@
     <property name="status" category="output" label="Status" kind="string"/>
     <property name="stream" category="output" label="Stream" kind="string"/>
     <property name="taskOutputId" category="output" label="Task id" kind="string"/>
-    <property name="type" category="output" label="Type" kind="string"/>
+    <property name="taskType" category="output" label="Type" kind="string"/>
     <property name="userId" category="output" label="User id" kind="string"/>
     <property name="version" category="output" label="Version" kind="integer"/>
     <property name="memberName" category="output" label="Member name" kind="string"/>
@@ -290,7 +290,7 @@
     <property name="status" category="output" label="Status" kind="string"/>
     <property name="stream" category="output" label="Stream" kind="string"/>
     <property name="taskOutputId" category="output" label="Task id" kind="string"/>
-    <property name="type" category="output" label="Type" kind="string"/>
+    <property name="taskType" category="output" label="Type" kind="string"/>
     <property name="userId" category="output" label="User id" kind="string"/>
     <property name="version" category="output" label="Version" kind="integer"/>
     <property name="memberName" category="output" label="Member name" kind="string"/>
