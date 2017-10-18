@@ -14,6 +14,19 @@ type Assignment struct {
 	URL          string `json:"url"`
 }
 
+// AssignmentInformation struct used to return json after getAssignmentInformation is called
+type AssignmentInformation struct {
+	Application   string `json:"application"`
+	DefaultPath   string `json:"defaultPath"`
+	Description   string `json:"description"`
+	Owner         string `json:"owner"`
+	ProjectNumber string `json:"projectNumber"`
+	RefNumber     string `json:"refNumber"`
+	Release       string `json:"release"`
+	Stream        string `json:"stream"`
+	UserTag       string `json:"userTag"`
+}
+
 // Release struct used to return json after createRelease is called
 type Release struct {
 	ReleaseID string `json:"releaseId"`
@@ -103,6 +116,7 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/assignments/", ReturnAssignmentResponse).Methods("POST")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", ReturnAssignmentResponse).Methods("POST")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}", GetAssignmentInformation).Methods("GET")
 
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
@@ -126,6 +140,20 @@ func main() {
 func ReturnAssignmentResponse(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-Type", "application/json")
 	c := Assignment{"assignmentID", "http://ispw:8080/ispw/ispw/assignments/assignmentid"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+}
+
+// GetAssignmentInformation sends a dummy response back
+func GetAssignmentInformation(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := AssignmentInformation{"FOO", "DEV1", "ASSIGNMENT FOR FOOBAR", "FOOUSR", "FB000001", "1234", "REL1", "BAR", "USRTAG"}
 	outgoingJSON, err := json.Marshal(c)
 	if err != nil {
 		log.Println(err.Error())

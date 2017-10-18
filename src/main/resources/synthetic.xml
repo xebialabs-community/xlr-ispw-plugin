@@ -83,6 +83,22 @@
     <property name="url" category="output" label="Url" kind="string"/>
   </type>
 
+  <type type="ispwServices.GetAssignmentInformation" extends="ispwServices.PythonScript"
+        label="ISPW Assignments: Get Assignment Information">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="stream" category="input" label="Stream" kind="string"/>
+
+    <property name="application" category="output" label="Application" kind="string"/>
+    <property name="defaultPath" category="output" label="Default path" kind="string"/>
+    <property name="description" category="output" label="Description" kind="string"/>
+    <property name="owner" category="output" label="Owner" kind="string"/>
+    <property name="projectNumber" category="output" label="Project number" kind="string"/>
+    <property name="refNumber" category="output" label="Ref number" kind="string"/>
+    <property name="release" category="output" label="Release" kind="string"/>
+    <property name="stream" category="output" label="Stream" kind="string"/>
+    <property name="userTag" category="output" label="User tag" kind="string"/>
+  </type>
+
 
   <!-- Releases -->
   <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript" label="ISPW Releases: Create Release">

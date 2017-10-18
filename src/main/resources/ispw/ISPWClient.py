@@ -46,6 +46,11 @@ class ISPWClient(object):
                                                   generate_sequence=variables['generateSequence'],
                                                   sql=variables['sql'], ims=variables['ims'],
                                                   cics=variables['cics'], program=variables['program'])
+        for key, value in result.iteritems():
+            variables[key] = value
+
+    def ispwservices_getassignmentinformation(self, variables):
+        result = self.assignment_client.get_assignment_information(srid=variables['srid'], assignment_id=variables['assignmentId'])
         variables['assignmentId'] = result["assignmentId"]
         variables['url'] = result["url"]
 
