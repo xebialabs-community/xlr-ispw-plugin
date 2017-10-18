@@ -51,8 +51,8 @@ class ISPWClient(object):
 
     def ispwservices_getassignmentinformation(self, variables):
         result = self.assignment_client.get_assignment_information(srid=variables['srid'], assignment_id=variables['assignmentId'])
-        variables['assignmentId'] = result["assignmentId"]
-        variables['url'] = result["url"]
+        for key, value in result.iteritems():
+            variables[key] = value
 
     def ispwservices_createrelease(self, variables):
         result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],
