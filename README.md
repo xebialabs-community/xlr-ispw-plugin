@@ -38,6 +38,7 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 + Create Assignment
 + Load Task
 + Get Assignment Information
++ Get Assignment Task List
 
 ### Releases
 

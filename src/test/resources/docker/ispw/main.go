@@ -117,6 +117,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/assignments/", ReturnAssignmentResponse).Methods("POST")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", ReturnAssignmentResponse).Methods("POST")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}", GetAssignmentInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
 
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")

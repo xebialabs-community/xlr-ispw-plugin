@@ -99,6 +99,15 @@
     <property name="userTag" category="output" label="User tag" kind="string"/>
   </type>
 
+  <type type="ispwServices.GetAssignmentTaskList" extends="ispwServices.PythonScript"
+        label="ISPW Assignments: Get Assignment Task List">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="level" category="input" label="Level" kind="string" required="false"
+              description="Optional - All tasks in the assignment at this level will be displayed."/>
+
+    <property name="tasks" category="output" label="Tasks" kind="map_string_string"
+              description="A map containing all tasks. Key is the taskId, Value is a json string containing all fields."/>
+  </type>
 
   <!-- Releases -->
   <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript" label="ISPW Releases: Create Release">
