@@ -15,12 +15,10 @@ from itests import ISPWServerCi
 from ispw.ISPWClientUtil import ISPWClientUtil
 
 
-class GetReleaseTaskInformationTest(unittest.TestCase):
+class GetAssignmentTaskListTest(unittest.TestCase):
 
-    def test_get_release_task_information(self):
+    def test_get_assignment_task_list(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {"srid":"ispw","relId":"1234","taskId":"abcd"}
-        client.ispwservices_getreleasetaskinformation(variables)
-        self.assertIsNotNone(variables["taskId"])
-        self.assertIsNotNone(variables["userId"])
-        self.assertIsNotNone(variables["stream"])
+        variables = {"srid":"ispw","assignmentId":"1234","level":"test"}
+        client.ispwservices_getassignmenttasklist(variables)
+        self.assertGreaterEqual(len(variables["tasks"]), 2)

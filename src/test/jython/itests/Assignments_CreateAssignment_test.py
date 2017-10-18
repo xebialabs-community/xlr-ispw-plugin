@@ -15,12 +15,20 @@ from itests import ISPWServerCi
 from ispw.ISPWClientUtil import ISPWClientUtil
 
 
-class GetReleaseTaskInformationTest(unittest.TestCase):
-
-    def test_get_release_task_information(self):
+class CreateAssignment(unittest.TestCase):
+    def test_create_assignment(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {"srid":"ispw","relId":"1234","taskId":"abcd"}
-        client.ispwservices_getreleasetaskinformation(variables)
-        self.assertIsNotNone(variables["taskId"])
-        self.assertIsNotNone(variables["userId"])
-        self.assertIsNotNone(variables["stream"])
+        variables = {"srid": "ispw",
+                     "stream": "FOO",
+                     "application": "BAR",
+                     "defaultPath": "DEV1",
+                     "description": "assignment for foobar",
+                     "owner": "me",
+                     "assignmentPrefix": "FB1",
+                     "referenceNumber": "1234",
+                     "relId": "rel",
+                     "userTag": "testing"
+                     }
+        client.ispwservices_createassignment(variables)
+        self.assertIsNotNone(variables["assignmentId"])
+        self.assertIsNotNone(variables["url"])
