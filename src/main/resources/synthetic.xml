@@ -158,6 +158,61 @@
     <property name="url" category="output" label="Url" kind="string"/>
   </type>
 
+  <type type="ispwServices.PromoteAssignment" extends="ispwServices.Action" label="ISPW Assignments: Promote Assignment">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="level" category="input" label="Level" kind="string"
+              description="All tasks in the assignment at this level will be promoted."/>
+    <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+              description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+              required="false"/>
+    <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+              description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+              required="false"/>
+    <property name="autoDeploy" category="input" label="Auto Deploy" kind="boolean" required="false"
+              description="Promotes can be set up to automatically Deploy as well by an option set up by the ISPW Administrator"/>
+
+    <property name="setId" category="output" label="Set id" kind="string"/>
+    <property name="url" category="output" label="Url" kind="string"/>
+
+  </type>
+
+  <type type="ispwServices.DeployAssignment" extends="ispwServices.Action" label="ISPW Assignments: Deploy Assignment">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="level" category="input" label="Level" kind="string"
+              description="All tasks in the assignment at this level will be deployed."/>
+    <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+              description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+              required="false"/>
+    <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+              description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+              required="false"/>
+    <property name="dpenvlst" category="input" label="DPENVLST parameter" kind="string"
+              description="The DPENVLST parameter allows you to override the Environments configured for Deploy at that level. If you wish to Deploy to only certain Environments, you can list them here, separated by a space. The length of the field is limited to 80."
+              required="false"/>
+    <property name="system" category="input" label="System" kind="string"
+              description="Allows you to specify a specific System for the Deploy"
+              required="false"/>
+
+    <property name="setId" category="output" label="Set id" kind="string"/>
+    <property name="url" category="output" label="Url" kind="string"/>
+  </type>
+
+  <type type="ispwServices.RegressAssignment" extends="ispwServices.Action" label="ISPW Assignments: Regress Assignment">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="level" category="input" label="Level" kind="string"
+              description="All tasks in the assignment at this level will be regressed."/>
+    <property name="changeType" category="input" label="Change Type" kind="string" default="S"
+              description="Optional, S for standard, I for incidental, or E for emergency. Default value of S"
+              required="false"/>
+    <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
+              description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
+              required="false"/>
+
+    <property name="setId" category="output" label="Set id" kind="string"/>
+    <property name="url" category="output" label="Url" kind="string"/>
+
+  </type>
+
   <!-- Releases -->
   <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript" label="ISPW Releases: Create Release">
     <property name="application" category="input" label="Application" kind="string"/>

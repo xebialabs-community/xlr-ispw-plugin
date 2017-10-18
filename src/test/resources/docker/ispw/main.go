@@ -120,6 +120,9 @@ func main() {
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/{task_id}", GetTaskInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/generate", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/regress", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
@@ -129,7 +132,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}/listing", GetReleaseTaskGenerateListing).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
-	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", ReturnIspwResponse).Methods("POST")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 
 	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetTaskList).Methods("GET")

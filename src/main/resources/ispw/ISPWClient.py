@@ -84,6 +84,49 @@ class ISPWClient(object):
         variables['setId'] = result["setId"]
         variables['url'] = result["url"]
 
+    def ispwservices_promoteassignment(self, variables):
+        result = self.assignment_client.promote_assignment(srid=variables['srid'], assignment_id=variables['assignmentId'],
+                                             level=variables['level'],
+                                             change_type=variables['changeType'],
+                                             execution_status=variables['executionStatus'],
+                                             runtime_configuration=variables['runtimeConfiguration'],
+                                             auto_deploy=variables['autoDeploy'],
+                                             callback_task_id=variables['callbackTaskId'],
+                                             callback_url=variables['callbackUrl'],
+                                             callback_username=variables['callbackUsername'],
+                                             callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
+
+    def ispwservices_deployassignment(self, variables):
+        result = self.assignment_client.deploy_assignment(srid=variables['srid'], assignment_id=variables['assignmentId'],
+                                            level=variables['level'],
+                                            change_type=variables['changeType'],
+                                            execution_status=variables['executionStatus'],
+                                            runtime_configuration=variables['runtimeConfiguration'],
+                                            dpenvlst=variables['dpenvlst'],
+                                            system=variables['system'],
+                                            callback_task_id=variables['callbackTaskId'],
+                                            callback_url=variables['callbackUrl'],
+                                            callback_username=variables['callbackUsername'],
+                                            callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
+
+    def ispwservices_regressassignment(self, variables):
+        result = self.assignment_client.regress_assignment(srid=variables['srid'], assignment_id=variables['assignmentId'],
+                                             level=variables['level'],
+                                             change_type=variables['changeType'],
+                                             execution_status=variables['executionStatus'],
+                                             runtime_configuration=variables['runtimeConfiguration'],
+                                             callback_task_id=variables['callbackTaskId'],
+                                             callback_url=variables['callbackUrl'],
+                                             callback_username=variables['callbackUsername'],
+                                             callback_password=variables['callbackPassword'])
+        variables['setId'] = result["setId"]
+        variables['url'] = result["url"]
+
+
     def ispwservices_createrelease(self, variables):
         result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],
                                                     stream=variables['stream'],

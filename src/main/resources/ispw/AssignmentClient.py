@@ -111,3 +111,75 @@ class AssignmentClient(HttpClient):
             assignment_id, response.status_code, response.json())
         return response.json()
 
+
+    def promote_assignment(self, srid, assignment_id, level, change_type, execution_status, runtime_configuration, auto_deploy,
+                callback_task_id,
+                callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/assignments/%s/tasks/promote?level=%s" % (srid, assignment_id, level)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'autoDeploy': auto_deploy,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to promote assignment [%s]. Server return [%s], with content [%s]" % (
+            assignment_id, response.status_code, response.text))
+        print "Called promote assignment with id [%s]. Server return [%s], with content [%s]\n" % (
+            assignment_id, response.status_code, response.json())
+        return response.json()
+
+    def deploy_assignment(self, srid, assignment_id, level, change_type, execution_status, runtime_configuration, dpenvlst, system,
+               callback_task_id, callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/assignments/%s/tasks/deploy?level=%s" % (srid, assignment_id, level)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'dpenvlst': dpenvlst, 'system': system,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to deploy assignment [%s]. Server return [%s], with content [%s]" % (
+            assignment_id, response.status_code, response.text))
+        print "Called deploy assignment with id [%s]. Server return [%s], with content [%s]\n" % (
+            assignment_id, response.status_code, response.json())
+        return response.json()
+
+    def regress_assignment(self, srid, assignment_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
+                callback_url, callback_username, callback_password):
+        context_root = "/ispw/%s/assignments/%s/tasks/regress?level=%s" % (srid, assignment_id, level)
+        body = {'changeType': change_type, 'executionStatus': execution_status,
+                'runtimeConfiguration': runtime_configuration,
+                'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
+                'credentials': {'username': callback_username, 'password': callback_password}, 'events': [
+                {"name": "completed", "url": "%s/api/v1/tasks/%s/complete" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression completed by ISPW\"}"},
+                {"name": "failed", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression failed by ISPW\"}"},
+                {"name": "terminated", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression terminated by ISPW\"}"},
+                {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
+                 "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
+        response = self._post_request(context_root, json.dumps(body),
+                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
+        check_response(response, "Failed to regress assignment [%s]. Server return [%s], with content [%s]" % (
+            assignment_id, response.status_code, response.text))
+        print "Called regress assignment with id [%s]. Server return [%s], with content [%s]\n" % (
+            assignment_id, response.status_code, response.json())
+        return response.json()
