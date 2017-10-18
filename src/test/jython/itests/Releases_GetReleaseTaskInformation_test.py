@@ -15,7 +15,7 @@ from itests import ISPWServerCi
 from ispw.ISPWClientUtil import ISPWClientUtil
 
 
-class GetReleaseTaskListTest(unittest.TestCase):
+class GetReleaseTaskInformationTest(unittest.TestCase):
 
     def test_get_release_task_information(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)

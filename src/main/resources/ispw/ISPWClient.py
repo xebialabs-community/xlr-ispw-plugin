@@ -63,6 +63,16 @@ class ISPWClient(object):
             processed_result[task_id] = item
         variables['tasks'] = processed_result
 
+    def ispwservices_getassignmenttaskinformation(self, variables):
+        result = self.assignment_client.get_assignment_task_information(srid=variables['srid'], assignment_id=variables['assignmentId'],
+                                                                  task_id=variables['taskId'])
+        for key, value in result.iteritems():
+            if key == "taskId":
+                variables["taskOutputId"] = value
+            else:
+                variables[key] = value
+
+
     def ispwservices_createrelease(self, variables):
         result = self.release_client.create_release(srid=variables['srid'], application=variables['application'],
                                                     stream=variables['stream'],
@@ -95,7 +105,10 @@ class ISPWClient(object):
         result = self.release_client.get_release_task_information(srid=variables['srid'], release_id=variables['relId'],
                                                                   task_id=variables['taskId'])
         for key, value in result.iteritems():
-            variables[key] = value
+            if key == "taskId":
+                variables["taskOutputId"] = value
+            else:
+                variables[key] = value
 
     def ispwservices_generatetasksinrelease(self, variables):
         result = self.release_client.generate_tasks_in_release(srid=variables['srid'], release_id=variables['relId'],

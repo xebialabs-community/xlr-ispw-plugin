@@ -75,3 +75,13 @@ class AssignmentClient(HttpClient):
         print "Received assignment task list with set id [%s]. Server return [%s], with content [%s]\n" % (
             assignment_id, response.status_code, response.json())
         return response.json()
+
+    def get_assignment_task_information(self, srid, assignment_id, task_id):
+        context_root = "/ispw/%s/assignments/%s/tasks/%s" % (srid, assignment_id, task_id)
+        response = self._get_request(context_root, {'Accept': 'application/json'})
+        check_response(response,
+                       "Failed to get assignment task information [%s]. Server return [%s], with content [%s]" % (
+                           task_id, response.status_code, response.text))
+        print "Received assignment task information with id [%s]. Server return [%s], with content [%s]\n" % (
+            task_id, response.status_code, response.json())
+        return response.json()

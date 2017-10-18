@@ -109,6 +109,43 @@
               description="A map containing all tasks. Key is the taskId, Value is a json string containing all fields."/>
   </type>
 
+  <type type="ispwServices.GetAssignmentTaskInformation" extends="ispwServices.PythonScript"
+        label="ISPW Assignments: Get Assignment Task Information">
+    <property name="assignmentId" category="input" label="Assignment id" kind="string"/>
+    <property name="taskId" category="input" label="Task id" kind="string" required="true"
+              description="The task id you want information on."/>
+
+    <property name="action" category="output" label="Action" kind="string"/>
+    <property name="alternateName" category="output" label="Alternate name" kind="string"/>
+    <property name="application" category="output" label="Application" kind="string"/>
+    <property name="assignment" category="output" label="Assignment" kind="string"/>
+    <property name="baseVersion" category="output" label="Base version" kind="integer"/>
+    <property name="cics" category="output" label="Cics" kind="boolean"/>
+    <property name="clazz" category="output" label="Clazz" kind="string"/>
+    <property name="dateTime" category="output" label="Datetime" kind="date"/>
+    <property name="environment" category="output" label="Environment" kind="string"/>
+    <property name="extension" category="output" label="Extension" kind="string"/>
+    <property name="flags" category="output" label="Flags" kind="string"/>
+    <property name="ims" category="output" label="IMS" kind="boolean"/>
+    <property name="internalVersion" category="output" label="Internal version" kind="integer"/>
+    <property name="level" category="output" label="Level" kind="string"/>
+    <property name="message" category="output" label="Message" kind="string"/>
+    <property name="operation" category="output" label="Operation" kind="string"/>
+    <property name="path" category="output" label="Path" kind="string"/>
+    <property name="program" category="output" label="Program" kind="boolean"/>
+    <property name="release" category="output" label="Release" kind="string"/>
+    <property name="replaceVersion" category="output" label="Replace version" kind="integer"/>
+    <property name="set" category="output" label="Set" kind="string"/>
+    <property name="sql" category="output" label="SQL" kind="boolean"/>
+    <property name="status" category="output" label="Status" kind="string"/>
+    <property name="stream" category="output" label="Stream" kind="string"/>
+    <property name="taskOutputId" category="output" label="Task id" kind="string"/>
+    <property name="type" category="output" label="Type" kind="string"/>
+    <property name="userId" category="output" label="User id" kind="string"/>
+    <property name="version" category="output" label="Version" kind="integer"/>
+    <property name="memberName" category="output" label="Member name" kind="string"/>
+  </type>
+
   <!-- Releases -->
   <type type="ispwServices.CreateRelease" extends="ispwServices.PythonScript" label="ISPW Releases: Create Release">
     <property name="application" category="input" label="Application" kind="string"/>
