@@ -146,7 +146,7 @@ class ISPWClient(object):
         variables['stream'] = result["stream"]
         variables['description'] = result["description"]
         variables['owner'] = result["owner"]
-        variables['workRefNumber'] = result["workRefNumber"]
+        variables['referenceNumber'] = result['referenceNumber']
 
     def ispwservices_getreleasetasklist(self, variables):
         result = self.release_client.get_release_task_list(srid=variables['srid'], release_id=variables['relId'],
