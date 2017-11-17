@@ -35,12 +35,12 @@ type Release struct {
 
 // ReleaseInformation struct used to return json after getReleaseInformation is called
 type ReleaseInformation struct {
-	RelOutputID   string `json:"releaseId"`
-	Application   string `json:"application"`
-	Stream        string `json:"stream"`
-	Description   string `json:"description"`
-	Owner         string `json:"owner"`
-	WorkRefNumber string `json:"workRefNumber"`
+	RelOutputID     string `json:"releaseId"`
+	Application     string `json:"application"`
+	Stream          string `json:"stream"`
+	Description     string `json:"description"`
+	Owner           string `json:"owner"`
+	ReferenceNumber string `json:"referenceNumber"`
 }
 
 // SetInformation struct used to return json after getSetInformation is called

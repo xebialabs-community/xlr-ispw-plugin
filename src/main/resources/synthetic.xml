@@ -246,7 +246,7 @@
     <property name="stream" category="output" label="Stream" kind="string"/>
     <property name="description" category="output" label="Release description" kind="string"/>
     <property name="owner" category="output" label="Owner" kind="string"/>
-    <property name="workRefNumber" category="output" label="Work Reference Number" kind="string"/>
+    <property name="referenceNumber" category="output" label="Reference Number" kind="string"/>
   </type>
 
   <type type="ispwServices.GetReleaseTaskList" extends="ispwServices.PythonScript"
