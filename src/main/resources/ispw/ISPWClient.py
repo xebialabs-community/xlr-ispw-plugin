@@ -7,7 +7,7 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
-
+import json
 from ispw.AssignmentClient import AssignmentClient
 from ispw.ReleaseClient import ReleaseClient
 from ispw.SetClient import SetClient
@@ -60,7 +60,7 @@ class ISPWClient(object):
         processed_result = {}
         for item in result["tasks"]:
             task_id = item['taskId']
-            processed_result[task_id] = item
+            processed_result[task_id] = json.dumps(item)
         variables['tasks'] = processed_result
 
     def ispwservices_getassignmenttaskinformation(self, variables):
@@ -154,7 +154,7 @@ class ISPWClient(object):
         processed_result = {}
         for item in result["tasks"]:
             task_id = item['taskId']
-            processed_result[task_id] = item
+            processed_result[task_id] = json.dumps(item)
         variables['tasks'] = processed_result
 
     def ispwservices_getreleasetaskinformation(self, variables):
@@ -248,7 +248,7 @@ class ISPWClient(object):
         processed_result = {}
         for item in result["tasks"]:
             task_id = item['taskId']
-            processed_result[task_id] = item
+            processed_result[task_id] = json.dumps(item)
         variables['tasks'] = processed_result
 
     def ispwservices_getsetdeploymentinformation(self, variables):
