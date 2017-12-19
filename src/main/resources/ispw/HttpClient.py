@@ -23,6 +23,9 @@ class HttpClient(object):
         if http_connection['proxyHost']:
             self.proxy = {'http': '%s:%s' % (http_connection['proxyHost'], http_connection['proxyPort'])}
         self.verify_ssl = http_connection['enableSslVerification']
+        if not self.verify_ssl:
+            from trustmanager.all_truster import TrustAllCertificates
+            TrustAllCertificates.trust_all_certificates()
 
     def _get_request(self, context_root, additional_headers=None):
         request_url = self.url + context_root
