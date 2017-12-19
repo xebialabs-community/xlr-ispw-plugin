@@ -32,8 +32,6 @@ class TrustAllCertificates:
     @staticmethod
     def trust_all_certificates():
         """Blindly trusts all certificates; note this is a per-JVM process setting."""
-        global _blind_trust
-
         if not _blind_trust:
             print >> sys.stderr, "Trusting all certificates without verifying them for this process."
             print >> sys.stderr, "It would be best to install certificates in the JVM's trust store."
