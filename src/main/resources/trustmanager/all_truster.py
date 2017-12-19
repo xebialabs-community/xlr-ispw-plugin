@@ -27,7 +27,6 @@ class TrustAllCertificates:
     _blind_trust = False
 
     def __init__(self):
-        _blind_trust = False
         pass
 
     @staticmethod
