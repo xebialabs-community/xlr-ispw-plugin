@@ -11,6 +11,7 @@ import json
 from ispw.AssignmentClient import AssignmentClient
 from ispw.ReleaseClient import ReleaseClient
 from ispw.SetClient import SetClient
+from ispw.TestConnectionClient import TestConnectionClient
 
 
 class ISPWClient(object):
@@ -18,6 +19,7 @@ class ISPWClient(object):
         self.set_client = SetClient(http_connection, ces_token)
         self.release_client = ReleaseClient(http_connection, ces_token)
         self.assignment_client = AssignmentClient(http_connection, ces_token)
+        self.test_connection_client = TestConnectionClient(http_connection)
 
     @staticmethod
     def create_client(http_connection, ces_token=None):

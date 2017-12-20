@@ -21,9 +21,8 @@
     <property name="enableSslVerification" label="SSL Verification" required="false" default="true" kind="boolean"
               description="Enable SSL Verification"/>
 
-    <property name="scriptLocation" hidden="true" default="configuration/HttpConnectionCheck.py"/>
+    <property name="scriptLocation" hidden="true" default="ispw/HttpConnectionCheck.py"/>
     <property name="checkConfigurationPath" hidden="true" default="/compuware/ws/Config/version"/>
-    <property name="checkConfigurationContentType" hidden="true" default="application/json"/>
   </type>
 
   <type type="ispwServices.PythonScript" extends="xlrelease.PythonScript" virtual="true">
