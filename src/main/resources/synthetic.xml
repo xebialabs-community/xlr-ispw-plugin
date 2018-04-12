@@ -171,6 +171,8 @@
     <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
               description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
               required="false"/>
+    <property name="override" category="input" label="Override" kind="boolean" required="false" default="true"
+              description="Allow to override a higher version in next level when promote"/>
     <property name="autoDeploy" category="input" label="Auto Deploy" kind="boolean" required="false"
               description="Promotes can be set up to automatically Deploy as well by an option set up by the ISPW Administrator"/>
 
@@ -335,6 +337,8 @@
     <property name="executionStatus" category="input" label="Execution Status" kind="string" default="I"
               description="Optional, I for immediate execution or at start date/time, H to create request in hold. Default is I"
               required="false"/>
+    <property name="override" category="input" label="Override" kind="boolean" required="false" default="true"
+              description="Allow to override a higher version in next level when promote"/>
     <property name="autoDeploy" category="input" label="Auto Deploy" kind="boolean" required="false"
               description="Promotes can be set up to automatically Deploy as well by an option set up by the ISPW Administrator"/>
 
