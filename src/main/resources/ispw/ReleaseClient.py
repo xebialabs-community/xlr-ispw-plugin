@@ -93,12 +93,13 @@ class ReleaseClient(HttpClient):
             task_id, response.status_code, response.json())
         return response.json()
 
-    def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, auto_deploy,
+    def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, override, auto_deploy,
                 callback_task_id,
                 callback_url, callback_username, callback_password):
         context_root = "/ispw/%s/releases/%s/tasks/promote?level=%s" % (srid, release_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
+                'override': override,
                 'autoDeploy': auto_deploy,
                 'httpHeaders': [{'name': 'Content-type', 'value': 'application/json'}],
                 'credentials': {'username': callback_username, 'password': callback_password}, 'events': [

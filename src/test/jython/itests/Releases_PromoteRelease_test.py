@@ -18,7 +18,7 @@ from ispw.ISPWClientUtil import ISPWClientUtil
 class PromoteRelease(unittest.TestCase):
     def test_promote_release(self):
         client = ISPWClientUtil.create_ispw_client(ISPWServerCi(), None)
-        variables = {"srid": "ispw", "relId": "1234", "level": "test", "changeType":"S", "executionStatus": "I","runtimeConfiguration": "", "autoDeploy": False,
+        variables = {"srid": "ispw", "relId": "1234", "level": "test", "changeType":"S", "executionStatus": "I","runtimeConfiguration": "", "override":False, "autoDeploy": False,
                      "callbackTaskId": "taskid", "callbackUrl": "http://localhost:1234", "callbackUsername": "testuser",
                      "callbackPassword": "testpassword"}
         client.ispwservices_promote(variables)
