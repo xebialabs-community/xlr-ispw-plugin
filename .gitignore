@@ -1,5 +1,8 @@
 .gradle
 .idea
 build
+*.class
+*.pyc
 supervisord.*
 xlr-ispw-plugin.iml
+secrets.xlvals

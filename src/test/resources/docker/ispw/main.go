@@ -1,11 +1,14 @@
 package main
 
 import (
+	"io/ioutil"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"github.com/gorilla/mux"
+	"bytes"
+  "github.com/gorilla/mux"
+  "time"
 )
 
 // Assignment struct used to return json after ReturnAssignmentResponse is called
@@ -112,6 +115,27 @@ type Listing struct {
 	Listing string `json:"listing"`
 }
 
+type DeployReleaseRequest struct {
+	ChangeType           string `json:"changeType"`
+	ExecutionStatus      string `json:"executionStatus"`
+	RuntimeConfiguration string `json:"runtimeConfiguration"`
+	Dpenvlst             string `json:"dpenvlst"`
+	System               string `json:"system"`
+	HttpHeaders          []struct {
+                          Name 	string `json:"name"`
+                        	Value string `json:"value"`
+                        } `json:"httpHeaders"`
+	Credentials          struct {
+                          Username  string `json:"username"`
+                          Password  string `json:"password"`
+                        } `json:"credentials"`
+  Events               []struct {
+                          Name    string `json:"name"`
+                          Url     string `json:"url"`
+                          Body    string `json:"body"`
+                        } `json:"events"`
+}
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/ispw/ispw/assignments/", ReturnAssignmentResponse).Methods("POST")
@@ -121,7 +145,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/{task_id}", GetTaskInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/generate", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
-	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/deploy", ReturnIspwDeployResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/regress", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 
 	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
@@ -131,7 +155,7 @@ func main() {
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/generate", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}/listing", GetReleaseTaskGenerateListing).Methods("GET")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
-	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", ReturnIspwDeployResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
 
 	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
@@ -240,6 +264,53 @@ func ReturnIspwResponse(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(res, string(outgoingJSON))
 
 }
+
+func ReturnIspwDeployResponse(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("Content-Type", "application/json")
+	c := IspwResponse{"ISPW2345", "This worked", "http://foobarsoft.com/ispw/w3t/sets/s0123456"}
+	outgoingJSON, err := json.Marshal(c)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(res, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	res.WriteHeader(http.StatusCreated)
+	fmt.Fprint(res, string(outgoingJSON))
+
+	var t DeployReleaseRequest
+	body, err := ioutil.ReadAll(req.Body)
+	fmt.Println(string(body))
+	err = json.Unmarshal(body, &t)
+
+	fmt.Println("Change Type = ", t.ChangeType)
+	fmt.Println("Username = ", t.Credentials.Username)
+	fmt.Println("URL      = ", t.Events[0].Url)
+	var jsonStr = []byte(t.Events[0].Body)
+
+	go xlrCallBack(t.Credentials.Username, t.Credentials.Password, t.Events[0].Url, jsonStr)
+
+}
+
+func xlrCallBack( username string, password string, url string, jsonStr []byte ) {
+
+	req2, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req2.SetBasicAuth(username, password)
+	req2.Header.Set("Accept", "application/json")
+	req2.Header.Set("Content-Type", "application/json")
+
+	time.Sleep( 5 * time.Second )
+	cli := &http.Client{}
+	resp, err := cli.Do(req2)
+
+	if err != nil {
+			 fmt.Println("REQUEST ERROR")
+			 fmt.Println(err)
+			 return
+	}
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+}
+
 
 // GetSetInformation sends a dummy response back
 func GetSetInformation(res http.ResponseWriter, req *http.Request) {

@@ -1,0 +1,270 @@
+---
+apiVersion: xl-release/v1
+kind: Templates
+spec:
+- directory: ISPW
+  children:
+  - template: Compuware - REST
+    scheduledStartDate: 2016-05-18T07:00:00Z
+    phases:
+    - phase: QA
+      tasks:
+      - name: Deployments
+        type: xlrelease.ParallelGroup
+        tasks:
+        - name: Deploy onto websphere
+          type: xldeploy.Deploy
+          deploymentPackage: PetClinic-wlp/1.0
+          deploymentEnvironment: WLP - defaultServer
+        - name: ISPW
+          type: xlrelease.ParallelGroup
+          tasks:
+          - name: Get release info
+            type: ispwServices.GetReleaseInformation
+            srid: ispw
+            relId: ${ISPW_RELEASE_ID}
+          - name: Create a new release
+            type: ispwServices.CreateRelease
+            srid: ispw
+            application: ${ISPW_APPLICATION}
+            stream: ${ISPW_STREAM}
+            description: ${ISPW_RELEASE_DESCRIPTION}
+            relId: ${ISPW_RELEASE_ID}
+          - name: Validate ISPW release components
+            type: xlrelease.Task
+          - name: Get deployment wait task id
+            type: xlr.GetTaskId
+            taskTitle: Placeholder for finishing deployment
+            variableMapping:
+              pythonScript.taskId: ${ISPW_QA_DEPL_TASK_ID}
+          - name: Run deployment
+            type: ispwServices.Deploy
+            srid: ispw
+            runtimeConfiguration: CWCC
+            callbackTaskId: ${ISPW_QA_DEPL_TASK_ID}
+            callbackUrl: http://dtw-xebialabs.nasa.cpwr.corp:5516
+            callbackUsername: admin
+            callbackPassword: !value "adminPassword"
+            level: ${ISPW_LEVEL}
+          - name: Placeholder for finishing deployment
+            type: xlrelease.Task
+            owner: admin
+          links:
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase2033345\/Task6872401\/Task2331482\/Link3327597
+            type: xlrelease.Link
+            source: Get deployment wait task id
+            target: Placeholder for finishing deployment
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase2033345\/Task6872401\/Task2331482\/Link6008439
+            type: xlrelease.Link
+            source: Get release info
+            target: Create a new release
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase2033345\/Task6872401\/Task2331482\/Link1531888
+            type: xlrelease.Link
+            source: Create a new release
+            target: Validate ISPW release components
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase2033345\/Task6872401\/Task2331482\/Link2764447
+            type: xlrelease.Link
+            source: Validate ISPW release components
+            target: Run deployment
+      - name: Approve QA
+        type: xlrelease.GateTask
+        conditions:
+        - name: Development done
+          type: xlrelease.GateCondition
+        - name: Everything tested
+          type: xlrelease.GateCondition
+      color: '#68b749'
+    - phase: Pre prod
+      tasks:
+      - name: Deployments
+        type: xlrelease.ParallelGroup
+        tasks:
+        - name: Deploy onto websphere
+          type: xldeploy.Deploy
+          deploymentPackage: PetClinic-wlp/1.0
+          deploymentEnvironment: WLP - defaultServer
+        - name: ISPW
+          type: xlrelease.ParallelGroup
+          tasks:
+          - name: Validate ISPW release components
+            type: xlrelease.Task
+          - name: Get preprod promote wait task id
+            type: xlr.GetTaskId
+            taskTitle: preprod promote wait task id
+            variableMapping:
+              pythonScript.taskId: ${ISPW_PREPROD_PROMOTE_TASK_ID}
+          - name: Get preprod deploy wait task id
+            type: xlr.GetTaskId
+            taskTitle: preprod deploy wait task id
+            variableMapping:
+              pythonScript.taskId: ${ISPW_PREPROD_DEPL_TASK_ID}
+          - name: Promote
+            type: ispwServices.Promote
+            srid: ispw
+            runtimeConfiguration: CWCC
+            callbackTaskId: ${ISPW_PREPROD_PROMOTE_TASK_ID}
+            callbackUrl: http://dtw-xebialabs.nasa.cpwr.corp:5516
+            callbackUsername: admin
+            callbackPassword: !value "adminPassword"
+            level: ${ISPW_LEVEL}
+          - name: Run deployment
+            type: ispwServices.Deploy
+            srid: ispw
+            callbackUrl: http://dtw-xebialabs.nasa.cpwr.corp:5516
+            callbackUsername: admin
+            callbackPassword: !value "adminPassword"
+            level: ${ISPW_LEVEL_STG}
+          - name: preprod promote wait task id
+            type: xlrelease.Task
+            owner: admin
+          - name: preprod deploy wait task id
+            type: xlrelease.Task
+            owner: admin
+          links:
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase799217\/Task6872401\/Task4010347\/Link4372122
+            type: xlrelease.Link
+            source: Get preprod deploy wait task id
+            target: preprod deploy wait task id
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase799217\/Task6872401\/Task4010347\/Link1368733
+            type: xlrelease.Link
+            source: Get preprod promote wait task id
+            target: preprod promote wait task id
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase799217\/Task6872401\/Task4010347\/Link6279116
+            type: xlrelease.Link
+            source: Promote
+            target: Run deployment
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase799217\/Task6872401\/Task4010347\/Link4877082
+            type: xlrelease.Link
+            source: Validate ISPW release components
+            target: Promote
+      - name: Approve pre prod
+        type: xlrelease.GateTask
+        conditions:
+        - name: Testing done?
+          type: xlrelease.GateCondition
+      color: '#009CDB'
+    - phase: Prod
+      tasks:
+      - name: Deployments
+        type: xlrelease.ParallelGroup
+        tasks:
+        - name: Deploy onto websphere
+          type: xldeploy.Deploy
+          deploymentPackage: PetClinic-wlp/1.0
+          deploymentEnvironment: WLP - defaultServer
+        - name: ISPW
+          type: xlrelease.ParallelGroup
+          tasks:
+          - name: Validate ISPW release components
+            type: xlrelease.Task
+          - name: Get prod promote wait task id
+            type: xlr.GetTaskId
+            taskTitle: prod promote wait task id
+            variableMapping:
+              pythonScript.taskId: ${ISPW_PROD_PROMOTE_TASK_ID}
+          - name: Get prod deploy wait task id
+            type: xlr.GetTaskId
+            taskTitle: prod deploy wait task id
+            variableMapping:
+              pythonScript.taskId: ${ISPW_PROD_DEPL_TASK_ID}
+          - name: Promote
+            type: ispwServices.Promote
+            srid: ispw
+            runtimeConfiguration: CWCC
+            callbackTaskId: ${ISPW_PROD_PROMOTE_TASK_ID}
+            callbackUrl: http://dtw-xebialabs.nasa.cpwr.corp:5516
+            callbackUsername: admin
+            callbackPassword: !value "adminPassword"
+            relId: XEBIAP3
+            level: ${ISPW_LEVEL_STG}
+          - name: Run deployment
+            type: ispwServices.Deploy
+            srid: ispw
+            runtimeConfiguration: CWCC
+            callbackTaskId: ${ISPW_PROD_DEPL_TASK_ID}
+            callbackUrl: http://dtw-xebialabs.nasa.cpwr.corp:5516
+            callbackUsername: admin
+            callbackPassword: !value "adminPassword"
+            level: ${ISPW_LEVEL_STG}
+          - name: prod promote wait task id
+            type: xlrelease.Task
+            owner: admin
+          - name: prod deploy wait task id
+            type: xlrelease.Task
+            owner: admin
+          links:
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase6280420\/Task6872401\/Task1845049\/Link4877082
+            type: xlrelease.Link
+            source: Validate ISPW release components
+            target: Promote
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase6280420\/Task6872401\/Task1845049\/Link6279116
+            type: xlrelease.Link
+            source: Promote
+            target: Run deployment
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase6280420\/Task6872401\/Task1845049\/Link1368733
+            type: xlrelease.Link
+            source: Get prod promote wait task id
+            target: prod promote wait task id
+          - name: Applications\/Folder5e0a1b7cb96142358537338f78628748\/Release2711474\/Phase6280420\/Task6872401\/Task1845049\/Link4372122
+            type: xlrelease.Link
+            source: Get prod deploy wait task id
+            target: prod deploy wait task id
+      - name: Get Set information
+        type: ispwServices.GetSetInformation
+        srid: ispw
+        setId: S000004743
+      color: '#663366'
+    variables:
+    - type: xlrelease.StringVariable
+      key: ISPW_RELEASE_ID
+      label: ISPW Release id
+    - type: xlrelease.StringVariable
+      key: ISPW_RELEASE_DESCRIPTION
+      label: ISPW Release description
+    - type: xlrelease.StringVariable
+      key: ISPW_APPLICATION
+      label: ISPW Application
+      value: peka
+    - type: xlrelease.StringVariable
+      key: ISPW_LEVEL
+      label: ISPW Level Dev
+      value: qa1
+    - type: xlrelease.StringVariable
+      key: ISPW_USER
+      label: ISPW User
+      value: icapss0
+    - type: xlrelease.StringVariable
+      key: ISPW_LEVEL_STG
+      label: ISPW Level QA
+      value: stg
+    - type: xlrelease.StringVariable
+      key: ISPW_LEVEL_PRD
+      label: ISPW Level Production
+      value: prd
+    - type: xlrelease.StringVariable
+      key: ISPW_STREAM
+      label: ISPW Stream
+      value: SNOW
+    - type: xlrelease.StringVariable
+      key: ISPW_QA_DEPL_TASK_ID
+      requiresValue: false
+      showOnReleaseStart: false
+    - type: xlrelease.StringVariable
+      key: ISPW_PREPROD_PROMOTE_TASK_ID
+      requiresValue: false
+      showOnReleaseStart: false
+    - type: xlrelease.StringVariable
+      key: ISPW_PREPROD_DEPL_TASK_ID
+      requiresValue: false
+      showOnReleaseStart: false
+    - type: xlrelease.StringVariable
+      key: ISPW_PROD_PROMOTE_TASK_ID
+      requiresValue: false
+      showOnReleaseStart: false
+    - type: xlrelease.StringVariable
+      key: ISPW_PROD_DEPL_TASK_ID
+      requiresValue: false
+      showOnReleaseStart: false
+    scriptUsername: admin
+    scriptUserPassword: !value "adminPassword"
+    riskProfile: Default risk profile

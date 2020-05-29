@@ -7,16 +7,16 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 xlDocker {
   compileImage = 'xebialabsunsupported/xlr_dev_compile'
-  compileVersion = 'v7.2.0.2'
+  compileVersion = '9.5.3'
   runImage = 'xebialabsunsupported/xlr_dev_run'
-  runVersion = 'v7.2.0.1'
+  runVersion = '9.5.3'
   runPortMapping = '15516:5516'
   download("xlr_community_plugins") {
-    src(["https://github.com/xebialabs-community/xlr-xlrelease-plugin/releases/download/v1.11.0/xlr-xlrelease-plugin-1.11.0.jar"])
+    src(["https://github.com/xebialabs-community/xlr-xlrelease-plugin/releases/download/v2.3.6/xlr-xlrelease-plugin-2.3.6.jar"])
     dest file("src/downloads/plugins")
     acceptAnyCertificate true
   }
@@ -30,13 +30,13 @@ if (!project.hasProperty('release.useLastTag')) {
   project.ext['release.useLastTag'] = true
 }
 
+/*
 if (!project.hasProperty('jythonInterpreter')) {
   project.ext['jythonInterpreter'] = "jython"
 }
 
 sourceSets.main.resources.srcDirs = ["src/main/jython", "src/main/resources"]
 sourceSets.test.resources.srcDirs = ["src/test/jython", "src/test/resources"]
-
 
 task testJython(type: Exec, dependsOn: ['testClasses']) {
   environment = ["itest_conf_file": "$projectDir/src/test/jython/itests/itest-conf.json","CLASSPATH": sourceSets.test.runtimeClasspath.asPath, "PATH": System.getenv("PATH"), "HOME": System.getenv("HOME")]
@@ -45,11 +45,12 @@ task testJython(type: Exec, dependsOn: ['testClasses']) {
 }
 
 test.dependsOn testJython
-
+*/
 
 license {
   header rootProject.file('License.md')
   strictCheck false
   ext.year = Calendar.getInstance().get(Calendar.YEAR)
   ext.name = 'XEBIALABS'
+  excludes(["**/*.json"])
 }
