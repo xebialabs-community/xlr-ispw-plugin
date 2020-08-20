@@ -1,5 +1,5 @@
 #
-# Copyright 2019 XEBIALABS
+# Copyright 2020 XEBIALABS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
@@ -9,14 +9,15 @@
 #
 
 import json
+import time
 
 from ispw.HttpClient import HttpClient
 from ispw.Util import check_response
-
+from ispw.Util import timeout_response
 
 class AssignmentClient(HttpClient):
     def create_assignment(self, srid, stream, application, default_path, description, owner, assignment_prefix,
-                          reference_number, release_id, user_tag):
+                          reference_number, release_id, user_tag, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/" % srid
         body = {'stream': stream, 'application': application,
                 'defaultPath': default_path,
@@ -26,16 +27,18 @@ class AssignmentClient(HttpClient):
                 'referenceNumber': reference_number,
                 'releaseId': release_id,
                 'userTag': user_tag}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to create assignment for srid [%s]. Server return [%s], with content [%s]" % (
-            srid, response.status_code, response.text))
-        print "Called create assignment with id [%s]. Server return [%s], with content [%s]\n" % (
-            srid, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "create assigment"):
+                break
+
         return response.json()
 
+
     def load_task(self, srid, assignment_id, stream, application, module_name, module_type, current_level, starting_level,
-                  generate_sequence, sql, ims, cics, program):
+                  generate_sequence, sql, ims, cics, program, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks" % (srid, assignment_id)
         body = {'application': application, 'stream': stream,
                 'moduleName': module_name,
@@ -47,47 +50,56 @@ class AssignmentClient(HttpClient):
                 'ims': ims,
                 'cics': cics,
                 'program': program}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to load task for srid [%s]. Server return [%s], with content [%s]" % (
-            srid, response.status_code, response.text))
-        print "Called load task with id [%s]. Server return [%s], with content [%s]\n" % (
-            srid, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "load task"):
+                break
+
         return response.json()
 
-    def get_assignment_information(self, srid, assignment_id):
+
+    def get_assignment_information(self, srid, assignment_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s" % (srid, assignment_id)
-        response = self._get_request(context_root,
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to get assignment information for srid [%s]. Server return [%s], with content [%s]" % (
-            srid, response.status_code, response.text))
-        print "Called get assignment information with id [%s]. Server return [%s], with content [%s]\n" % (
-            srid, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment information"):
+                break
+
         return response.json()
 
-    def get_assignment_task_list(self, srid, assignment_id, level):
+
+    def get_assignment_task_list(self, srid, assignment_id, level, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks" % (srid, assignment_id)
         if level:
             context_root += "?level=%s" % level
-        response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response, "Failed to get assignment task list [%s]. Server return [%s], with content [%s]" % (
-            assignment_id, response.status_code, response.text))
-        print "Received assignment task list with set id [%s]. Server return [%s], with content [%s]\n" % (
-            assignment_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment task list"):
+                break
+
         return response.json()
 
-    def get_assignment_task_information(self, srid, assignment_id, task_id):
+
+    def get_assignment_task_information(self, srid, assignment_id, task_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks/%s" % (srid, assignment_id, task_id)
-        response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response,
-                       "Failed to get assignment task information [%s]. Server return [%s], with content [%s]" % (
-                           task_id, response.status_code, response.text))
-        print "Received assignment task information with id [%s]. Server return [%s], with content [%s]\n" % (
-            task_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment task information"):
+                break
+
         return response.json()
+
 
     def generate_tasks_in_assignment(self, srid, assignment_id, level, runtime_configuration, auto_deploy, callback_task_id,
-                                  callback_url, callback_username, callback_password):
+                                  callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks/generate" % (srid, assignment_id)
         if level:
             context_root += "?level=%s" % level
@@ -103,18 +115,18 @@ class AssignmentClient(HttpClient):
                  "body": "{\"comment\":\"Task generation terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Task generation deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to generate tasks for assignment [%s]. Server return [%s], with content [%s]" % (
-            assignment_id, response.status_code, response.text))
-        print "Called task generation for assignment with id [%s]. Server return [%s], with content [%s]\n" % (
-            assignment_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "generate tasks"):
+                break
+
         return response.json()
 
 
     def promote_assignment(self, srid, assignment_id, level, change_type, execution_status, runtime_configuration, override, auto_deploy,
-                callback_task_id,
-                callback_url, callback_username, callback_password):
+                callback_task_id, callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks/promote?level=%s" % (srid, assignment_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
@@ -130,16 +142,18 @@ class AssignmentClient(HttpClient):
                  "body": "{\"comment\":\"Promotion terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to promote assignment [%s]. Server return [%s], with content [%s]" % (
-            assignment_id, response.status_code, response.text))
-        print "Called promote assignment with id [%s]. Server return [%s], with content [%s]\n" % (
-            assignment_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "promote assignment"):
+                break
+
         return response.json()
 
+
     def deploy_assignment(self, srid, assignment_id, level, change_type, execution_status, runtime_configuration, dpenvlst, system,
-               callback_task_id, callback_url, callback_username, callback_password):
+               callback_task_id, callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks/deploy?level=%s" % (srid, assignment_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
@@ -154,16 +168,18 @@ class AssignmentClient(HttpClient):
                  "body": "{\"comment\":\"Deploy terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to deploy assignment [%s]. Server return [%s], with content [%s]" % (
-            assignment_id, response.status_code, response.text))
-        print "Called deploy assignment with id [%s]. Server return [%s], with content [%s]\n" % (
-            assignment_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "deploy assignment"):
+                break
+
         return response.json()
 
+
     def regress_assignment(self, srid, assignment_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
-                callback_url, callback_username, callback_password):
+                callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks/regress?level=%s" % (srid, assignment_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
@@ -177,10 +193,11 @@ class AssignmentClient(HttpClient):
                  "body": "{\"comment\":\"Regression terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to regress assignment [%s]. Server return [%s], with content [%s]" % (
-            assignment_id, response.status_code, response.text))
-        print "Called regress assignment with id [%s]. Server return [%s], with content [%s]\n" % (
-            assignment_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body),                                       {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "regress assignment"):
+                break
+
         return response.json()

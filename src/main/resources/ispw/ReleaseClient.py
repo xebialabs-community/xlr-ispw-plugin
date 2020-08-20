@@ -1,5 +1,5 @@
 #
-# Copyright 2019 XEBIALABS
+# Copyright 2020 XEBIALABS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
@@ -20,43 +20,49 @@ class ReleaseClient(HttpClient):
         context_root = "/ispw/%s/releases/" % srid
         body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
                 'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to create release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Created release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body),
+                                        {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "create release"):
+                break
+
         return response.json()
 
     def get_release_information(self, srid, release_id):
         context_root = "/ispw/%s/releases/%s" % (srid, release_id)
-        response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response, "Failed to get release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Received release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release"):
+                break
+
         return response.json()
 
     def get_release_task_list(self, srid, release_id, level):
         context_root = "/ispw/%s/releases/%s/tasks" % (srid, release_id)
         if level:
             context_root += "?level=%s" % level
-        response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response, "Failed to get release task list [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Received release task list with set id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release task list"):
+                break
+
         return response.json()
+
 
     def get_release_task_information(self, srid, release_id, task_id):
         context_root = "/ispw/%s/releases/%s/tasks/%s" % (srid, release_id, task_id)
-        response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response,
-                       "Failed to get release task information [%s]. Server return [%s], with content [%s]" % (
-                           release_id, response.status_code, response.text))
-        print "Received release task information with id [%s]. Server return [%s], with content [%s]\n" % (
-            task_id, response.status_code, response.json())
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release task information"):
+                break
+
         return response.json()
+
 
     def generate_tasks_in_release(self, srid, release_id, level, runtime_configuration, auto_deploy, callback_task_id,
                                   callback_url, callback_username, callback_password):
@@ -75,23 +81,27 @@ class ReleaseClient(HttpClient):
                  "body": "{\"comment\":\"Task generation terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Task generation deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to generate tasks for release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Called task generation for release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body),
+                                        {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "generate tasks for release"):
+                break
+
         return response.json()
+
 
     def get_release_task_generate_listing(self, srid, release_id, task_id):
         context_root = "/ispw/%s/releases/%s/tasks/%s/listing" % (srid, release_id, task_id)
-        response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response,
-                       "Failed to get release task generate listing [%s]. Server return [%s], with content [%s]" % (
-                           release_id, response.status_code, response.text))
-        print "Received release task generate listing for id [%s]. Server return [%s], with content [%s]\n" % (
-            task_id, response.status_code, response.json())
+        for x in range(retryLimit):
+            response = self._get_request(context_root, {'Accept': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release tasks generate listing"):
+                break
+
         return response.json()
+
 
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, override, auto_deploy,
                 callback_task_id,
@@ -111,12 +121,14 @@ class ReleaseClient(HttpClient):
                  "body": "{\"comment\":\"Promotion terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to promote release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Called promote release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body),
+                                        {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "promote release"):
+                break
+
         return response.json()
 
     def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, dpenvlst, system,
@@ -135,13 +147,16 @@ class ReleaseClient(HttpClient):
                  "body": "{\"comment\":\"Deploy terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to deploy release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Called deploy release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body),
+                                        {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "deploy release"):
+                break
+
         return response.json()
+
 
     def regress(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
                 callback_url, callback_username, callback_password):
@@ -158,10 +173,12 @@ class ReleaseClient(HttpClient):
                  "body": "{\"comment\":\"Regression terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
-        response = self._post_request(context_root, json.dumps(body),
-                                      {'Accept': 'application/json', 'Content-type': 'application/json'})
-        check_response(response, "Failed to regress release [%s]. Server return [%s], with content [%s]" % (
-            release_id, response.status_code, response.text))
-        print "Called regress release with id [%s]. Server return [%s], with content [%s]\n" % (
-            release_id, response.status_code, response.json())
+
+        for x in range(retryLimit):
+            response = self._post_request(context_root, json.dumps(body),
+                                        {'Accept': 'application/json', 'Content-type': 'application/json'})
+
+            if check_response(response, retryInterval, (x >= retryLimit), srid, "regress release"):
+                break
+
         return response.json()
