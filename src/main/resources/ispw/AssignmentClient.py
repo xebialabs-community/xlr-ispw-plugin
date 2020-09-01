@@ -10,10 +10,12 @@
 
 import json
 import time
+import logging
 
 from ispw.HttpClient import HttpClient
 from ispw.Util import check_response
-from ispw.Util import timeout_response
+
+logger = logging.getLogger(__name__)
 
 class AssignmentClient(HttpClient):
     def create_assignment(self, srid, stream, application, default_path, description, owner, assignment_prefix,
@@ -33,6 +35,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "create assigment"):
                 break
+            else:
+                print("Call for 'create assignment' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -56,6 +60,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "load task"):
                 break
+            else:
+                print("Call for 'load task' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -68,6 +74,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment information"):
                 break
+            else:
+                print("Call for 'get assignment information' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -82,6 +90,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment task list"):
                 break
+            else:
+                print("Call for 'get assignment task list' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -94,6 +104,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment task information"):
                 break
+            else:
+                print("Call for 'get release task information' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -121,6 +133,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "generate tasks"):
                 break
+            else:
+                print("Call for 'generate tasks' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -148,6 +162,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "promote assignment"):
                 break
+            else:
+                print("Call for 'promote assignment' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -174,6 +190,8 @@ class AssignmentClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "deploy assignment"):
                 break
+            else:
+                print("Call for 'deploy assignment' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
@@ -195,9 +213,11 @@ class AssignmentClient(HttpClient):
                  "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
 
         for x in range(retryLimit):
-            response = self._post_request(context_root, json.dumps(body),                                       {'Accept': 'application/json', 'Content-type': 'application/json'})
+            response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "regress assignment"):
                 break
+            else:
+                print("Call for 'regress assignment' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()

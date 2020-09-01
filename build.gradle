@@ -40,6 +40,7 @@ sourceSets.test.resources.srcDirs = ["src/test/jython", "src/test/resources"]
 license {
   header rootProject.file('License.md')
   strictCheck false
+  excludes(["**/*.png",  "**/*.txt", "**/*.json", "**/*.pyc", "**/*.yml", "**/*.yaml", "**/*.properties", "**/*.xml"])
   ext.year = Calendar.getInstance().get(Calendar.YEAR)
   ext.name = 'XEBIALABS'
 }

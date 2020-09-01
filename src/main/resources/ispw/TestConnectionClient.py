@@ -17,8 +17,10 @@ class TestConnectionClient(HttpClient):
     def get_version(self, path):
         context_root = "%s" % path
         response = self._get_request(context_root, {'Accept': 'application/json'})
-        check_response(response, "Failed to get version information [%s]. Server return [%s], with content [%s]" % (
+        if not response.ok:
+            raise Exception("Failed to get version information [%s]. Server return [%s], with content [%s]" % (
             path, response.status_code, response.text))
-        print "Received version info for path [%s]. Server return [%s], with content [%s]\n" % (
-            path, response.status_code, response.json())
+
+        print ("Received version info for path [%s]. Server return [%s], with content [%s]\n" % (
+            path, response.status_code, response.json()))
         return response.json()

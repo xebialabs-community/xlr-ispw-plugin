@@ -15,11 +15,34 @@ ispw:
     - 18080:8080
 
 xlr:
-  image: xebialabsunsupported/xlr_dev_run:v7.2.0.1
+  image: xebialabs/xl-release:9.7
+  container_name: xlr
   volumes:
-    - ~/xl-licenses:/license
-    - ./../../../../:/data
+    # - ~/xl-licenses/xl-release-license.lic:/opt/xebialabs/xl-release-server/conf/xl-release-license.lic
+    - ./../../../../build/libs/:/opt/xebialabs/xl-release-server/plugins/__local__/
+    - ./../../../../build/reports/tests/log/:/opt/xebialabs/xl-release-server/log/
+  environment:
+    - ADMIN_PASSWORD=admin
+    - ACCEPT_EULA=Y
   links:
-   - ispw
+    - ispw
+    - mockserver
   ports:
-   - "15516:5516"
+    - "15516:5516"  
+  #image: xebialabsunsupported/xlr_dev_run:v7.2.0.1
+  #volumes:
+  #  - ~/xl-licenses:/license
+  #  - ./../../../../:/data
+  #links:
+  # - ispw
+  #ports:
+  # - "15516:5516"
+
+mockserver:
+  build: ../mockserver
+  container_name: mockserver
+  ports:
+  - "5099:5000"
+  volumes:
+    - ./../mockserver/app:/mockserver
+    - ./../../../../build/reports/tests/log/:/var/log/

@@ -19,8 +19,14 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 wget --http-user=admin --http-password=admin --auth-no-challenge \
      --header="Accept: application/json" \
      --header="Content-type: application/json" \
-     --post-file=$SCRIPTPATH/data/server-configs.json \
-    http://localhost:5516/repository/cis -O /dev/null
+     --post-file=$SCRIPTPATH/data/server-config.json \
+    http://localhost:15516/api/v1/config -O /dev/null
+
+wget --http-user=admin --http-password=admin --auth-no-challenge \
+     --header="Accept: application/json" \
+     --header="Content-type: application/json" \
+     --post-file=$SCRIPTPATH/data/mock-server-config.json \
+    http://localhost:15516/api/v1/config -O /dev/null
 
 
 ##### Insert template
@@ -28,5 +34,5 @@ wget --http-user=admin --http-password=admin --auth-no-challenge \
 wget --http-user=admin --http-password=admin --auth-no-challenge \
      --header="Accept: application/json" \
      --header="Content-type: application/json" \
-     --post-file=$SCRIPTPATH/data/ispw-template.json \
-    http://localhost:5516/api/v1/templates/import -O /dev/null
+     --post-file=$SCRIPTPATH/data/release-template.json \
+    http://localhost:15516/api/v1/templates/import -O /dev/null

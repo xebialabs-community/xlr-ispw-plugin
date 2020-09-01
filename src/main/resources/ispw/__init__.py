@@ -8,10 +8,29 @@
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+import logging
 import os
 import tempfile
 from com.xebialabs.xlr.ssl import LoaderUtil
 from java.nio.file import Files, Paths, StandardCopyOption
+
+LOG_FILENAME = 'log/ispw-plugin.log'
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.handlers.RotatingFileHandler(
+              LOG_FILENAME, maxBytes=1000000, backupCount=1)
+formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+logger.debug('logger has been configured')
+
+#logging.basicConfig(filename='log/ispw-plugin.log',
+#                            filemode='w',
+#                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+#                            datefmt='%H:%M:%S',
+#                            level=logging.DEBUG)
 
 def set_ca_bundle_path():
     ca_bundle_path = extract_file_from_jar("requests/cacert.pem")

@@ -33,6 +33,10 @@
     <property name="cesToken" category="input" kind="string" required="false" label="Authentication token"/>
     <property name="srid" category="input" kind="string" required="true" label="srid"
               description="The instance of ISPW you are working with."/>
+    <property name="retryInterval" category="input" label="Retry Interval (sec)" kind="integer" 
+              description="Number of seconds to wait for retries" required="true" default="30"/>
+    <property name="retryLimit" category="input" label="Retry Limit" kind="integer" 
+              description="Number of time to retry the task before failing" required="true" default="5"/>
   </type>
 
   <type type="ispwServices.Action" extends="ispwServices.PythonScript" virtual="true">
@@ -46,10 +50,6 @@
               description="XLR username used for callback" required="true"/>
     <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
               description="XLR password used for callback" required="true"/>
-    <property name="retryInterval" category="input" label="Retry Interval (sec)" kind="integer" 
-              description="Number of seconds to wait for retries" required="true" default=30/>
-    <property name="retryLimit" category="input" label="Retry Limit" kind="integer" 
-              description="Number of time to retry the task before failing" required="true" default=5/>
   </type>
 
   <!-- Assignments -->

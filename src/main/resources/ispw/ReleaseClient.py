@@ -9,14 +9,15 @@
 #
 
 import json
-
+import logging
 from ispw.HttpClient import HttpClient
 from ispw.Util import check_response
 
+logger = logging.getLogger(__name__)
 
 class ReleaseClient(HttpClient):
     def create_release(self, srid, application, stream, description, release_id, release_prefix, owner,
-                       reference_number):
+                       reference_number, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/" % srid
         body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
                 'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
@@ -27,45 +28,51 @@ class ReleaseClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "create release"):
                 break
+            else:
+                print("Call for 'create release' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
-    def get_release_information(self, srid, release_id):
+    def get_release_information(self, srid, release_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s" % (srid, release_id)
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
-
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get release"):
                 break
+            else:
+                print("Call for 'get release' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
-    def get_release_task_list(self, srid, release_id, level):
+    def get_release_task_list(self, srid, release_id, level, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks" % (srid, release_id)
         if level:
             context_root += "?level=%s" % level
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
-
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get release task list"):
                 break
+            else:
+                print("Call for 'get release task list' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
 
-    def get_release_task_information(self, srid, release_id, task_id):
+    def get_release_task_information(self, srid, release_id, task_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/%s" % (srid, release_id, task_id)
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get release task information"):
                 break
+            else:
+                print("Call for 'get release task information' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
 
     def generate_tasks_in_release(self, srid, release_id, level, runtime_configuration, auto_deploy, callback_task_id,
-                                  callback_url, callback_username, callback_password):
+                                  callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/generate" % (srid, release_id)
         if level:
             context_root += "?level=%s" % level
@@ -88,24 +95,28 @@ class ReleaseClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "generate tasks for release"):
                 break
-
+            else:
+                print("Call for 'generate tasks for release' returned 409(conflict), trying again - %s" % str(x+1))
+            
         return response.json()
 
 
-    def get_release_task_generate_listing(self, srid, release_id, task_id):
+    def get_release_task_generate_listing(self, srid, release_id, task_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/%s/listing" % (srid, release_id, task_id)
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "get release tasks generate listing"):
                 break
+            else:
+                print("Call for 'get release tasks generate listing' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
 
     def promote(self, srid, release_id, level, change_type, execution_status, runtime_configuration, override, auto_deploy,
                 callback_task_id,
-                callback_url, callback_username, callback_password):
+                callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/promote?level=%s" % (srid, release_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
@@ -128,11 +139,13 @@ class ReleaseClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "promote release"):
                 break
+            else:
+                print("Call for 'promote release' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
     def deploy(self, srid, release_id, level, change_type, execution_status, runtime_configuration, dpenvlst, system,
-               callback_task_id, callback_url, callback_username, callback_password):
+               callback_task_id, callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/deploy?level=%s" % (srid, release_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
@@ -154,12 +167,14 @@ class ReleaseClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "deploy release"):
                 break
+            else:
+                print("Call for 'deploy release' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
 
 
     def regress(self, srid, release_id, level, change_type, execution_status, runtime_configuration, callback_task_id,
-                callback_url, callback_username, callback_password):
+                callback_url, callback_username, callback_password, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/regress?level=%s" % (srid, release_id, level)
         body = {'changeType': change_type, 'executionStatus': execution_status,
                 'runtimeConfiguration': runtime_configuration,
@@ -180,5 +195,7 @@ class ReleaseClient(HttpClient):
 
             if check_response(response, retryInterval, (x >= retryLimit), srid, "regress release"):
                 break
+            else:
+                print("Call for 'regress release' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
