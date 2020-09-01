@@ -1,4 +1,3 @@
-sudo: required
 language: java
 jdk: openjdk8
 notifications:
@@ -7,10 +6,11 @@ notifications:
 deploy:
   provider: releases
   api_key:
-    secure: M0/7sRXropBHOJkvRfF+xLKjKYD1EjzbPTu9kfbHIy1wI1VXHDO9w/KFakzgcgZnfoVNUk4XEH8dCu+SKfNPTP4Dx+eYO1256O+o4XoHlW3rHOrvw4hEPRir4EnGWTe+VHkzZRM2Zx9cgIciOxIQi/hbqECkLKe8n9Z1d8pH5KJUe6VLiiTiG5EUP1YpZdjd5YbyCB645XlO/2OmTxvm9fdgvxAHRH/9dTZvCEJFKfN6IXoW0FGt7OlCpRKTYGgze0GQDirHW5AQ37WEOfzJvTsP5Zj3BDki8/TtgwEn5v+JfI0F6HaI2fi3B+Rmgl0crubN/gaiYHUQwDEo6g8QqJ04o+v2bncUJXgTwdNzmiKmtQlw3gqrdNV+n2ygQdDF56YZd+msNNZFnVi1GI1Fm6OSbiRvK4N5oK0uS2QdffvdGy6MJUN/W6SN6LsHBHMGNxN+zSSYXKedMQw9o7Oz588h915WTNg+QEwGE0LEVP7ZeMAQlSG7WG3gDwR6s5M5CLoTcXYGLkOloo2cOYwcJj2ELitt+8taI8T5c/OdxIoVEAc4bu2gKBEiZ7b60YInDX8IGWzkrRm/KsVt3bBKvyhED7CZAwjr0u5QedfWZ+R/m1olu6sdcVpc0AuXDJiRFBiMGW4ABzQY6KIoI6OyAYU1lVOIK5AylNNamNqhxmI=
+    secure: i7ITo3naP4gENjX5suen0FqJ3PRsr8rhVjA/JxZfCGwz2aTGgAOKKQahjN8lrSxlRCs/2/DGpFW3COX40GvNWxqGB13LH9BFoEsnzEX21FD9RKm/O8unX4q4KQkyGOxk5lGFPID2JOssUtJfkuEiTfZjfFOe9BL6SypX5dQb9+cd4lVstS1zRIQYTN8SI4tzsClAg5ZEGymm4KFvOcwCKaBxUmhOAO9AhE+gGXoUQ6CoCgWgNWZb/0XXutCDmfe8Pd8lQqUXUFYvSkjfGOXU/eQysJa6wffGfgX9zustXwiBMr4vFa0OwvA+0VQApYJuCcJgmCFajA43/l50/L842c6/YuRd8rYhrH7A13Aj1rOgfHA4Kpj9PHYajO6Fbq2nFX9kiM6DJcR9rRhy7knHY+lWcRGLpT8jXFx0fkjLw2/1bt9VXUdfhAza+BQySe0SEVG5eeqkAXYB4IJchH4uZt8KX8a17Vem+L6jsEShjIaOK7PsA+xJWp4wDAIS463ijEeBWOHnh/d/YlbYW7N9gkVa6Tfg5fbTKt8wD1tB4tRwtfRbKACUY3kUs93ClGgMvPbmMd64elmW7PsTlb8h3ELmLop2AtcH3jKtYuCposw/8e+AmF3Qj+cOpPCpM5Daf5c/9T9BY21fkLihoL667lbnP9s1lGXntMkJLsU7gWs=
   file_glob: true
   file: build/libs/*
   skip_cleanup: true
   on:
+    all_branches: true
     tags: true
     repo: xebialabs-community/xlr-ispw-plugin
