@@ -26,11 +26,6 @@ logger.addHandler(handler)
 
 logger.debug('logger has been configured')
 
-#logging.basicConfig(filename='log/ispw-plugin.log',
-#                            filemode='w',
-#                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-#                            datefmt='%H:%M:%S',
-#                            level=logging.DEBUG)
 
 def set_ca_bundle_path():
     ca_bundle_path = extract_file_from_jar("requests/cacert.pem")

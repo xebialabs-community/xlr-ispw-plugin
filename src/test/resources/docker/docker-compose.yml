@@ -29,14 +29,6 @@ xlr:
     - mockserver
   ports:
     - "15516:5516"  
-  #image: xebialabsunsupported/xlr_dev_run:v7.2.0.1
-  #volumes:
-  #  - ~/xl-licenses:/license
-  #  - ./../../../../:/data
-  #links:
-  # - ispw
-  #ports:
-  # - "15516:5516"
 
 mockserver:
   build: ../mockserver

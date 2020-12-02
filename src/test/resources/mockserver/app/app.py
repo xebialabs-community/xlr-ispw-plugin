@@ -29,9 +29,15 @@ handler.setFormatter(logger_formatter)
 handler.setLevel(logging.DEBUG)
 app.logger.addHandler(handler)
 
+# 409 retry testing
 return409NumTimes = 0
 return409Counter = 0
 shouldReturn409 = False
+
+# polling testing
+returnBadResponseNumTimes = 0
+pollingCounter = 0
+shouldTestPolling = False
 
 
 def getFile( fileName, status="200" ):
@@ -100,6 +106,25 @@ def get_exampleFileNotFound(exampleVariable):
 
 ####### ISPW Specific
 
+#### Utility Methods
+
+# set set the polling variables
+# if this route is called with 0, then 'shouldTestPolling' is turned off - i.e. /setPolling/0
+# if it is called with >0 then return409 is turned on
+@app.route('/setPolling/<setReturnBadResponseNumTimes>')
+def setPolling(setReturnBadResponseNumTimes):
+     global pollingCounter
+     global shouldTestPolling
+     global returnBadResponseNumTimes 
+     logRequest(request)
+     returnBadResponseNumTimes = int(setReturnBadResponseNumTimes)
+     pollingCounter = 0
+     if returnBadResponseNumTimes > 0:
+        shouldTestPolling = True
+     else:
+        shouldTestPolling = False
+     return ("shouldTestPolling is %s and number of times is set to %s" % (str(shouldTestPolling), str(returnBadResponseNumTimes)))
+
 # set return409
 # if this route is called with 0, then 'return409' is turned off - i.e. /setReturn409/0
 # if it is called with >0 then return409 is turned on
@@ -118,8 +143,77 @@ def setReturn409(setReturn409NumTimes):
 
     return ("return409 is %s and number of times is set to %s" % (str(shouldReturn409), str(return409NumTimes)))
 
+# For 409 Response testing
+def createAndReturn409():
+    global return409NumTimes
+    global return409Counter
+    global shouldReturn409
+    if return409Counter == return409NumTimes:
+        shouldReturn409 = False
+        return409Counter = 0
+        return409NumTimes = 0
+    else:
+        return409Counter += 1 
 
-@app.route('/ispw/ispw/releases/<release_id>')
+    response = jsonify("Conflict")
+    response.status_code = 409
+    return response
+
+# For Polling Testing
+def createAndReturnBadResponse(badResponseFile):
+    global returnBadResponseNumTimes
+    global pollingCounter
+    global shouldTestPolling
+    if pollingCounter == returnBadResponseNumTimes:
+        shouldTestPolling = False
+        pollingCounter = 0
+        returnBadResponseNumTimes = 0
+    else:
+        pollingCounter += 1 
+
+    return getFile(badResponseFile, "201")
+
+
+### ISPW Mockserver Methods
+@app.route('/ispw/ispwMock/sets/<set_id>')
+@requires_auth
+def get_setInformation(set_id):
+    global shouldReturn409
+    global return409NumTimes
+    global return409Counter
+    global shouldTestPolling
+    global returnBadResponseNumTimes
+    global pollingCounter
+    logRequest(request)
+    app.logger.debug("The set_id is %s, shouldReturn409 is %s, return409NumTimes is %s, return409Counter is %s" % (set_id, str(shouldReturn409), str(return409NumTimes), str(return409Counter)))
+    app.logger.debug("The set_id is %s, shouldTestPolling is %s, returnBadResponseNumTimes is %s, pollingCounter is %s" % (set_id, str(shouldTestPolling), str(returnBadResponseNumTimes), str(pollingCounter)))
+    if shouldReturn409:
+        return createAndReturn409()
+    elif shouldTestPolling:
+        return createAndReturnBadResponse("pollingBadResponseSetInfo.json")
+    else:
+        return getFile("getSetInfo.json", "201")
+
+@app.route('/ispw/ispwMock/sets/<set_id>/deployment')
+@requires_auth
+def get_setDeployInformation(set_id):
+    global shouldReturn409
+    global return409NumTimes
+    global return409Counter
+    global shouldTestPolling
+    global returnBadResponseNumTimes
+    global pollingCounter
+    logRequest(request)
+    app.logger.debug("The set_id is %s, shouldReturn409 is %s, return409NumTimes is %s, return409Counter is %s" % (set_id, str(shouldReturn409), str(return409NumTimes), str(return409Counter)))
+    app.logger.debug("The set_id is %s, shouldTestPolling is %s, returnBadResponseNumTimes is %s, pollingCounter is %s" % (set_id, str(shouldTestPolling), str(returnBadResponseNumTimes), str(pollingCounter)))
+    if shouldReturn409:
+        return createAndReturn409()
+    elif shouldTestPolling:
+        return createAndReturnBadResponse("pollingBadResponseSetDeployInfo.json")
+    else:
+        return getFile("getSetDeployInfo.json", "201")
+
+@app.route('/ispw/ispwMock/releases/<release_id>')
 @requires_auth
 def get_releaseInformation(release_id):
     global shouldReturn409
@@ -130,18 +224,6 @@ def get_releaseInformation(release_id):
     else:
         return getFile("getReleaseInformation.json", "201")
 
-def createAndReturn409():
-    global return409NumTimes
-    global return409Counter
-    global shouldReturn409
-    if return409Counter == return409NumTimes:
-        shouldReturn409 = False
-    else:
-        return409Counter += 1 
-
-    response = jsonify("Conflict")
-    response.status_code = 409
-    return response
     
 
 # Use for detailed request debug

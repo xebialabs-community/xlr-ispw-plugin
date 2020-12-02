@@ -22,11 +22,11 @@ class ReleaseClient(HttpClient):
         body = {'application': application, 'stream': stream, 'description': description, 'releaseId': release_id,
                 'releasePrefix': release_prefix, 'owner': owner, 'referenceNumber': reference_number}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body),
                                         {'Accept': 'application/json', 'Content-type': 'application/json'})
-
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "create release"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "create release"):
                 break
             else:
                 print("Call for 'create release' returned 409(conflict), trying again - %s" % str(x+1))
@@ -35,11 +35,17 @@ class ReleaseClient(HttpClient):
 
     def get_release_information(self, srid, release_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s" % (srid, release_id)
+        
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release"):
+            logger.debug("isLastCall? - %s, x - %d, retryLimt - %d " % ((x >= retryLimit-1), x, retryLimit))
+            logger.debug("response returned - %s, %s, about to run check response" % (str(response.status_code), str(response.text)))
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get release"):
+                logger.debug("About to break, check response was true")
                 break
             else:
+                logger.debug("in for loop, check reponse returned false, about to try again, range is %s" % str(range(retryLimit)))
                 print("Call for 'get release' returned 409(conflict), trying again - %s" % str(x+1))
 
         return response.json()
@@ -48,9 +54,11 @@ class ReleaseClient(HttpClient):
         context_root = "/ispw/%s/releases/%s/tasks" % (srid, release_id)
         if level:
             context_root += "?level=%s" % level
+
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release task list"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get release task list"):
                 break
             else:
                 print("Call for 'get release task list' returned 409(conflict), trying again - %s" % str(x+1))
@@ -60,10 +68,12 @@ class ReleaseClient(HttpClient):
 
     def get_release_task_information(self, srid, release_id, task_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/%s" % (srid, release_id, task_id)
+        
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release task information"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get release task information"):
                 break
             else:
                 print("Call for 'get release task information' returned 409(conflict), trying again - %s" % str(x+1))
@@ -89,11 +99,12 @@ class ReleaseClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Task generation deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body),
                                         {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "generate tasks for release"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "generate tasks for release"):
                 break
             else:
                 print("Call for 'generate tasks for release' returned 409(conflict), trying again - %s" % str(x+1))
@@ -103,10 +114,12 @@ class ReleaseClient(HttpClient):
 
     def get_release_task_generate_listing(self, srid, release_id, task_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/releases/%s/tasks/%s/listing" % (srid, release_id, task_id)
+        
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get release tasks generate listing"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get release tasks generate listing"):
                 break
             else:
                 print("Call for 'get release tasks generate listing' returned 409(conflict), trying again - %s" % str(x+1))
@@ -133,11 +146,12 @@ class ReleaseClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body),
                                         {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "promote release"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "promote release"):
                 break
             else:
                 print("Call for 'promote release' returned 409(conflict), trying again - %s" % str(x+1))
@@ -161,11 +175,12 @@ class ReleaseClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body),
                                         {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "deploy release"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "deploy release"):
                 break
             else:
                 print("Call for 'deploy release' returned 409(conflict), trying again - %s" % str(x+1))
@@ -189,11 +204,12 @@ class ReleaseClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body),
                                         {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "regress release"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "regress release"):
                 break
             else:
                 print("Call for 'regress release' returned 409(conflict), trying again - %s" % str(x+1))

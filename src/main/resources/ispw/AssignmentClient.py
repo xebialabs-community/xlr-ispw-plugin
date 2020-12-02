@@ -29,11 +29,11 @@ class AssignmentClient(HttpClient):
                 'referenceNumber': reference_number,
                 'releaseId': release_id,
                 'userTag': user_tag}
-
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "create assigment"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "create assigment"):
                 break
             else:
                 print("Call for 'create assignment' returned 409(conflict), trying again - %s" % str(x+1))
@@ -54,11 +54,11 @@ class AssignmentClient(HttpClient):
                 'ims': ims,
                 'cics': cics,
                 'program': program}
-
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "load task"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "load task"):
                 break
             else:
                 print("Call for 'load task' returned 409(conflict), trying again - %s" % str(x+1))
@@ -69,10 +69,11 @@ class AssignmentClient(HttpClient):
     def get_assignment_information(self, srid, assignment_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s" % (srid, assignment_id)
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment information"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get assignment information"):
                 break
             else:
                 print("Call for 'get assignment information' returned 409(conflict), trying again - %s" % str(x+1))
@@ -85,10 +86,11 @@ class AssignmentClient(HttpClient):
         if level:
             context_root += "?level=%s" % level
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment task list"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get assignment task list"):
                 break
             else:
                 print("Call for 'get assignment task list' returned 409(conflict), trying again - %s" % str(x+1))
@@ -99,10 +101,11 @@ class AssignmentClient(HttpClient):
     def get_assignment_task_information(self, srid, assignment_id, task_id, retryInterval, retryLimit):
         context_root = "/ispw/%s/assignments/%s/tasks/%s" % (srid, assignment_id, task_id)
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._get_request(context_root, {'Accept': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "get assignment task information"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "get assignment task information"):
                 break
             else:
                 print("Call for 'get release task information' returned 409(conflict), trying again - %s" % str(x+1))
@@ -128,10 +131,11 @@ class AssignmentClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Task generation deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "generate tasks"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "generate tasks"):
                 break
             else:
                 print("Call for 'generate tasks' returned 409(conflict), trying again - %s" % str(x+1))
@@ -157,10 +161,11 @@ class AssignmentClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Promotion deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "promote assignment"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "promote assignment"):
                 break
             else:
                 print("Call for 'promote assignment' returned 409(conflict), trying again - %s" % str(x+1))
@@ -185,10 +190,11 @@ class AssignmentClient(HttpClient):
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Deploy deleted by ISPW\"}"}]}
 
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "deploy assignment"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "deploy assignment"):
                 break
             else:
                 print("Call for 'deploy assignment' returned 409(conflict), trying again - %s" % str(x+1))
@@ -211,11 +217,11 @@ class AssignmentClient(HttpClient):
                  "body": "{\"comment\":\"Regression terminated by ISPW\"}"},
                 {"name": "deleted", "url": "%s/api/v1/tasks/%s/fail" % (callback_url, callback_task_id),
                  "body": "{\"comment\":\"Regression deleted by ISPW\"}"}]}
-
+        if retryLimit == 0: retryLimit = 1
         for x in range(retryLimit):
             response = self._post_request(context_root, json.dumps(body), {'Accept': 'application/json', 'Content-type': 'application/json'})
 
-            if check_response(response, retryInterval, (x >= retryLimit), srid, "regress assignment"):
+            if check_response(response, retryInterval, (x >= retryLimit-1), srid, "regress assignment"):
                 break
             else:
                 print("Call for 'regress assignment' returned 409(conflict), trying again - %s" % str(x+1))

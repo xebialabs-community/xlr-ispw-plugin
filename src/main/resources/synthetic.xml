@@ -33,10 +33,26 @@
     <property name="cesToken" category="input" kind="string" required="false" label="Authentication token"/>
     <property name="srid" category="input" kind="string" required="true" label="srid"
               description="The instance of ISPW you are working with."/>
-    <property name="retryInterval" category="input" label="Retry Interval (sec)" kind="integer" 
-              description="Number of seconds to wait for retries" required="true" default="30"/>
     <property name="retryLimit" category="input" label="Retry Limit" kind="integer" 
-              description="Number of time to retry the task before failing" required="true" default="5"/>
+              description="Number of times to retry the task before failing, in the case that a 409 response status is returned" required="true" default="0"/>
+    <property name="retryInterval" category="input" label="Retry Interval (sec)" kind="integer" 
+              description="Number of seconds to wait for retries" required="true" default="0"/>
+  </type>
+
+  <type type="ispwServices.Poll" extends="xlrelease.PythonScript" virtual="true">
+    <property name="scriptLocation" default="ispw/ISPWTask.py" hidden="true"/>
+    <property name="iconLocation" default="ispw/compuware.png" hidden="true"/>
+    <property name="ispwServiceServer" category="input" label="Server" referenced-type="ispwServices.Server"
+              kind="ci"/>
+    <property name="cesToken" category="input" kind="string" required="false" label="Authentication token"/>
+    <property name="srid" category="input" kind="string" required="true" label="srid"
+              description="The instance of ISPW you are working with."/>
+    <property name="pollInterval" category="input" kind="integer" description="Time in seconds between each polling action" default="15" />
+    <property name="pollTimeoutCount" category="input" kind="integer" description="Number of times to poll before declaring a timeout failure, must be 1 or greater" default="1" 
+        label="Number of times to poll before timeout failure"/>
+    <property name="expectedStatusList" category="input" kind="list_of_string"  description="List one or more expected values for the 'state' field" default=""/>
+    
+    <property name="statusResult" category="output" kind="string" description="The expected status that was returned" label="Final Retrieved Status" />
   </type>
 
   <type type="ispwServices.Action" extends="ispwServices.PythonScript" virtual="true">
@@ -51,6 +67,7 @@
     <property name="callbackPassword" password="true" category="input" label="Callback Password" kind="string"
               description="XLR password used for callback" required="true"/>
   </type>
+  
 
   <!-- Assignments -->
   <type type="ispwServices.CreateAssignment" extends="ispwServices.PythonScript"
@@ -129,7 +146,7 @@
     <property name="baseVersion" category="output" label="Base version" kind="integer"/>
     <property name="cics" category="output" label="Cics" kind="boolean"/>
     <property name="clazz" category="output" label="Clazz" kind="string"/>
-    <property name="dateTime" category="output" label="Datetime" kind="date"/>
+    <property name="dateTime" category="output" label="Datetime" kind="string"/>
     <property name="environment" category="output" label="Environment" kind="string"/>
     <property name="extension" category="output" label="Extension" kind="string"/>
     <property name="flags" category="output" label="Flags" kind="string"/>
@@ -281,7 +298,7 @@
     <property name="baseVersion" category="output" label="Base version" kind="integer"/>
     <property name="cics" category="output" label="Cics" kind="boolean"/>
     <property name="clazz" category="output" label="Clazz" kind="string"/>
-    <property name="dateTime" category="output" label="Datetime" kind="date"/>
+    <property name="dateTime" category="output" label="Datetime" kind="string"/>
     <property name="environment" category="output" label="Environment" kind="string"/>
     <property name="extension" category="output" label="Extension" kind="string"/>
     <property name="flags" category="output" label="Flags" kind="string"/>
@@ -393,7 +410,7 @@
   <type type="ispwServices.GetSetInformation" extends="ispwServices.PythonScript"
         label="ISPW Sets: Get Set Information">
     <property name="setId" category="input" label="Set id" kind="string"
-              description="The set ID you want information on" required="true"/>
+              description="The set ID you want information about" required="true"/>
 
     <property name="setOutputId" category="output" label="Set id" kind="string"/>
     <property name="application" category="output" label="Application" kind="string"/>
@@ -407,6 +424,17 @@
     <property name="deployImplementationDate" category="output" label="Deploy Implementation Date" kind="string"/>
     <property name="deployImplementationTime" category="output" label="Deploy Implementation Time" kind="string"/>
     <property name="state" category="output" label="State" kind="string"/>
+  </type>
+
+  <type type="ispwServices.PollGetSetInformation" extends="ispwServices.Poll"
+        label="ISPW Sets: Poll 'Get Set Information'">
+        
+    <property name="statusFieldName" category="input" kind="string"
+              description="The field returned by the server that should be inspected for status value" 
+              required="true" default="state"/>
+
+    <property name="setId" category="input" label="Set id" kind="string"
+              description="The set ID you want information about" required="true"/>
   </type>
 
   <type type="ispwServices.GetSetTaskList" extends="ispwServices.PythonScript"
@@ -423,13 +451,24 @@
     <property name="setId" category="input" label="Set id" kind="string"
               description="The set ID you want deployment information on" required="true"/>
 
-    <property name="createDate" category="output" label="Creation Date" kind="date"/>
+    <property name="createDate" category="output" label="Creation Date" kind="string"/>
     <property name="description" category="output" label="Release description" kind="string"/>
     <property name="environment" category="output" label="Environment" kind="string"/>
     <property name="packages" category="output" label="Packages" kind="map_string_string"/>
     <property name="requestId" category="output" label="Request id" kind="integer"/>
     <property name="setOutputId" category="output" label="Set id" kind="string"/>
     <property name="state" category="output" label="State" kind="string"/>
+  </type>
+
+  <type type="ispwServices.PollGetSetDeploymentInformation" extends="ispwServices.Poll"
+        label="ISPW Sets: Poll 'Get Set Deployment Information'">
+        
+    <property name="statusFieldName" category="input" kind="string"
+              description="The field returned by the server that should be inspected for status value" 
+              required="true" default="status"/>
+
+    <property name="setId" category="input" label="Set id" kind="string"
+              description="The set ID you want deployment information on" required="true"/>
   </type>
 
   <type type="ispwServices.FallbackSet" extends="ispwServices.Action"

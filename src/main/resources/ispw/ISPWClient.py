@@ -285,6 +285,15 @@ class ISPWClient(object):
         variables['deployImplementationTime'] = result["deployImplementationTime"]
         variables['state'] = result["state"]
 
+    def ispwservices_pollgetsetinformation(self, variables):
+        result = self.set_client.poll_get_set_information(srid=variables['srid'], set_id=variables['setId'],
+                                             poll_interval=variables['pollInterval'],
+                                             poll_timeout_count=variables['pollTimeoutCount'],
+                                             status_field_name=variables['statusFieldName'],
+                                             expected_status_list=variables['expectedStatusList'])
+
+        variables['statusResult'] = result["status"]
+
     def ispwservices_getsettasklist(self, variables):
         result = self.set_client.get_set_task_list(srid=variables['srid'], set_id=variables['setId'],
                                              retryInterval=variables['retryInterval'],
@@ -306,6 +315,15 @@ class ISPWClient(object):
         variables['requestId'] = result["requestId"]
         variables['setOutputId'] = result["setId"]
         variables['state'] = result["status"]
+
+    def ispwservices_pollgetsetdeploymentinformation(self, variables):
+        result = self.set_client.poll_get_set_deployment_information(srid=variables['srid'], set_id=variables['setId'],
+                                             poll_interval=variables['pollInterval'],
+                                             poll_timeout_count=variables['pollTimeoutCount'],
+                                             status_field_name=variables['statusFieldName'],
+                                             expected_status_list=variables['expectedStatusList'])
+
+        variables['statusResult'] = result["status"]
 
     def ispwservices_fallbackset(self, variables):
         result = self.set_client.fallback_set(srid=variables['srid'], set_id=variables['setId'],

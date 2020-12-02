@@ -45,6 +45,7 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 + Deploy Assignment
 + Regress Assignment
 
+
 ### Releases
 
 #### Some examples
@@ -99,3 +100,23 @@ This is a plugin allowing to interact from XL Release with ISPW for deploying, p
 ## Example Template
 
 ![XLR Example Template](images/ExampleTemplate.png)
+
+## Wrappers
+
+Two wrappers have been added to augment the functionality of some of the tasks.
+
+1. 409 Retry - All tasks can now be configured to retry for a set number of times at a set interval in the case that a status code of 409 is returned. The task will complete when a status other than 409 is returned or the retry limit is reached.
+2. Two new polling tasks have been added - Poll Get Set Information and Poll Get Set Deployment information
+   1. Set single or mulitple 'expected' values to look for
+   2. Set the respone field to look for the value
+   3. Set the number of times to poll
+   4. Set the polling interval
+   5. If any of the expected values are found, the found value can be saved to a release variable
+
+### 409 Retry Example
+
+![409 Retry Example](images/409RetryGetReleaseInfo.png)
+
+### Poll Get Set Information
+
+![Poll Get Set Information](images/PollGetSetInformation.png)
