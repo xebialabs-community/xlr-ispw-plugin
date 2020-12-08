@@ -9,6 +9,7 @@
 #
 
 import logging
+import logging.handlers
 import os
 import tempfile
 from com.xebialabs.xlr.ssl import LoaderUtil
