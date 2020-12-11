@@ -15,8 +15,7 @@ ispw:
     - 18080:8080
 
 xlr:
-  image: xebialabs/xl-release:9.7
-  container_name: xlr
+  image: xebialabs/xl-release:9.8.0
   volumes:
     # - ~/xl-licenses/xl-release-license.lic:/opt/xebialabs/xl-release-server/conf/xl-release-license.lic
     - ./../../../../build/libs/:/opt/xebialabs/xl-release-server/plugins/__local__/
@@ -32,7 +31,6 @@ xlr:
 
 mockserver:
   build: ../mockserver
-  container_name: mockserver
   ports:
   - "5099:5000"
   volumes:
