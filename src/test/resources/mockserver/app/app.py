@@ -1,6 +1,6 @@
 #!flask/bin/python
 #
-# Copyright 2020 XEBIALABS
+# Copyright 2021 XEBIALABS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
@@ -8,6 +8,8 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
+
+# Rewritting this project src/test/resources/docker/ispw/main.go as a flask app
 
 from flask import Flask
 from flask import request
@@ -175,6 +177,36 @@ def createAndReturnBadResponse(badResponseFile):
 
 
 ### ISPW Mockserver Methods
+
+'''
+From this project src/test/resources/docker/ispw/main.go
+    router.HandleFunc("/ispw/ispw/assignments/", ReturnAssignmentResponse).Methods("POST")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", ReturnAssignmentResponse).Methods("POST")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}", GetAssignmentInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/{task_id}", GetTaskInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/generate", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/regress", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+
+	router.HandleFunc("/ispw/ispw/releases/", CreateRelease).Methods("POST")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}", GetReleaseInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks", GetTaskList).Methods("GET").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}", GetTaskInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/generate", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/{task_id}/listing", GetReleaseTaskGenerateListing).Methods("GET")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/deploy", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+	router.HandleFunc("/ispw/ispw/releases/{release_id}/tasks/regress", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+
+	router.HandleFunc("/ispw/ispw/sets/{set_id}", GetSetInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks", GetTaskList).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/deployment", GetSetDeploymentInformation).Methods("GET")
+	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks/fallback", ReturnIspwResponse).Methods("POST")
+    '''
+
+# GetSetInformation
 @app.route('/ispw/ispwMock/sets/<set_id>')
 @requires_auth
 def get_setInformation(set_id):
@@ -194,6 +226,7 @@ def get_setInformation(set_id):
     else:
         return getFile("getSetInfo.json", "201")
 
+# GetSetDeploymentInformation
 @app.route('/ispw/ispwMock/sets/<set_id>/deployment')
 @requires_auth
 def get_setDeployInformation(set_id):
@@ -213,6 +246,7 @@ def get_setDeployInformation(set_id):
     else:
         return getFile("getSetDeployInfo.json", "201")
 
+# GetReleaseInformation
 @app.route('/ispw/ispwMock/releases/<release_id>')
 @requires_auth
 def get_releaseInformation(release_id):

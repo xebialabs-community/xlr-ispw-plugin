@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!--
 
-    Copyright 2020 XEBIALABS
+    Copyright 2021 XEBIALABS
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -487,15 +487,17 @@
   </type>
 
   <!-- Tiles -->
-  <type type="ispwServices.ISPWTile" label="ISPW Summary Tile" extends="xlrelease.Tile">
+  <type type="ispwServices.ISPWTile" description="Information about ISPW Plugin Tasks" label="ISPW Summary Tile" extends="xlrelease.Tile">
+    <property default="release,folder" hidden="true" name="supportedScopes" kind="list_of_string"/>
     <property name="uri" hidden="true" default="include/ISPWServicesTile/ispw-tile-view.html"/>
     <property name="title" description="Tile title" default="ISPW Services Summary"/>
+    <property name="description" default="Information about ISPW Services Tasks"/>
     <property name="detailsUri" hidden="true" default="include/ISPWServicesTile/ispw-tile-details.html"/>
     <property name="embedded" kind="boolean" hidden="true" default="true"
-              required="false"/>  <!-- XLR 7.0.0 compatibility -->
+              required="false"/>
 
-    <property category="input" name="action" required="true" default="deploy"
-              description="ISPW Action to show (Possible values are Deploy,Promote and CreateRelease)"/>
+    <property category="input" name="action" required="false" 
+              description="Optional: If you wish to display only tasks of a certain type, enter the task type here. Some possible values are Deploy, Promote, CreateRelease, PromoteAssignment. You can enter a string followed by an asterisk to filter for an included string rather than an exact type match. Example: Deploy* If you wish to display all ispw tasks, leave this field empty."/>
   </type>
 
 </synthetic>
