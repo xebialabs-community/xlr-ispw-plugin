@@ -8,7 +8,7 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
 
-version = "3.9.0"
+version = "3.9.1"
 
 if (!project.hasProperty('release.scope')) {
   project.ext['release.scope'] = 'patch'

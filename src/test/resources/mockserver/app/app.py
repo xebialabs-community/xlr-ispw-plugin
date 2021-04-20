@@ -180,6 +180,7 @@ def createAndReturnBadResponse(badResponseFile):
 
 '''
 From this project src/test/resources/docker/ispw/main.go
+As necessary, we will implement these tests in the Flask test mockserver instead of the go test server
     router.HandleFunc("/ispw/ispw/assignments/", ReturnAssignmentResponse).Methods("POST")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks", ReturnAssignmentResponse).Methods("POST")
 	router.HandleFunc("/ispw/ispw/assignments/{assignment_id}", GetAssignmentInformation).Methods("GET")
@@ -205,7 +206,7 @@ From this project src/test/resources/docker/ispw/main.go
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/deployment", GetSetDeploymentInformation).Methods("GET")
 	router.HandleFunc("/ispw/ispw/sets/{set_id}/tasks/fallback", ReturnIspwResponse).Methods("POST")
     '''
-
+# SETS
 # GetSetInformation
 @app.route('/ispw/ispwMock/sets/<set_id>')
 @requires_auth
@@ -246,6 +247,7 @@ def get_setDeployInformation(set_id):
     else:
         return getFile("getSetDeployInfo.json", "201")
 
+# RELEASES
 # GetReleaseInformation
 @app.route('/ispw/ispwMock/releases/<release_id>')
 @requires_auth
@@ -258,7 +260,21 @@ def get_releaseInformation(release_id):
     else:
         return getFile("getReleaseInformation.json", "201")
 
-    
+# ASSIGNMENTS
+# router.HandleFunc("/ispw/ispw/assignments/{assignment_id}/tasks/promote", ReturnIspwResponse).Methods("POST").Queries("level", "{[a-z]*?}")
+@app.route('/ispw/ispwMock/assignments/<assignment_id>/tasks/promote', methods=['POST'])
+@requires_auth
+def promote_assignment(assignment_id):
+    global shouldReturn409
+    logRequest(request)
+    app.logger.debug("The release_id is %s, shouldReturn is %s, numTimes is %s, counter is %s" % (assignment_id, str(shouldReturn409), str(return409NumTimes), str(return409Counter)))
+    content = request.json
+    if shouldReturn409:
+        return createAndReturn409()
+    else:
+        return getFile("postIspwResponse.json", "201")  
+
+
 
 # Use for detailed request debug
 def logRequest(request):

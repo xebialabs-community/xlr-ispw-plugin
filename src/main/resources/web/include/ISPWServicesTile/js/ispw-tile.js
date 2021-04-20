@@ -67,8 +67,10 @@
                     return shouldInclude;
                 })
                 .map(function (task) {
-                    var theId = task.inputProperties.relid ? task.inputProperties.relid : 
-                                    task.inputProperties.assignmentid ? task.inputProperties.assignmentid : "";
+                    var theId = task.inputProperties.relId ? task.inputProperties.relId : 
+                                    task.inputProperties.assignmentId ? task.inputProperties.assignmentId : 
+                                    task.inputProperties.setId ? task.inputProperties.setId : 
+                                    task.inputProperties.taskId ? task.inputProperties.taskId : "";
                     var theType = task.scriptDefinitionType ? task.scriptDefinitionType.replace("ispwServices.", ""): "";
                     return {
                         taskName: task.title,
@@ -111,7 +113,7 @@
                     width: '20%'
                 },
                 {
-                    displayName: "Release or Assignment ID",
+                    displayName: "Request - Release, Assign, Set or Task ID",
                     field: "relId",
                     cellTemplate: "static/@project.version@/include/ISPWServicesTile/grid/ispw-relid-cell-template.html",
                     //filterHeaderTemplate: "<div data-ng-include=\"'partials/releases/grid/templates/name-filter-template.html'\"></div>",
